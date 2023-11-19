@@ -1,7 +1,10 @@
 sorcery
 
 CARDS:
+
 spells -----------------------------------------------------
+- change state of the game
+- dissapear
 
 Minions -----------------------------------------------------
 - main card type
