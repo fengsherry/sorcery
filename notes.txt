@@ -1,0 +1,33 @@
+sorcery
+
+CARDS:
+spells -----------------------------------------------------
+
+Minions -----------------------------------------------------
+- main card type
+- "play" by move from hand to one of 5 Minion slots on board
+- Minions have  
+    - name (inherited from Card)
+    - cost (inherited from Card)
+    - attack value 
+    - defense values
+    - actions = number of times it is allowed to attack of use an ability in 1 turn
+        - attack the opposing player
+        - attack the an opposing minion
+        - use an activated ability (optional) -- how to maximize code reuse
+    - use a triggered ability (optional)
+
+enhancements -----------------------------------------------------
+- modifications of minions (attack, defense, abilities)
+- applied in oldest-to-newest
+- overrites old activated ability
+- (probably Decorator design pattern) 
+
+rituals -----------------------------------------------------
+- cards with:
+    - triggered ability
+    - activation cost
+    - number of charges 
+- each time the ritual is triggered, it expenses the number of charges equal to the activation cost.
+
+
