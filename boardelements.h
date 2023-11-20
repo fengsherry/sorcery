@@ -1,7 +1,8 @@
 // This is the public interface for all elements of the sorcery game board.
 
 #ifndef __BOARDELEMENTS_H__
-#define __BOARDELEMENTSH__
+#define __BOARDELEMENTS_H__
+#include "card.h"
 
 // collection of cards from which players draw cards into their Hand
 class Deck {
@@ -13,7 +14,7 @@ class Hand {
 
 };
 
-// Minions the player has played
+// Minions the player has played, not yet dead
 class Board {
 
 };

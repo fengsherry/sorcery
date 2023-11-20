@@ -24,8 +24,15 @@ int main(int argc, char *argv[]) {
     if (findIndex(argc, argv, "-testing", i)) testing = true; 
 
     // set decks according to cmd line args, or default.deck
-    ifstream* in1 = deck1 ? new ifstream(deck1File.c_str()) : new ifstream("default.deck");
-    ifstream* in2 = deck2 ? new ifstream(deck2File.c_str()) : new ifstream("default.deck");
+    ifstream in1 = deck1 ? ifstream(deck1File.c_str()) : ifstream("default.deck");
+    ifstream in2 = deck2 ? ifstream(deck2File.c_str()) : ifstream("default.deck");
+
+    string cardName;
+    while (getline(in1, cardName)) {
+        // (create the card that corresponds to cardName)
+    }
+    // (construct a Deck)
+
 
     // asks players for their names
     cout << "Please enter player names: " << endl;
@@ -34,6 +41,6 @@ int main(int argc, char *argv[]) {
     getline(cin, p2name); 
 
     // initialize the game
-    GameMaster gm{p1name, p2name};
+    GameMaster gm{p1name, p2name, deck1, deck2}; 
 
 }
