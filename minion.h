@@ -7,7 +7,19 @@
 using namespace std;
 
 class Minion: public Card {
-    
+ private:
+    // add to UML:
+    int attack;
+    int ability;
+    //Ability ability;
+
+ public:
+    // constructor
+    // destructor
+    int getAttack();
+    int getDefense();
+    // Ability getAbility();
+
 };
 
 #endif

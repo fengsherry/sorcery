@@ -7,6 +7,7 @@
 using namespace std;
 
 class Spell: public Card {
+    // do something
     
 };
 

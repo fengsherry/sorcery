@@ -7,7 +7,10 @@
 using namespace std;
 
 class Ritual: public Card {
-    
+    int activationCost;
+    int charge;
+    //TriggeredAbility trigAbility;
+ 
 };
 
 #endif
