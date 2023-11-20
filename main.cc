@@ -51,8 +51,32 @@ int main(int argc, char *argv[]) {
     GameMaster gm{p1name, p2name, deck1, deck2}; 
 
     bool turn = 0; // 0 for player 1's turn, 1 for player 2's turn
+    string cmd;
     while (true) {
+        cin >> cmd;
+        if (cmd == "help") { 
 
-    }
+        } else if (cmd == "quit") {
+
+        } else if (cmd == "draw") {
+
+        } else if (cmd == "discard") { // only available in -testing mode; how to handle this?
+
+        } else if (cmd == "attack") {
+
+        } else if (cmd == "play") {
+
+        } else if (cmd == "use") {
+
+        } else if (cmd == "describe") {
+
+        } else if (cmd == "hand") {
+
+        } else if (cmd == "board") {
+
+        } else {
+            cout << "Not a valid command" << endl;
+        }
+     }
 
 }
