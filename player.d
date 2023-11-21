@@ -1,1 +1,1 @@
-player.o: player.cc player.h
+player.o: player.cc player.h boardelements.h card.h minion.h ritual.h

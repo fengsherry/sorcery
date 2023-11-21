@@ -21,7 +21,10 @@ void testCmdArg(string arg, string filename = "n/a") {
 int main(int argc, char *argv[]) {
     // potential command line arguments: -deck1 (filename), -deck2 (filename), -init (filename), -testing
     int i;
-    bool deck1Flag, deck2Flag, initFlag, testingFlag;
+    bool deck1Flag = false;
+    bool deck2Flag = false;
+    bool initFlag = false;
+    bool testingFlag = false;
     string deck1File, deck2File, initFile;
     if (findIndex(argc, argv, "-deck1", i)) {
         deck1Flag = true; deck1File = argv[i + 1];
@@ -40,27 +43,18 @@ int main(int argc, char *argv[]) {
         testCmdArg("testing");
     }
 
-    // SET DECKS according to cmd line args, or default.deck
-    ifstream in1 = deck1Flag ? ifstream(deck1File.c_str()) : ifstream("default.deck");
+    // create input file streams for each deck file location
     ifstream in2 = deck2Flag ? ifstream(deck2File.c_str()) : ifstream("default.deck");
-    /* will be handled in GameMaster */
-    // string cardName;
-    // while (getline(in1, cardName)) {
-    //     // (construct each card that corresponds to cardName)
-    // }
-    // while (getline(in2, cardName)) {
-    //     // (construct each card that corresponds to cardName)
-    // }
-
-    // // initialize 2 decks - should this be done in GameMaster?
-    // Deck deck1; // {...}
-    // Deck deck2; // {...}
+    ifstream in1 = deck1Flag ? ifstream(deck1File.c_str()) : ifstream("default.deck");
+    // ifstream in2 = deck2Flag ? ifstream(deck2File.c_str()) : ifstream("default.deck");
 
     // initialize the game
     GameMaster gm{}; 
 
-    // initialize players
+    // initialize Players
     gm.initPlayers();
+    // initialize Decks
+    gm.initDecks(in1, in2);
 
     bool turn = 0; // 0 for player 1's turn, 1 for player 2's turn
     string cmd;
