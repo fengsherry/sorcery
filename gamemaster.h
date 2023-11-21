@@ -10,7 +10,7 @@ using namespace std;
 
 class GameMaster {
     Player p1, p2;
-    // Deck d1, d2;
+    Deck d1, d2;
     // vector<TriggeredAbility*> observers;
     
     public:

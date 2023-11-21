@@ -5,6 +5,8 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include "boardelements.h"
+#include "ritual.h"
 using namespace std;
 
 class Player {
@@ -19,9 +21,10 @@ class Player {
     Ritual* ritual;
     public:
         Player(); // default ctor to be called when GameMaster is initialized
-        Player(string name, int id);
+        // Player(string name, int id);
         ~Player();
 
+        void init(string name, int id);
         string getName();
         int getId();
         int getLife();
