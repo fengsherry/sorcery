@@ -5,7 +5,7 @@
 #include <string>
 using namespace std;
 
-enum class CardType { Spell, Minion, Enchantment, Ritual};
+enum class CardType { Spell, Minion, Enchantment, Ritual };
 
 // every card has a name and a cost
 class Card {   
