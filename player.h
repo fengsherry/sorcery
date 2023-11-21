@@ -17,8 +17,14 @@ class Player {
     // Graveyard grave;
     // Ritual* ritual;
     public:
+        Player(); // default ctor to be called when GameMaster is initialized
         Player(string name, int id);
         ~Player();
+
+        string getName();
+        int getId();
+        int getLife();
+        int getMagic();
 
 };
 
