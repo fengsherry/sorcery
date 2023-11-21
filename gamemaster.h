@@ -29,7 +29,7 @@ class GameMaster {
         void play();
         void notifyObservers();
 
-        // displays
+        // displays some visual
         void describe();
         void hand();
         void board();

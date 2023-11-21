@@ -7,53 +7,73 @@
 using namespace std;
 
 // helper function to find command line variabls
-bool findIndex(int argc, char* argv[], string s, int* i) {
-    for (int index = 0; index < argc; ++i) {
-        if (argv[index] == s) *i = index; return true;
+bool findIndex(int argc, char* argv[], string s, int& i) {
+    for (int index = 1; index < argc; ++i) {
+        if (argv[index] == s) {i = index; return true;}
     }
     return false;
 }
 
+void testCmdArg(string arg) { cout << "You have activated the " << arg << " command argument" << endl; }
+
 int main(int argc, char *argv[]) {
     // potential command line arguments: -deck1 (filename), -deck2 (filename), -init (filename), -testing
-    int* i;
+    int i;
     bool deck1Flag, deck2Flag, initFlag, testingFlag;
     string deck1File, deck2File, initFile;
-    if (findIndex(argc, argv, "-deck1", i)) deck1Flag = true; deck1File = argv[*i + 1];
-    if (findIndex(argc, argv, "-deck2", i)) deck2Flag = true; deck2File = argv[*i + 1];
-    if (findIndex(argc, argv, "-init", i)) initFlag = true; initFile = argv[*i + 1];
-    if (findIndex(argc, argv, "-testing", i)) testingFlag = true; 
+    if (findIndex(argc, argv, "-deck1", i)) {
+        deck1Flag = true; deck1File = argv[i + 1];
+        testCmdArg("deck1");
+    }
+    if (findIndex(argc, argv, "-deck2", i)) {
+        deck2Flag = true; deck2File = argv[i + 1];
+        testCmdArg("deck2");
+    }
+    if (findIndex(argc, argv, "-init", i)) {
+        initFlag = true; initFile = argv[i + 1];
+        testCmdArg("init");
+    }
+    if (findIndex(argc, argv, "-testing", i)) {
+        testingFlag = true; 
+        testCmdArg("testing");
+    }
 
-    // set decks according to cmd line args, or default.deck
+    // SET DECKS according to cmd line args, or default.deck
     ifstream in1 = deck1Flag ? ifstream(deck1File.c_str()) : ifstream("default.deck");
     ifstream in2 = deck2Flag ? ifstream(deck2File.c_str()) : ifstream("default.deck");
-
     string cardName;
     while (getline(in1, cardName)) {
-        // (construct the card that corresponds to cardName)
+        // (construct each card that corresponds to cardName)
     }
-    // initialize 2 decks
-    Deck deck1; // = new Deck{...}
-    Deck deck2; // = new Deck{...}
+    while (getline(in2, cardName)) {
+        // (construct each card that corresponds to cardName)
+    }
+
+    // initialize 2 decks - should this be done in GameMaster?
+    Deck deck1; // {...}
+    Deck deck2; // {...}
 
 
-    // asks players for their names
+
+    // SET PLAYERS, ask players for their names
     cout << "Please enter player names: " << endl;
     string p1name, p2name;
     getline(cin, p1name); 
     getline(cin, p2name); 
+    cout << "Player 1: " << p1name << "\nPlayer 2: " << p2name << endl;
 
-    // initialize 2 players
-    // Player p1{ ... }
-    // Player p2{ ... }
+    // initialize 2 players - should this be done in GameMaster?
+    Player p1{p1name, 1};
+    Player p2{p2name, 2};
 
     // initialize the game
-    GameMaster gm{p1name, p2name, deck1, deck2}; 
+    // GameMaster gm{p1name, p2name, deck1, deck2}; 
 
     bool turn = 0; // 0 for player 1's turn, 1 for player 2's turn
     string cmd;
     while (true) {
         cin >> cmd;
+        if (cin.eof()) return 0;
         if (cmd == "help") { 
 
         } else if (cmd == "quit") {
@@ -74,9 +94,9 @@ int main(int argc, char *argv[]) {
 
         } else if (cmd == "board") {
 
-        } else {
+        } else if (cmd != "") {
             cout << "Not a valid command" << endl;
-        }
+        } 
      }
 
 }

@@ -1,4 +1,4 @@
-// This is the public interface for all elements of the sorcery game board.
+// This is the public interface for Deck, Hand, Board, Graveyard, which are elements of the sorcery game board.
 
 #ifndef __BOARDELEMENTS_H__
 #define __BOARDELEMENTS_H__
