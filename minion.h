@@ -3,22 +3,18 @@
 #ifndef __MINION_H__
 #define __MINION_H__
 #include "card.h"
+// #inlcude "ability.h"
 #include <string>
 using namespace std;
 
 class Minion: public Card {
- private:
-    // add to UML:
-    int attack;
-    int ability;
-    //Ability ability;
-
  public:
     // constructor
     // destructor
-    int getAttack();
-    int getDefense();
-    // Ability getAbility();
+
+    virtual int getAttack() = 0;
+    virtual int getDefense() = 0;
+    // Ability getAbility() = 0;
 
 };
 

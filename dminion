@@ -7,7 +7,8 @@
 using namespace std;
 
 class DefaultMinion : public Minion {
-    int attack, defense, action;
+    int attack, defense;
+    int action = 0;
     // Ability ability;
 
  public:
