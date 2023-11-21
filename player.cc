@@ -5,11 +5,14 @@ Player::Player() {
     id = 0;
 }
 
-Player::Player(string name, int id) : name{name}, id{id} {
-
-}
+// Player::Player(string name, int id) : name{name}, id{id} {}
 
 Player::~Player() {}
+
+void Player::init(string name, int id) {
+    this->name = name;
+    this->id = id;
+}
 
 string Player::getName() {return name;}
 int Player::getId() {return id;}

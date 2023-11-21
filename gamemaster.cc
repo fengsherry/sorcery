@@ -13,9 +13,9 @@ void GameMaster::initPlayers() {
     getline(cin, p1name); 
     getline(cin, p2name); 
 
-    // initialize 2 players
-    p1 = Player{p1name, 1};
-    p2 = Player{p2name, 2};
+    Player p1, p2;
+    p1.init(p1name, 1);
+    p2.init(p2name, 2);
 
     cout << "Player " << p1.getId() << ": " << p1.getName() << endl;
     cout << "Player " << p2.getId() << ": " << p2.getName() << endl;
@@ -24,17 +24,14 @@ void GameMaster::initPlayers() {
 
 // SET DECKS, initialize Decks
 void GameMaster::initDecks(ifstream& deck1In, ifstream& deck2In) {
-    string cardName;
-    while (getline(deck1In, cardName)) {
-        // (construct each card that corresponds to cardName)
-    }
-    while (getline(deck2In, cardName)) {
-        // (construct each card that corresponds to cardName)
-    }
+    Deck deck1, deck2;
+    deck1.init(deck1In);
+    deck2.init(deck2In);
 
-    // initialize 2 decks - should this be done in GameMaster?
-    Deck deck1; // {...}
-    Deck deck2; // {...}
+    cout << "Player 1's Deck: " << endl;
+    deck1.TEMP_printDeck();
+    cout << "Player 2's Deck: " << endl;
+    deck2.TEMP_printDeck();
 }
 
 GameMaster::~GameMaster() {} 
