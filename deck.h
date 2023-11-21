@@ -6,9 +6,11 @@
 using namespace std;
 
 class Deck {
-    vector<Card*> theDeck;
+    // vector<Card*> theDeck;
+    vector<string*> theDeck;
 
  public:
+    void shuffle();
     Card* drawCard();
 };
 

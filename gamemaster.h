@@ -19,7 +19,7 @@ class GameMaster {
 
         // methods to initialize the game
         void initPlayers();
-        // void initDecks(ifstream& deck1In, ifstream& deck2In);
+        void initDecks(ifstream& deck1In, ifstream& deck2In);
 
         // methods correlating to commands recieved in main:
         void startTurn();

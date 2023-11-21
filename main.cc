@@ -8,13 +8,15 @@ using namespace std;
 
 // helper function to find command line variabls
 bool findIndex(int argc, char* argv[], string s, int& i) {
-    for (int index = 1; index < argc; ++i) {
+    for (int index = 1; index < argc; ++index) {
         if (argv[index] == s) {i = index; return true;}
     }
     return false;
 }
 
-void testCmdArg(string arg) { cout << "You have activated the " << arg << " command argument" << endl; }
+void testCmdArg(string arg, string filename = "n/a") { 
+    cout << "You have activated the " << arg << " command argument, and " << filename << " file " << endl; 
+}
 
 int main(int argc, char *argv[]) {
     // potential command line arguments: -deck1 (filename), -deck2 (filename), -init (filename), -testing
@@ -23,15 +25,15 @@ int main(int argc, char *argv[]) {
     string deck1File, deck2File, initFile;
     if (findIndex(argc, argv, "-deck1", i)) {
         deck1Flag = true; deck1File = argv[i + 1];
-        testCmdArg("deck1");
+        testCmdArg("deck1", deck1File);
     }
     if (findIndex(argc, argv, "-deck2", i)) {
         deck2Flag = true; deck2File = argv[i + 1];
-        testCmdArg("deck2");
+        testCmdArg("deck2", deck2File);
     }
     if (findIndex(argc, argv, "-init", i)) {
         initFlag = true; initFile = argv[i + 1];
-        testCmdArg("init");
+        testCmdArg("init", initFile);
     }
     if (findIndex(argc, argv, "-testing", i)) {
         testingFlag = true; 

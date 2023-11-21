@@ -12,10 +12,11 @@ class Player {
     int id; // player 1 or 2
     int life = 20; // health points
     int magic = 3; // way to place cards on the board, etc
-    // Deck deck;
-    // Hand hand; // players start with 5 cards in their hand
-    // Graveyard grave;
-    // Ritual* ritual;
+    Deck deck;
+    Hand hand; // players start with 5 cards in their hand
+    Board board;
+    Graveyard grave;
+    Ritual* ritual;
     public:
         Player(); // default ctor to be called when GameMaster is initialized
         Player(string name, int id);
