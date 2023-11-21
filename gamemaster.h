@@ -10,12 +10,16 @@ using namespace std;
 
 class GameMaster {
     Player p1, p2;
-    Deck d1, d2;
+    // Deck d1, d2;
     // vector<TriggeredAbility*> observers;
     
     public:
-        GameMaster(string name1, string name2, Deck d1, Deck d2); // Deck should be a parameter later
+        GameMaster(); 
         ~GameMaster();
+
+        // methods to initialize the game
+        void initPlayers();
+        // void initDecks(ifstream& deck1In, ifstream& deck2In);
 
         // methods correlating to commands recieved in main:
         void startTurn();

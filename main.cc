@@ -41,33 +41,24 @@ int main(int argc, char *argv[]) {
     // SET DECKS according to cmd line args, or default.deck
     ifstream in1 = deck1Flag ? ifstream(deck1File.c_str()) : ifstream("default.deck");
     ifstream in2 = deck2Flag ? ifstream(deck2File.c_str()) : ifstream("default.deck");
-    string cardName;
-    while (getline(in1, cardName)) {
-        // (construct each card that corresponds to cardName)
-    }
-    while (getline(in2, cardName)) {
-        // (construct each card that corresponds to cardName)
-    }
+    /* will be handled in GameMaster */
+    // string cardName;
+    // while (getline(in1, cardName)) {
+    //     // (construct each card that corresponds to cardName)
+    // }
+    // while (getline(in2, cardName)) {
+    //     // (construct each card that corresponds to cardName)
+    // }
 
-    // initialize 2 decks - should this be done in GameMaster?
-    Deck deck1; // {...}
-    Deck deck2; // {...}
-
-
-
-    // SET PLAYERS, ask players for their names
-    cout << "Please enter player names: " << endl;
-    string p1name, p2name;
-    getline(cin, p1name); 
-    getline(cin, p2name); 
-    cout << "Player 1: " << p1name << "\nPlayer 2: " << p2name << endl;
-
-    // initialize 2 players - should this be done in GameMaster?
-    Player p1{p1name, 1};
-    Player p2{p2name, 2};
+    // // initialize 2 decks - should this be done in GameMaster?
+    // Deck deck1; // {...}
+    // Deck deck2; // {...}
 
     // initialize the game
-    // GameMaster gm{p1name, p2name, deck1, deck2}; 
+    GameMaster gm{}; 
+
+    // initialize players
+    gm.initPlayers();
 
     bool turn = 0; // 0 for player 1's turn, 1 for player 2's turn
     string cmd;
