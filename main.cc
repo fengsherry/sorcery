@@ -56,8 +56,6 @@ int main(int argc, char *argv[]) {
     // initialize Decks
     gm.initDecks(in1, in2);
 
-    int turn = 1; // 1 for player 1's turn, 2 for player 2's turn
-    int numPlayers = 2;
     string cmd;
     int arg;
     while (true) {
@@ -67,10 +65,7 @@ int main(int argc, char *argv[]) {
         if (cmd == "help") { 
 
         } else if (cmd == "end") {
-            ++turn;
-            if (turn > numPlayers) {
-                turn = 1;
-            }
+            
         } else if (cmd == "quit") {
 
         } else if (cmd == "draw") {
@@ -78,9 +73,9 @@ int main(int argc, char *argv[]) {
         } else if (cmd == "discard") { // only available in -testing mode; how to handle this?
 
         } else if (cmd == "attack") {
-            // basic version that only attacks player
+            // currently the basic version that only attacks player
             cin >> arg;
-            gm.attackPlayer();
+            gm.attackPlayer(arg);
         } else if (cmd == "play") {
 
         } else if (cmd == "use") {

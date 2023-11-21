@@ -34,8 +34,19 @@ void GameMaster::initDecks(ifstream& deck1In, ifstream& deck2In) {
     deck2.TEMP_printDeck();
 }
 
-void GameMaster::attackPlayer() {
-    
+void GameMaster::endTurn() {
+    ++turn;
+    if (turn > numPlayers) {
+        turn = 1;
+    }
+
+    // notify end of turn observers
+}
+
+void GameMaster::attackPlayer(int i) {
+    Minion* attackingMinion = activePlayer->getMinion(i);
+    int attackVal = attackingMinion->getAttack();
+    nonactivePlayer->decreaseLife(attackVal);
 }
 
 GameMaster::~GameMaster() {} 

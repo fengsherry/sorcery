@@ -30,6 +30,9 @@ class Player {
         int getLife();
         int getMagic();
 
+        Minion* getMinion(int i); 
+        void decreaseLife(int n);
+
 };
 
 

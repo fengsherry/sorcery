@@ -22,3 +22,7 @@ void Deck::TEMP_printDeck() {
     for (auto s : theDeck) { cout << *s << endl; }
 }
 
+
+Minion *Board::getMinion(int i) {
+    return theBoard[i];
+}

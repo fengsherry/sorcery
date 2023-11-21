@@ -11,6 +11,10 @@ using namespace std;
 class GameMaster {
     Player p1, p2;
     Deck d1, d2;
+    int turn = 1; // 1 for player 1's turn, 2 for player 2's turn
+    int numPlayers = 2;
+    Player* activePlayer;
+    Player* nonactivePlayer;
     // vector<TriggeredAbility*> observers;
     
     public:
@@ -26,7 +30,7 @@ class GameMaster {
         void endTurn();
 
         void attackMinion();
-        void attackPlayer();
+        void attackPlayer(int i);
         void activateAbility();
 
         void discard();

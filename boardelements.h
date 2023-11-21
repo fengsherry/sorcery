@@ -33,6 +33,9 @@ class Hand {
 // Minions the player has played, not yet dead
 class Board {
     vector<Minion*> theBoard;
+
+    public:
+        Minion* getMinion(int i);
 };
 
 // collection of dead Minions

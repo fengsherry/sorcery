@@ -19,4 +19,7 @@ int Player::getId() {return id;}
 int Player::getLife() {return life;}
 int Player::getMagic() {return magic;}
 
+Minion* Player::getMinion(int i) {return board.getMinion(i);}
+
+void Player::decreaseLife(int n) {life -= n;}
 
