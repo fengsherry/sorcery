@@ -34,4 +34,8 @@ void GameMaster::initDecks(ifstream& deck1In, ifstream& deck2In) {
     deck2.TEMP_printDeck();
 }
 
+void GameMaster::attackPlayer() {
+    
+}
+
 GameMaster::~GameMaster() {} 

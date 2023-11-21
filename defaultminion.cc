@@ -3,17 +3,15 @@
 #include "defaultminion.h"
 using namespace std;
 
-
-
-int getAttack() {
+int DefaultMinion::getAttack() {
     return attack;
 }
 
-int getDefense() {
+int DefaultMinion::getDefense() {
     return defense;
 }
 
-int getAction() {
+int DefaultMinion::getAction() {
     return action;
 }
 
