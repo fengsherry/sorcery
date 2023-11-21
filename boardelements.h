@@ -22,7 +22,7 @@ class Deck {
         void shuffle();
         Card* drawCard();
 
-        void TEMP_printDeck();
+        void TEST_printDeck();
 };
 
 // cards a player is holding, but has not placed

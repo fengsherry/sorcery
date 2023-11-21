@@ -24,11 +24,13 @@ class Player {
         // Player(string name, int id);
         ~Player();
 
-        void init(string name, int id);
+        void init(string name, int id, ifstream& deckIn);
         string getName();
         int getId();
         int getLife();
         int getMagic();
+
+        void TEST_printPlayerDeck();
 
 };
 

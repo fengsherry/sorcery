@@ -17,8 +17,7 @@ void Deck::init(ifstream& file) {
     }
 }
 
-void Deck::TEMP_printDeck() {
-    cout << "printing deck"<< endl;
+void Deck::TEST_printDeck() {
     for (auto s : theDeck) { cout << *s << endl; }
 }
 

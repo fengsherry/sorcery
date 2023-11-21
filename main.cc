@@ -44,21 +44,19 @@ int main(int argc, char *argv[]) {
     }
 
     // create input file streams for each deck file location
-    ifstream in2 = deck2Flag ? ifstream(deck2File.c_str()) : ifstream("default.deck");
     ifstream in1 = deck1Flag ? ifstream(deck1File.c_str()) : ifstream("default.deck");
-    // ifstream in2 = deck2Flag ? ifstream(deck2File.c_str()) : ifstream("default.deck");
+    ifstream in2 = deck2Flag ? ifstream(deck2File.c_str()) : ifstream("default.deck");
 
     // initialize the game
     GameMaster gm{}; 
 
     // initialize Players
-    gm.initPlayers();
-    // initialize Decks
-    gm.initDecks(in1, in2);
+    gm.initPlayers(in1, in2);
 
     bool turn = 0; // 0 for player 1's turn, 1 for player 2's turn
     string cmd;
     while (true) {
+        
         cin >> cmd;
         if (cin.eof()) return 0;
         if (cmd == "help") { 
@@ -66,7 +64,7 @@ int main(int argc, char *argv[]) {
         } else if (cmd == "quit") {
 
         } else if (cmd == "draw") {
-
+            
         } else if (cmd == "discard") { // only available in -testing mode; how to handle this?
 
         } else if (cmd == "attack") {
