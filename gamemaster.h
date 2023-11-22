@@ -1,4 +1,4 @@
-// This is the public interface for GameMaster, representing the controls over a game of sorcery
+// This is the public interface for GameMaster, representing a game of sorcery
 
 #ifndef __GAMEMASTER_H__
 #define __GAMEMASTER_H__
