@@ -12,12 +12,12 @@ Deck::~Deck() {}
 void Deck::init(ifstream& file) {
     string cardName;
     while (getline(file, cardName)) {
-        string* card = new string(cardName);
+        Card* card = new Card(cardName);
         theDeck.emplace_back(card);
     }
 }
 
 void Deck::TEST_printDeck() {
-    for (auto s : theDeck) { cout << *s << endl; }
+    for (auto s : theDeck) { cout << s->getName() << endl; }
 }
 
