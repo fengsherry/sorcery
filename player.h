@@ -19,10 +19,11 @@ class Player {
     Board board;
     Graveyard grave;
     Ritual* ritual;
-    public:
-        Player(); // default ctor to be called when GameMaster is initialized
-        // Player(string name, int id);
-        ~Player();
+ 
+ public:
+    Player(); // default ctor to be called when GameMaster is initialized
+    // Player(string name, int id);
+    ~Player();
 
         void init(string name, int id);
         string getName();
@@ -31,11 +32,9 @@ class Player {
         int getMagic();
         Minion* getMinion(int i); 
         void decreaseLife(int n);
-
         void play(int i); // plays the ith card int he player's hand with no target
-
-
-
+        void init(string name, int id, ifstream& deckIn);
+        void TEST_printPlayerDeck();
 };
 
 

@@ -1,4 +1,4 @@
-// This is the public interface for GameMaster, representing the controls over a game of sorcery
+// This is the public interface for GameMaster, representing a game of sorcery
 
 #ifndef __GAMEMASTER_H__
 #define __GAMEMASTER_H__
@@ -21,9 +21,9 @@ class GameMaster {
         GameMaster(); 
         ~GameMaster();
 
-        // methods to initialize the game
-        void initPlayers();
-        void initDecks(ifstream& deck1In, ifstream& deck2In);
+        // methods to initialize the players
+        void initPlayers(ifstream& deck1In, ifstream& deck2In);
+        // void initDecks(ifstream& deck1In, ifstream& deck2In);
 
         // methods correlating to commands recieved in main:
         void startTurn();

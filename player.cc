@@ -9,9 +9,15 @@ Player::Player() {
 
 Player::~Player() {}
 
-void Player::init(string name, int id) {
+void Player::init(string name, int id, ifstream& deckIn) {
     this->name = name;
     this->id = id;
+    deck.init(deckIn);
+}
+
+void Player::TEST_printPlayerDeck() {
+    cout << "Player " << id << "'s Deck: " << endl;
+    deck.TEST_printDeck();
 }
 
 string Player::getName() {return name;}
