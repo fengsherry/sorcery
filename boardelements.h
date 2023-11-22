@@ -11,18 +11,18 @@ using namespace std;
 
 // collection of cards from which players draw cards into their Hand
 class Deck {
-    // vector<Card*> theDeck;
-    vector<string*> theDeck;
+    vector<Card*> theDeck;
+    //vector<string*> theDeck;
 
-    public:
-        Deck();
-        ~Deck();
+ public:
+    Deck();
+    ~Deck();
 
-        void init(ifstream& file);
-        void shuffle();
-        Card* drawCard();
+    void init(ifstream& file);
+    void shuffle();
+    Card* drawCard();
 
-        void TEST_printDeck();
+    void TEST_printDeck();
 };
 
 // cards a player is holding, but has not placed

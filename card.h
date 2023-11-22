@@ -14,9 +14,10 @@ class Card {
     CardType type;
     string desc;
 
-    public:
-        void getName();
-        void getString();
+ public:
+    Card(string cardName);
+    string getName() const;
+    int getCost() const;
 
 };
 
