@@ -21,3 +21,14 @@ void Deck::TEST_printDeck() {
     for (auto s : theDeck) { cout << s->getName() << endl; }
 }
 
+Card *Hand::getCard(int i) {
+    return theHand[i];
+}
+
+Minion *Board::getMinion(int i) {
+    return theBoard[i];
+}
+
+void Board::addCard(Minion *m) {
+    theBoard.emplace_back(m);
+}

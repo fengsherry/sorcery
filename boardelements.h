@@ -28,11 +28,19 @@ class Deck {
 // cards a player is holding, but has not placed
 class Hand {
     vector<Card*> theHand;
+
+    public:
+        Card* getCard(int i);
 };
 
 // Minions the player has played, not yet dead
 class Board {
     vector<Minion*> theBoard;
+
+    public:
+        Minion* getMinion(int i);
+        void addCard(Minion *m);
+
 };
 
 // collection of dead Minions

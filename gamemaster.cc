@@ -5,6 +5,8 @@
 using namespace std;
 
 GameMaster::GameMaster() {} 
+GameMaster::~GameMaster() {} 
+
 
 // SET PLAYERS, ask Players for their names
 void GameMaster::initPlayers(ifstream& deck1In, ifstream& deck2In) {
@@ -38,8 +40,42 @@ void GameMaster::initPlayers(ifstream& deck1In, ifstream& deck2In) {
 //     deck2.TEMP_printDeck();
 // }
 
-void GameMaster::attackPlayer() {
-    
+// starts a turn, switches active and nonactive players, notifies corresponding observers
+void GameMaster::startTurn() {
+    swap(activePlayer, nonactivePlayer);
+    // notify
 }
 
-GameMaster::~GameMaster() {} 
+// ends a turn, notifies corresponding observers
+void GameMaster::endTurn() {
+    ++turn;
+    if (turn > numPlayers) {
+        turn = 1;
+    }
+    // notify end of turn observers
+}
+
+void attackMinion();
+
+
+void GameMaster::attackPlayer(int i) {
+    Minion* attackingMinion = activePlayer->getMinion(i);
+    int attackVal = attackingMinion->getAttack();
+    nonactivePlayer->decreaseLife(attackVal);
+}
+
+void activateAbility();
+
+void discard();
+
+void GameMaster::play(int i) {
+    activePlayer->play(i);
+}
+
+void notifyObservers();
+
+// displays some visual
+void describe();
+void hand();
+void board();
+
