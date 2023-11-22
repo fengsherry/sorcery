@@ -77,6 +77,9 @@ int main(int argc, char *argv[]) {
             cin >> arg;
             gm.attackPlayer(arg);
         } else if (cmd == "play") {
+            // currently the basic version that only plays a basic minion with no abilities
+            cin >> arg;
+            gm.play(arg);
 
         } else if (cmd == "use") {
 

@@ -29,9 +29,12 @@ class Player {
         int getId();
         int getLife();
         int getMagic();
-
         Minion* getMinion(int i); 
         void decreaseLife(int n);
+
+        void play(int i); // plays the ith card int he player's hand with no target
+
+
 
 };
 

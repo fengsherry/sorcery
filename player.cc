@@ -23,3 +23,9 @@ Minion* Player::getMinion(int i) {return board.getMinion(i);}
 
 void Player::decreaseLife(int n) {life -= n;}
 
+void Player::play(int i) {
+    Card* cardToPlay = hand.getCard(i);
+    Minion* minionToPlay = dynamic_cast<Minion*>(cardToPlay);
+    board.addCard(minionToPlay);
+}
+
