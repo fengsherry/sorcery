@@ -55,10 +55,9 @@ void GameController::go(int argc, char *argv[]) {
     // initialize Players, their Decks, and their Hands
     gm.initPlayers(in1, in2);
 
-    int turn = 1; // 1 for player 1's turn, 2 for player 2's turn
-    int numPlayers = 2;
     string cmd;
     int arg;
+    gm.startTurn();
     while (true) {
         
         cin >> cmd;
@@ -67,10 +66,8 @@ void GameController::go(int argc, char *argv[]) {
         if (cmd == "help") { 
 
         } else if (cmd == "end") {
-            ++turn;
-            if (turn > numPlayers) {
-                turn = 1;
-            }
+            gm.endTurn();
+            gm.startTurn();
         } else if (cmd == "quit") {
 
         } else if (cmd == "draw") {

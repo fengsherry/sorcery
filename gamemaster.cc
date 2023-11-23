@@ -46,6 +46,8 @@ void GameMaster::initPlayers(ifstream& deck1In, ifstream& deck2In) {
 // starts a turn, switches active and nonactive players, notifies corresponding observers
 void GameMaster::startTurn() {
     swap(activePlayer, nonactivePlayer);
+    activePlayer->increaseMagic(1);
+    cout << "Player " << turn << " : " << activePlayer->getName() << "  It's your turn!"
     // notify
 }
 

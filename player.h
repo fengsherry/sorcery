@@ -26,12 +26,18 @@ class Player {
     ~Player();
 
         void init(string name, int id);
+
         string getName();
         int getId();
         int getLife();
         int getMagic();
         Minion* getMinion(int i); 
+
+        void setLife(int n);
+        void setMagic(int n);
+        void increaseMagic(int n);
         void decreaseLife(int n);
+
         void play(int i); // plays the ith card int he player's hand with no target
         void init(string name, int id, ifstream& deckIn);
         
