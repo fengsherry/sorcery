@@ -16,9 +16,11 @@ void GameMaster::initPlayers(ifstream& deck1In, ifstream& deck2In) {
     getline(cin, p1name); 
     getline(cin, p2name); 
 
-    Player p1, p2;
     p1.init(p1name, 1, deck1In);
     p2.init(p2name, 2, deck2In);
+
+    activePlayer = &p1;
+    nonactivePlayer = &p2;
 
     cout << "Player " << p1.getId() << ": " << p1.getName() << endl;
     cout << "Player " << p2.getId() << ": " << p2.getName() << endl;
@@ -47,7 +49,7 @@ void GameMaster::initPlayers(ifstream& deck1In, ifstream& deck2In) {
 void GameMaster::startTurn() {
     swap(activePlayer, nonactivePlayer);
     activePlayer->increaseMagic(1);
-    cout << "Player " << turn << " : " << activePlayer->getName() << "  It's your turn!";
+    cout << "Player " << turn << " : " << activePlayer->getName() << "  It's your turn!" << endl;
     // notify
 }
 
@@ -64,8 +66,8 @@ void attackMinion();
 
 
 void GameMaster::attackPlayer(int i) {
-    Minion* attackingMinion = activePlayer->getMinion(i);
-    int attackVal = attackingMinion->getAttack();
+    // Minion* attackingMinion = activePlayer->getMinion(i);
+    int attackVal = activePlayer->getMinion(i)->getAttack();
     nonactivePlayer->decreaseLife(attackVal);
 }
 
