@@ -16,10 +16,12 @@ class Card {
 
  public:
     Card(string cardName);
-    virtual ~Card();
+    virtual ~Card() = default;
     string getName() const;
     int getCost() const;
 
 };
+
+ostream &operator<< (ostream &out, const Card &c);
 
 #endif

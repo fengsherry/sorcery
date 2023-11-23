@@ -20,7 +20,7 @@ void Deck::init(ifstream& file) {
 }
 
 void Deck::TEST_printDeck() {
-    for (auto s : theDeck) { cout << s->getName() << endl; }
+    for (auto s : theDeck) { cout << *s << endl; }
 }
 
 Card *Hand::getCard(int i) {

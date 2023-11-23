@@ -20,6 +20,8 @@ ostream &operator<< (ostream &out, const Card &c) {
 }
 // TEMP
 
+// Card::~Card() {}
+
 
 
 
