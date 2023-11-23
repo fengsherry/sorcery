@@ -26,6 +26,9 @@ void GameMaster::initPlayers(ifstream& deck1In, ifstream& deck2In) {
     p1.TEST_printPlayerDeck();
     p2.TEST_printPlayerDeck();
 
+    p1.TEST_printPlayerHand();
+    p2.TEST_printPlayerHand();
+
 }
 
 // // SET DECKS, initialize Decks

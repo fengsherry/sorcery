@@ -13,11 +13,17 @@ void Player::init(string name, int id, ifstream& deckIn) {
     this->name = name;
     this->id = id;
     deck.init(deckIn);
+    hand.init(deck);
 }
 
 void Player::TEST_printPlayerDeck() {
     cout << "Player " << id << "'s Deck: " << endl;
     deck.TEST_printDeck();
+}
+
+void Player::TEST_printPlayerHand() {
+    cout << "Player " << id << "'s Hand: " << endl;
+    hand.TEST_printHand();
 }
 
 string Player::getName() {return name;}

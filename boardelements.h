@@ -31,7 +31,10 @@ class Hand {
     vector<Card*> theHand;
 
     public:
+        void init(Deck& deck);
         Card* getCard(int i);
+
+        void TEST_printHand();
 };
 
 // Minions the player has played, not yet dead

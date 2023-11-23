@@ -34,7 +34,9 @@ class Player {
         void decreaseLife(int n);
         void play(int i); // plays the ith card int he player's hand with no target
         void init(string name, int id, ifstream& deckIn);
+        
         void TEST_printPlayerDeck();
+        void TEST_printPlayerHand();
 };
 
 

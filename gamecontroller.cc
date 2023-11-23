@@ -52,7 +52,7 @@ void GameController::go(int argc, char *argv[]) {
     // initialize the game
     GameMaster gm{}; 
 
-    // initialize Players
+    // initialize Players, their Decks, and their Hands
     gm.initPlayers(in1, in2);
 
     int turn = 1; // 1 for player 1's turn, 2 for player 2's turn

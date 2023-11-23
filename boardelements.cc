@@ -23,10 +23,31 @@ void Deck::TEST_printDeck() {
     for (auto s : theDeck) { cout << *s << endl; }
 }
 
+Card* Deck::drawCard() {
+    Card* card = theDeck.back();
+    theDeck.pop_back();
+    return card;
+}
+
+
+/* HAND */
+void Hand::init(Deck& deck) {
+    for (int i = 0; i < 5; ++i) {
+        theHand.emplace_back(deck.drawCard());
+    }
+}
+
 Card *Hand::getCard(int i) {
     return theHand[i];
 }
 
+void Hand::TEST_printHand() {
+    for (int i = 0; i < 5; ++i) {
+        cout << "Hand (" << i << "): " << *theHand[i] << endl;
+    }
+}
+
+/* BOARD */
 Minion *Board::getMinion(int i) {
     return theBoard[i];
 }
