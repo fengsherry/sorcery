@@ -16,6 +16,7 @@ class Card {
 
  public:
     Card(string cardName);
+    virtual ~Card();
     string getName() const;
     int getCost() const;
 

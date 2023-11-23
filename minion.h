@@ -9,7 +9,7 @@ using namespace std;
 
 class Minion: public Card {
  public:
-    // constructor
+    Minion(string cardname);
     // destructor
 
     virtual int getAttack() = 0;

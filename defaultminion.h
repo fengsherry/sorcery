@@ -12,7 +12,8 @@ class DefaultMinion : public Minion {
     // Ability ability;
 
  public:
-    // Default constructor
+    // without ability for now
+    DefaultMinion(string cardName, int attack, int defense, int action);
     int getAttack();
     int getDefense();
     int getAction();

@@ -3,6 +3,9 @@
 #include "defaultminion.h"
 using namespace std;
 
+DefaultMinion::DefaultMinion(string cardName, int attack, int defense, int action):
+    Minion {cardName}, attack {attack}, defense {defense}, action {action} {}
+
 int DefaultMinion::getAttack() {
     return attack;
 }

@@ -12,7 +12,9 @@ Deck::~Deck() {}
 void Deck::init(ifstream& file) {
     string cardName;
     while (getline(file, cardName)) {
-        Card* card = new Card(cardName);
+        // an if else to make the different cards?
+
+        Card* card = new DefaultMinion(cardName, 1, 1, 1);
         theDeck.emplace_back(card);
     }
 }

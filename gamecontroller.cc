@@ -80,9 +80,11 @@ void GameController::go(int argc, char *argv[]) {
         } else if (cmd == "attack") {
             // basic version that only attacks player
             cin >> arg;
-            gm.attackPlayer();
+            gm.attackPlayer(arg);
         } else if (cmd == "play") {
-
+            // currently the basic version that only plays a basic minion with no abilities
+            cin >> arg;
+            gm.play(arg);
         } else if (cmd == "use") {
 
         } else if (cmd == "describe") {
