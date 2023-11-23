@@ -47,7 +47,7 @@ void GameMaster::initPlayers(ifstream& deck1In, ifstream& deck2In) {
 void GameMaster::startTurn() {
     swap(activePlayer, nonactivePlayer);
     activePlayer->increaseMagic(1);
-    cout << "Player " << turn << " : " << activePlayer->getName() << "  It's your turn!"
+    cout << "Player " << turn << " : " << activePlayer->getName() << "  It's your turn!";
     // notify
 }
 
