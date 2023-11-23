@@ -22,8 +22,8 @@ void GameMaster::initPlayers(ifstream& deck1In, ifstream& deck2In) {
     activePlayer = &p1;
     nonactivePlayer = &p2;
 
-    cout << "Player " << p1.getId() << ": " << p1.getName() << endl;
-    cout << "Player " << p2.getId() << ": " << p2.getName() << endl;
+    cout << "Player " << p1.getId() << ": " << p1.getName() << "\n" << endl;
+    cout << "Player " << p2.getId() << ": " << p2.getName() << "\n" << endl;
 
     p1.TEST_printPlayerDeck();
     p2.TEST_printPlayerDeck();
@@ -48,6 +48,8 @@ void GameMaster::initPlayers(ifstream& deck1In, ifstream& deck2In) {
 // starts a turn, switches active and nonactive players, notifies corresponding observers
 void GameMaster::startTurn() {
     activePlayer->increaseMagic(1);
+    activePlayer->getBoard().restoreAction();
+    activePlayer->getHand().restoreAction(); // can we combine these two
     // notify
 }
 
@@ -64,10 +66,18 @@ void GameMaster::endTurn() {
 void attackMinion();
 
 
-void GameMaster::attackPlayer(int i) {
-    // Minion* attackingMinion = activePlayer->getMinion(i);
-    int attackVal = activePlayer->getMinion(i)->getAttack();
+bool GameMaster::attackPlayer(int i) {
+    Minion* attackingMinion = activePlayer->getBoard().getCard(i);
+
+    if (attackingMinion->getAction() == 0) { // check for enough action
+        cout << attackingMinion->getName() << " has 0 action. Unable to attack." << endl; // this shouldn't be here
+        return false;
+    }
+
+    attackingMinion->setAction(0);
+    int attackVal = attackingMinion->getAttack();
     nonactivePlayer->decreaseLife(attackVal);
+    return true;
 }
 
 void activateAbility();
@@ -76,6 +86,10 @@ void discard();
 
 void GameMaster::play(int i) {
     activePlayer->play(i);
+    activePlayer->getHand().removeCard(i);
+
+    activePlayer->TEST_printPlayerHand();
+    activePlayer->TEST_printPlayerBoard();
 }
 
 void notifyObservers();
@@ -86,5 +100,5 @@ void hand();
 void board();
 
 int GameMaster::getTurn() {return turn;}
-string GameMaster::getActivePlayerName() {return activePlayer->getName();}
-Hand& GameMaster::getActivePlayerHand() {return activePlayer->getHand();} 
+Player& GameMaster::getActivePlayer() {return *activePlayer;}
+Player& GameMaster::getNonactivePlayer() {return *nonactivePlayer;}

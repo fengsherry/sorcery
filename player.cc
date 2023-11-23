@@ -17,23 +17,30 @@ void Player::init(string name, int id, ifstream& deckIn) {
 }
 
 void Player::TEST_printPlayerDeck() {
-    cout << "Player " << id << "'s Deck: " << endl;
+    cout << "Player " << id << " " << name << "'s Deck: " << endl;
     deck.TEST_printDeck();
+    cout << endl;
 }
 
 void Player::TEST_printPlayerHand() {
-    cout << "Player " << id << "'s Hand: " << endl;
+    cout << "Player " << id << " " << name << "'s Hand: " << endl;
     hand.TEST_printHand();
+    cout << endl;
 }
 
-string Player::getName() {return name;}
-int Player::getId() {return id;}
-int Player::getLife() {return life;}
-int Player::getMagic() {return magic;}
+void Player::TEST_printPlayerBoard() {
+    cout << "Player " << id << " " << name << "'s Board: " << endl;
+    board.TEST_printBoard();
+    cout << endl;
+}
 
-Minion* Player::getMinion(int i) {return board.getMinion(i);}
+string Player::getName() const {return name;}
+int Player::getId() const {return id;}
+int Player::getLife() const {return life;}
+int Player::getMagic() const {return magic;}
+
 Hand& Player::getHand() {return hand;}
-
+Board& Player::getBoard() {return board;}
 
 void Player::setLife(int n) {life = n;}
 void Player::setMagic(int n) {magic = n;}
@@ -42,7 +49,7 @@ void Player::decreaseLife(int n) {
     life -= n;
 
     // checks if player is still alive
-    if (life <= 0) cout << this->getName() << " is dead D:";
+    if (life <= 0) cout << this->getName() << " is dead D:" << endl;
 }
 
 void Player::play(int i) {

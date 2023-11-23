@@ -12,8 +12,11 @@ class Minion: public Card {
     Minion(string cardname);
     // destructor
 
-    virtual int getAttack() = 0;
-    virtual int getDefense() = 0;
+    virtual int getAttack() const = 0;
+    virtual int getDefense() const = 0;
+    virtual int getAction() const = 0;
+
+    virtual void setAction(int n) = 0;
     // Ability getAbility() = 0;
 
 };

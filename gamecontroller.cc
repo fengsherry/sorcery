@@ -58,6 +58,7 @@ void GameController::go(int argc, char *argv[]) {
     string cmd;
     int arg;
     gm.startTurn();
+    cout << "Player " << gm.getTurn() << ": " << gm.getActivePlayer().getName() << "  It's your turn!" << endl;
     while (true) {
         
         cin >> cmd;
@@ -68,7 +69,7 @@ void GameController::go(int argc, char *argv[]) {
         } else if (cmd == "end") {
             gm.endTurn();
             gm.startTurn();
-            cout << "Player " << gm.getTurn() << " : " << gm.getActivePlayerName() << "  It's your turn!" << endl;
+            cout << "Player " << gm.getTurn() << ": " << gm.getActivePlayer().getName() << "  It's your turn!" << endl;
         } else if (cmd == "quit") {
 
         } else if (cmd == "draw") {
@@ -77,13 +78,27 @@ void GameController::go(int argc, char *argv[]) {
 
         } else if (cmd == "attack") {
             // basic version that only attacks player
+
             cin >> arg;
-            gm.attackPlayer(arg);
+
+            cout << gm.getActivePlayer().getName() << " is attacking " <<  gm.getNonactivePlayer().getName() 
+            << " with " << *(gm.getActivePlayer().getBoard().getCard(arg-1)) << endl;
+
+            // perform attack
+            bool success = gm.attackPlayer(arg-1);
+
+            // output new states of players
+            if (success) cout << gm.getNonactivePlayer().getName() << "'s  Life Remaining: " << gm.getNonactivePlayer().getLife() << endl;
+            
+            cout << endl;
+
         } else if (cmd == "play") {
             // currently the basic version that only plays a basic minion with no abilities
+            
             cin >> arg;
-            cout << gm.getActivePlayerName() << " played " << *(gm.getActivePlayerHand().getCard(arg)) << endl;
-            gm.play(arg);
+
+            cout << gm.getActivePlayer().getName() << " is playing " << *(gm.getActivePlayer().getHand().getCard(arg-1)) << endl;
+            gm.play(arg-1);
         } else if (cmd == "use") {
 
         } else if (cmd == "describe") {

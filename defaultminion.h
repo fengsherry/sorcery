@@ -2,6 +2,7 @@
 #define __DEFAULTMINION_H__
 #include <string>
 #include <vector>
+#include <iostream> // delete later
 #include "minion.h"
 #include "card.h"
 using namespace std;
@@ -13,11 +14,13 @@ class DefaultMinion : public Minion {
 
  public:
     // without ability for now
-    DefaultMinion(string cardName, int attack, int defense, int action);
-    int getAttack();
-    int getDefense();
-    int getAction();
+    DefaultMinion(string cardName, int attack, int defense);
+    int getAttack() const override;
+    int getDefense() const override;
+    int getAction() const override;
     //Ability getAbility();
+
+    void setAction(int n);
 };
 
 #endif

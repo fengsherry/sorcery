@@ -29,8 +29,8 @@ class GameMaster {
         void startTurn();
         void endTurn();
 
-        void attackMinion();
-        void attackPlayer(int i);
+        bool attackMinion();
+        bool attackPlayer(int i); // returns true if successfully attacked, returns false otherwise
         void activateAbility();
 
         void discard();
@@ -44,8 +44,8 @@ class GameMaster {
 
         // getters and setters
         int getTurn();
-        string getActivePlayerName();
-        Hand& getActivePlayerHand();
+        Player& getActivePlayer();
+        Player& getNonactivePlayer();
 };
 
 

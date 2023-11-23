@@ -27,12 +27,12 @@ class Player {
 
         void init(string name, int id);
 
-        string getName();
-        int getId();
-        int getLife();
-        int getMagic();
-        Minion* getMinion(int i); 
+        string getName() const;
+        int getId() const;
+        int getLife() const;
+        int getMagic() const;
         Hand& getHand();
+        Board& getBoard();
 
         void setLife(int n);
         void setMagic(int n);
@@ -44,6 +44,7 @@ class Player {
         
         void TEST_printPlayerDeck();
         void TEST_printPlayerHand();
+        void TEST_printPlayerBoard();
 };
 
 

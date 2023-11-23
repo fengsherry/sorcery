@@ -12,9 +12,10 @@ Deck::~Deck() {}
 void Deck::init(ifstream& file) {
     string cardName;
     while (getline(file, cardName)) {
-        // an if else to make the different cards?
+        // an function to make the different cards?
 
-        Card* card = new DefaultMinion(cardName, 1, 1, 1);
+        // this is just making a basic 1/1 minion 
+        Card* card = new DefaultMinion(cardName, 1, 1);
         theDeck.emplace_back(card);
     }
 }
@@ -37,21 +38,45 @@ void Hand::init(Deck& deck) {
     }
 }
 
-Card *Hand::getCard(int i) {
+Card* Hand::getCard(int i) const {
     return theHand[i];
 }
 
 void Hand::TEST_printHand() {
-    for (int i = 0; i < 5; ++i) {
-        cout << "Hand (" << i << "): " << *theHand[i] << endl;
+    for (size_t i = 0; i < theHand.size(); ++i) {
+        cout << "Hand (" << (i+1) << "): " << *theHand[i] << endl;
     }
 }
 
+void Hand::restoreAction() {
+    for (auto card : theHand) {
+        // type check for Minions
+        Minion* minionCard = dynamic_cast<Minion*>(card);
+        minionCard->setAction(1);
+    }
+}
+
+void Hand::removeCard(int i) {
+    theHand.erase(theHand.begin() + i);
+}
+
 /* BOARD */
-Minion *Board::getMinion(int i) {
+Minion* Board::getCard(int i) const {
     return theBoard[i];
 }
 
 void Board::addCard(Minion *m) {
     theBoard.emplace_back(m);
+}
+
+void Board::restoreAction() {
+    for (auto minion : theBoard) {
+        minion->setAction(1);
+    }
+}
+
+void Board::TEST_printBoard() {
+    for (size_t i = 0; i < theBoard.size(); ++i) {
+        cout << "Board (" << (i+1) << "): " << *theBoard[i] << endl;
+    }
 }

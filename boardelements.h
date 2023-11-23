@@ -32,9 +32,11 @@ class Hand {
 
     public:
         void init(Deck& deck);
-        Card* getCard(int i);
+        Card* getCard(int i) const;
 
         void TEST_printHand();
+        void restoreAction(); // sets action of Minions to 1
+        void removeCard(int i);
 };
 
 // Minions the player has played, not yet dead
@@ -42,9 +44,10 @@ class Board {
     vector<Minion*> theBoard;
 
     public:
-        Minion* getMinion(int i);
+        Minion* getCard(int i) const;
         void addCard(Minion *m);
-
+        void restoreAction(); // sets action of Minions to 1
+        void TEST_printBoard();
 };
 
 // collection of dead Minions
