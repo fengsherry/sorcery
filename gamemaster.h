@@ -29,7 +29,7 @@ class GameMaster {
         void startTurn();
         void endTurn();
 
-        bool attackMinion();
+        bool attackMinion(int i, int j); // returns true if successfully attacked, returns false otherwise
         bool attackPlayer(int i); // returns true if successfully attacked, returns false otherwise
         void activateAbility();
 

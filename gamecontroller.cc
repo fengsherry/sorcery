@@ -82,19 +82,43 @@ void GameController::go(int argc, char *argv[]) {
             // basic version that only attacks player
 
             cin >> arg;
-
-            Minion* attackingMinion = gm.getActivePlayer().getBoard().getCard(arg-1);
-            cout << activePlayerName << " is attacking " <<  nonactivePlayerName 
-            << " with " << *attackingMinion << endl;
-
-            // perform attack
-            bool success = gm.attackPlayer(arg-1);
-
-            // output new states of players
-            if (!success) cout << attackingMinion->getName() << " has 0 action. Unable to attack." << endl; 
-            if (success) cout << nonactivePlayerName << "'s life remaining: " << gm.getNonactivePlayer().getLife() << endl;
+            int arg2;
             
-            cout << endl;
+            if (cin >> arg2) { 
+                // "attack i j" - order minion i to attack nonactive player's minion j
+                Minion* attackingMinion = gm.getActivePlayer().getBoard().getCard(arg-1);
+                Minion* victimMinion = gm.getNonactivePlayer().getBoard().getCard(arg2-1);
+                cout << activePlayerName << "'s minion, " << *attackingMinion << " is attacking " <<  nonactivePlayerName 
+                << "'s minion," << *victimMinion << endl;
+
+                // perform attack
+                bool success = gm.attackMinion(arg-1, arg2-1);  // DOESN'T WORK UNTIL WE IMPLEMENT DECORATOR
+
+                // output new states of players
+                if (!success) cout << attackingMinion->getName() << " has 0 action. Unable to attack." << endl; 
+                if (success) {
+                    cout << attackingMinion << "'s defense remaining: " << attackingMinion->getDefense() << endl;
+                    cout << victimMinion << "'s defense remaining: " << victimMinion->getDefense() << endl;
+                }
+
+            } else {
+                // "attack i" - order minion i to attack the nonactive player
+                cin.clear();
+
+                Minion* attackingMinion = gm.getActivePlayer().getBoard().getCard(arg-1);
+                cout << activePlayerName << " is attacking " <<  nonactivePlayerName 
+                << " with " << *attackingMinion << endl;
+
+                // perform attack
+                bool success = gm.attackPlayer(arg-1);
+
+                // output new states of players
+                if (!success) cout << attackingMinion->getName() << " has 0 action. Unable to attack." << endl; 
+                if (success) cout << nonactivePlayerName << "'s life remaining: " << gm.getNonactivePlayer().getLife() << endl;
+                
+                cout << endl;
+
+            }
 
         } else if (cmd == "play") {
             // currently the basic version that only plays a basic minion with no abilities

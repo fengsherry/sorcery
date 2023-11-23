@@ -63,7 +63,21 @@ void GameMaster::endTurn() {
     swap(activePlayer, nonactivePlayer);
 }
 
-void attackMinion();
+// NOT DONE YET
+bool GameMaster::attackMinion(int i, int j) { // i is attacker, j is victim
+    Minion* attackingMinion = activePlayer->getBoard().getCard(i);
+    Minion* victimMinion = nonactivePlayer->getBoard().getCard(j);
+
+    // check for enough action
+    if (attackingMinion->getAction() == 0) return false;
+
+    attackingMinion->setAction(0);
+    int attackValAttacker = attackingMinion->getAttack();
+    int attackValVictim = victimMinion->getAttack();
+    // victimMinion->
+    // activePlayer
+
+}
 
 
 bool GameMaster::attackPlayer(int i) {

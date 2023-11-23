@@ -17,6 +17,7 @@ class Minion: public Card {
     virtual int getAction() const = 0;
 
     virtual void setAction(int n) = 0;
+    void decreaseLife(int n);
     // Ability getAbility() = 0;
 
 };

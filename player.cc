@@ -63,7 +63,7 @@ bool Player::play(int i) {
 
     // currently only considers minions
     if (cardToPlay->getType() == CardType::Minion) {
-        Minion* minionToPlay = dynamic_cast<Minion*>(cardToPlay);
+        Minion* minionToPlay = dynamic_cast<Minion*>(cardToPlay); // fails if cardToPlay is not Minion* type
         board.addCard(minionToPlay);
     }
     return true;
