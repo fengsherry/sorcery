@@ -22,6 +22,7 @@ class Deck {
     void init(ifstream& file);
     void shuffle();
     Card* drawCard();
+    size_t getSize();
 
     void TEST_printDeck();
 };

@@ -39,7 +39,9 @@ class Player {
         void increaseMagic(int n);
         void decreaseLife(int n);
 
-        void play(int i); // plays the ith card int he player's hand with no target
+        // plays the ith card int he player's hand with no target (i.e. minions, rituals, spells)
+        // returns true if successful, false otherwise
+        bool play(int i); 
         void init(string name, int id, ifstream& deckIn);
         
         void TEST_printPlayerDeck();

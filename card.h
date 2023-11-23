@@ -7,18 +7,26 @@ using namespace std;
 
 enum class CardType { Spell, Minion, Enchantment, Ritual };
 
+// contains only minions for now
+enum class CardName { 
+    AirElemental, EarthElemental, BoneGolem, FireElemental, PotionSeller, NovicePyromancer, ApprenticeSummoner, MasterSummoner
+};
+string cardNameToString(CardName c);
+
 // every card has a name and a cost
 class Card {   
-    string name;
+    CardName name;
     int cost;
     CardType type;
     string desc;
 
  public:
-    Card(string cardName);
+    // Card();
+    Card(CardName cardName, int cost, CardType type, string desc = "");
     virtual ~Card() = default;
     string getName() const;
     int getCost() const;
+    CardType getType();
 
 };
 

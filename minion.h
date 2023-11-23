@@ -9,7 +9,7 @@ using namespace std;
 
 class Minion: public Card {
  public:
-    Minion(string cardname);
+    Minion(CardName cardName, int cost, CardType type, string desc = "");
     // destructor
 
     virtual int getAttack() const = 0;

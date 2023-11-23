@@ -58,7 +58,9 @@ void GameController::go(int argc, char *argv[]) {
     string cmd;
     int arg;
     gm.startTurn();
-    cout << "Player " << gm.getTurn() << ": " << gm.getActivePlayer().getName() << "  It's your turn!" << endl;
+    string activePlayerName = gm.getActivePlayer().getName();
+    string nonactivePlayerName = gm.getNonactivePlayer().getName();
+    cout << "Player " << gm.getTurn() << ": " << activePlayerName << "  It's your turn!" << endl;
     while (true) {
         
         cin >> cmd;
@@ -69,7 +71,7 @@ void GameController::go(int argc, char *argv[]) {
         } else if (cmd == "end") {
             gm.endTurn();
             gm.startTurn();
-            cout << "Player " << gm.getTurn() << ": " << gm.getActivePlayer().getName() << "  It's your turn!" << endl;
+            cout << "Player " << gm.getTurn() << ": " << activePlayerName << "  It's your turn!" << endl;
         } else if (cmd == "quit") {
 
         } else if (cmd == "draw") {
@@ -81,14 +83,16 @@ void GameController::go(int argc, char *argv[]) {
 
             cin >> arg;
 
-            cout << gm.getActivePlayer().getName() << " is attacking " <<  gm.getNonactivePlayer().getName() 
-            << " with " << *(gm.getActivePlayer().getBoard().getCard(arg-1)) << endl;
+            Minion* attackingMinion = gm.getActivePlayer().getBoard().getCard(arg-1);
+            cout << activePlayerName << " is attacking " <<  nonactivePlayerName 
+            << " with " << *attackingMinion << endl;
 
             // perform attack
             bool success = gm.attackPlayer(arg-1);
 
             // output new states of players
-            if (success) cout << gm.getNonactivePlayer().getName() << "'s  Life Remaining: " << gm.getNonactivePlayer().getLife() << endl;
+            if (!success) cout << attackingMinion->getName() << " has 0 action. Unable to attack." << endl; 
+            if (success) cout << nonactivePlayerName << "'s life remaining: " << gm.getNonactivePlayer().getLife() << endl;
             
             cout << endl;
 
@@ -97,8 +101,11 @@ void GameController::go(int argc, char *argv[]) {
             
             cin >> arg;
 
-            cout << gm.getActivePlayer().getName() << " is playing " << *(gm.getActivePlayer().getHand().getCard(arg-1)) << endl;
-            gm.play(arg-1);
+            cout << activePlayerName << " is playing " << *(gm.getActivePlayer().getHand().getCard(arg-1)) << endl;
+            bool playSuccess = gm.play(arg-1);
+            if (!playSuccess) cout << "Not enough magic. Play failed." << endl;
+            else cout << activePlayerName << "'s magic remaining: " << gm.getActivePlayer().getMagic() << endl;
+            cout << endl;
         } else if (cmd == "use") {
 
         } else if (cmd == "describe") {

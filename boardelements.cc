@@ -9,14 +9,30 @@ Deck::Deck() {
 
 Deck::~Deck() {}
 
+Card* createCard(string cardName) {
+    Card* card;
+    if (cardName == "Air Elemental") card = new DefaultMinion(CardName::AirElemental, 0, CardType::Minion, 1, 1);
+    else if (cardName == "Earth Elemental") card = new DefaultMinion(CardName::EarthElemental, 3, CardType::Minion, 4, 4);
+    else if (cardName == "Bone Golem") card = new DefaultMinion(CardName::BoneGolem, 2, CardType::Minion, 1, 3, "Gain +1/+1 whenever a minion leaves play.");
+    else if (cardName == "Fire Elemental") card = new DefaultMinion(CardName::FireElemental, 2, CardType::Minion, 2, 2, "Whenever an opponent's minion enters play, deal 1 damage to it.");
+    else if (cardName == "Potion Seller") card = new DefaultMinion(CardName::PotionSeller, 2, CardType::Minion, 1, 3, "At the end of your turn, all your minions gain +0/+1.");
+    else if (cardName == "Novice Pyromancer") card = new DefaultMinion(CardName::NovicePyromancer, 1, CardType::Minion, 0, 1, "Deal 1 damage to target minion.");
+    else if (cardName == "Apprentice Summoner") card = new DefaultMinion(CardName::ApprenticeSummoner, 1, CardType::Minion, 1, 1, "Summon a 1/1 air elemental.");
+    else if (cardName == "Master Summoner") card = new DefaultMinion(CardName::MasterSummoner, 3, CardType::Minion, 2, 3, "Summon up to three 1/1 air elementals.");
+    // to do: add decorators and abilities to minions, add other kinds of cards
+    else return nullptr;
+    return card;
+}
+
 void Deck::init(ifstream& file) {
     string cardName;
-    while (getline(file, cardName)) {
+    while (getline(file, cardName) && cardName != "") {
         // an function to make the different cards?
 
-        // this is just making a basic 1/1 minion 
-        Card* card = new DefaultMinion(cardName, 1, 1);
-        theDeck.emplace_back(card);
+        Card* newCard = createCard(cardName);
+
+        // add to theDeck if it is a valid card (not nullptr)
+        if (newCard) theDeck.emplace_back(newCard);
     }
 }
 
@@ -30,10 +46,13 @@ Card* Deck::drawCard() {
     return card;
 }
 
+size_t Deck::getSize() {return theDeck.size();}
+
 
 /* HAND */
 void Hand::init(Deck& deck) {
-    for (int i = 0; i < 5; ++i) {
+    size_t deckSize = deck.getSize();
+    for (size_t i = 0; i < deckSize && i < 5; ++i) {
         theHand.emplace_back(deck.drawCard());
     }
 }

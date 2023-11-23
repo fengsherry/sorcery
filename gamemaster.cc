@@ -69,10 +69,8 @@ void attackMinion();
 bool GameMaster::attackPlayer(int i) {
     Minion* attackingMinion = activePlayer->getBoard().getCard(i);
 
-    if (attackingMinion->getAction() == 0) { // check for enough action
-        cout << attackingMinion->getName() << " has 0 action. Unable to attack." << endl; // this shouldn't be here
-        return false;
-    }
+    // check for enough action
+    if (attackingMinion->getAction() == 0) return false;
 
     attackingMinion->setAction(0);
     int attackVal = attackingMinion->getAttack();
@@ -84,12 +82,14 @@ void activateAbility();
 
 void discard();
 
-void GameMaster::play(int i) {
-    activePlayer->play(i);
+bool GameMaster::play(int i) {
+    if(!activePlayer->play(i)) return false;
     activePlayer->getHand().removeCard(i);
 
     activePlayer->TEST_printPlayerHand();
     activePlayer->TEST_printPlayerBoard();
+
+    return true;
 }
 
 void notifyObservers();

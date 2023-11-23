@@ -34,7 +34,7 @@ class GameMaster {
         void activateAbility();
 
         void discard();
-        void play(int i);
+        bool play(int i);
         void notifyObservers();
 
         // displays some visual

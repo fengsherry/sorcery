@@ -52,9 +52,20 @@ void Player::decreaseLife(int n) {
     if (life <= 0) cout << this->getName() << " is dead D:" << endl;
 }
 
-void Player::play(int i) {
+bool Player::play(int i) {
     Card* cardToPlay = hand.getCard(i);
-    Minion* minionToPlay = dynamic_cast<Minion*>(cardToPlay);
-    board.addCard(minionToPlay);
+    
+    // check if player has enough magic to play the card
+    int cost = cardToPlay->getCost();
+    if (cost > magic) return false;
+
+    magic -= cost;
+
+    // currently only considers minions
+    if (cardToPlay->getType() == CardType::Minion) {
+        Minion* minionToPlay = dynamic_cast<Minion*>(cardToPlay);
+        board.addCard(minionToPlay);
+    }
+    return true;
 }
 
