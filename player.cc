@@ -32,6 +32,8 @@ int Player::getLife() {return life;}
 int Player::getMagic() {return magic;}
 
 Minion* Player::getMinion(int i) {return board.getMinion(i);}
+Hand& Player::getHand() {return hand;}
+
 
 void Player::setLife(int n) {life = n;}
 void Player::setMagic(int n) {magic = n;}

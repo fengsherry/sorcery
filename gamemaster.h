@@ -41,6 +41,11 @@ class GameMaster {
         void describe();
         void hand();
         void board();
+
+        // getters and setters
+        int getTurn();
+        string getActivePlayerName();
+        Hand& getActivePlayerHand();
 };
 
 

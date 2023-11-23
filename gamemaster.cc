@@ -47,9 +47,7 @@ void GameMaster::initPlayers(ifstream& deck1In, ifstream& deck2In) {
 
 // starts a turn, switches active and nonactive players, notifies corresponding observers
 void GameMaster::startTurn() {
-    swap(activePlayer, nonactivePlayer);
     activePlayer->increaseMagic(1);
-    cout << "Player " << turn << " : " << activePlayer->getName() << "  It's your turn!" << endl;
     // notify
 }
 
@@ -60,6 +58,7 @@ void GameMaster::endTurn() {
         turn = 1;
     }
     // notify end of turn observers
+    swap(activePlayer, nonactivePlayer);
 }
 
 void attackMinion();
@@ -86,3 +85,6 @@ void describe();
 void hand();
 void board();
 
+int GameMaster::getTurn() {return turn;}
+string GameMaster::getActivePlayerName() {return activePlayer->getName();}
+Hand& GameMaster::getActivePlayerHand() {return activePlayer->getHand();} 

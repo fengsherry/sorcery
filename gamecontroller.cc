@@ -68,6 +68,7 @@ void GameController::go(int argc, char *argv[]) {
         } else if (cmd == "end") {
             gm.endTurn();
             gm.startTurn();
+            cout << "Player " << gm.getTurn() << " : " << gm.getActivePlayerName() << "  It's your turn!" << endl;
         } else if (cmd == "quit") {
 
         } else if (cmd == "draw") {
@@ -81,6 +82,7 @@ void GameController::go(int argc, char *argv[]) {
         } else if (cmd == "play") {
             // currently the basic version that only plays a basic minion with no abilities
             cin >> arg;
+            cout << gm.getActivePlayerName() << " played " << *(gm.getActivePlayerHand().getCard(arg)) << endl;
             gm.play(arg);
         } else if (cmd == "use") {
 

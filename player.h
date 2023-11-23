@@ -32,6 +32,7 @@ class Player {
         int getLife();
         int getMagic();
         Minion* getMinion(int i); 
+        Hand& getHand();
 
         void setLife(int n);
         void setMagic(int n);
