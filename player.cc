@@ -27,7 +27,15 @@ int Player::getMagic() {return magic;}
 
 Minion* Player::getMinion(int i) {return board.getMinion(i);}
 
-void Player::decreaseLife(int n) {life -= n;}
+void Player::setLife(int n) {life = n};
+void Player::setMagic(int n) {magic = n;}
+void Player::increaseMagic(int n) {magic += n;}
+void Player::decreaseLife(int n) {
+    life -= n;
+
+    // checks if player is still alive
+    if (life <= 0) cout << this->getName << " is dead D:";
+}
 
 void Player::play(int i) {
     Card* cardToPlay = hand.getCard(i);
