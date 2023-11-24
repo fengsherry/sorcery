@@ -10,7 +10,14 @@ class Ritual: public Card {
     int activationCost;
     int charge;
     //TriggeredAbility trigAbility;
- 
+    public:
+        Ritual(int ac, int charge);
+
+        int getActivationCost();
+        int getCharge();
+
+        void decreaseCharge(int n);
+        void increaseCharge(int n);
 };
 
 #endif

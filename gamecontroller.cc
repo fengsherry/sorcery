@@ -56,7 +56,7 @@ void GameController::go(int argc, char *argv[]) {
     gm.initPlayers(in1, in2);
 
     string cmd;
-    int arg;
+    int arg1, arg2, arg3;
     gm.startTurn();
     string activePlayerName = gm.getActivePlayer().getName();
     string nonactivePlayerName = gm.getNonactivePlayer().getName();
@@ -85,14 +85,14 @@ void GameController::go(int argc, char *argv[]) {
         } else if (cmd == "attack") {
             // basic version that only attacks player
 
-            cin >> arg;
+            cin >> arg1;
 
-            Minion* attackingMinion = gm.getActivePlayer().getBoard().getCard(arg-1);
+            Minion* attackingMinion = gm.getActivePlayer().getBoard().getCard(arg1-1);
             cout << activePlayerName << " is attacking " <<  nonactivePlayerName 
             << " with " << *attackingMinion << endl;
 
             // perform attack
-            bool success = gm.attackPlayer(arg-1);
+            bool success = gm.attackPlayer(arg1-1);
 
             // output new states of players
             if (!success) cout << attackingMinion->getName() << " has 0 action. Unable to attack." << endl; 
@@ -102,13 +102,31 @@ void GameController::go(int argc, char *argv[]) {
 
         } else if (cmd == "play") {
             
-            cin >> arg;
+            cin >> arg1;
+            if (cin >> arg2 >> arg3) {
+                // play i p t - plays ith card on card t owned by p
+                
+                // playing spells for now
+                Card& cardToPlay = gm.getActivePlayer().getHand().getCard(arg1-1);
+                Player& targetPlayer = gm.getPlayer(arg2).getName();
+                Card& targetCard;
 
-            cout << activePlayerName << " is playing " << *(gm.getActivePlayer().getHand().getCard(arg-1)) << endl;
-            bool playSuccess = gm.play(arg-1);
-            if (!playSuccess) cout << "Not enough magic. Play failed." << endl;
-            else cout << activePlayerName << "'s magic remaining: " << gm.getActivePlayer().getMagic() << endl;
-            cout << endl;
+                if (arg3 == 'r') {
+                    targetCard = targetPlayer.getRitual();
+                } else {
+                    targetCard = targetPlayer.getBoard().getCard(arg3);
+                }
+                cout << activePlayerName << " is playing " << *(cardToPlay) << " on " << targetPlayer << "'s " << targetCard << endl;
+                gm.
+
+            } else {
+                // play i - plays ith card with no target
+                cout << activePlayerName << " is playing " << *(gm.getActivePlayer().getHand().getCard(arg1-1)) << endl;
+                bool playSuccess = gm.play(arg1-1);
+                if (!playSuccess) cout << "Not enough magic. Play failed." << endl;
+                else cout << activePlayerName << "'s magic remaining: " << gm.getActivePlayer().getMagic() << endl;
+                cout << endl;
+            }
         } else if (cmd == "use") {
 
         } else if (cmd == "describe") {

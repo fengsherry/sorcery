@@ -41,6 +41,8 @@ int Player::getMagic() const {return magic;}
 
 Hand& Player::getHand() {return hand;}
 Board& Player::getBoard() {return board;}
+Ritual* Player::getRitual() {return ritual;}
+
 
 void Player::setLife(int n) {life = n;}
 void Player::setMagic(int n) {magic = n;}
@@ -61,10 +63,18 @@ bool Player::play(int i) {
 
     magic -= cost;
 
-    // currently only considers minions
     if (cardToPlay->getType() == CardType::Minion) {
         Minion* minionToPlay = dynamic_cast<Minion*>(cardToPlay);
         board.addCard(minionToPlay);
+    } else if (cardToPlay->getType() == CardType::Ritual) {
+        Ritual* ritualToPlay = dynamic_cast<Ritual*>(cardToPlay);
+        ritual = cardToPlay();
+        // add triggered ability to subject
+
+    } else if (cardToPlay->getType() == CardType::Spell) {
+        if (cardToPlay->getNeedTarget() == true) return false;
+        Sepll* spellToPlay = dynamic_cast<Spell*>(cardToPlay);
+        spellToPlay->applyAbility(*this);
     }
     return true;
 }

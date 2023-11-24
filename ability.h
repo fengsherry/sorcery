@@ -3,6 +3,7 @@
 #ifndef __ABILITY_H__
 #define __ABILITY_H__
 #include <vector>
+#include "player.h"
 using namespace std;
 
 class Ability {
@@ -10,9 +11,11 @@ class Ability {
     vector<Minion*> targetMinions;
 
     public:   
-        Ability(targetPlayers = vector<Player*> emptyPlayerVector, targetMinions = vector<Minion*> emptyMinionVector); 
-        bool applyAbility() = 0; 
+        Ability(vector<Player*> targetPlayers = {}, vector<Minion*> targetMinions = {}); 
+        virtual bool applyAbility() = 0; 
 
         vector<Player*>& getTargetPlayers();
         vector<Minion*>& getTargetMinions();
-}
+};
+
+#endif

@@ -33,6 +33,7 @@ class Player {
         int getMagic() const;
         Hand& getHand();
         Board& getBoard();
+        Ritual* getRitual();
 
         void setLife(int n);
         void setMagic(int n);

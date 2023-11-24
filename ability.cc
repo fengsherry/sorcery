@@ -1,7 +1,7 @@
 #include "ability.h"
 using namespace std;
 
-Ability::Ability(targetPlayers = vector<Player*> emptyPlayerVector, targetMinions = vector<Minion*> emptyMinionVector):
+Ability::Ability(vector<Player*> targetPlayers, vector<Minion*> targetMinions):
 targetPlayers{targetPlayers}, targetMinions{targetMinions} {}
 
 vector<Player*>& Ability::getTargetPlayers() {

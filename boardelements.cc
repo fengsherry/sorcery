@@ -24,7 +24,7 @@ Card* createCard(string cardName) {
     // to do: add decorators and abilities to minions, add other kinds of cards
     
     // spells
-    else if (cardName == "Banish") card = new Spell(CardName::Banish, 2, CardType::Spell, BanishAbility{});
+    else if (cardName == "Recharge") card = new Spell(CardName::Recharge, 1, "Your ritual gains 3 charges", RechargeAbility{});
     else return nullptr;
     return card;
 }

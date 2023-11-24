@@ -8,6 +8,7 @@
 #include "card.h"
 #include "minion.h"
 #include "defaultminion.h"
+#include "spell.h"
 using namespace std;
 
 // collection of cards from which players draw cards into their Hand

@@ -44,6 +44,7 @@ class GameMaster {
 
         // getters and setters
         int getTurn();
+        Player& getPlayer(int i);
         Player& getActivePlayer();
         Player& getNonactivePlayer();
 };

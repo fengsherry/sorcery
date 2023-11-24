@@ -102,3 +102,6 @@ void board();
 int GameMaster::getTurn() {return turn;}
 Player& GameMaster::getActivePlayer() {return *activePlayer;}
 Player& GameMaster::getNonactivePlayer() {return *nonactivePlayer;}
+Player& GameMaster::getPlayer(int i) {
+    (i == 1) ? return p1 : return p2;
+}
