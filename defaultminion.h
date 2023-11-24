@@ -8,13 +8,14 @@
 using namespace std;
 
 class DefaultMinion : public Minion {
+    CardType type = CardType::Minion;
     int attack, defense;
     int action = 0;
     // Ability ability;
 
  public:
     // without ability for now
-    DefaultMinion(CardName cardName, int cost, CardType type, int attack, int defense, string desc = "");
+    DefaultMinion(CardName cardName, int cost, int attack, int defense, string desc = "");
     int getAttack() const override;
     int getDefense() const override;
     int getAction() const override;

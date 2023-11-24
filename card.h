@@ -9,7 +9,8 @@ enum class CardType { Spell, Minion, Enchantment, Ritual };
 
 // contains only minions for now
 enum class CardName { 
-    AirElemental, EarthElemental, BoneGolem, FireElemental, PotionSeller, NovicePyromancer, ApprenticeSummoner, MasterSummoner
+    /* Minions: */ AirElemental, EarthElemental, BoneGolem, FireElemental, PotionSeller, NovicePyromancer, ApprenticeSummoner, MasterSummoner,
+    /* Enchantments: */ GiantStrength, Enrage, Haste, MagicFatigue, Silence
 };
 string cardNameToString(CardName c);
 

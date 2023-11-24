@@ -3,8 +3,8 @@
 #include "defaultminion.h"
 using namespace std;
 
-DefaultMinion::DefaultMinion(CardName cardName, int cost, CardType type, int attack, int defense, string desc):
-    Minion {cardName, cost, type, desc}, attack {attack}, defense {defense} {}
+DefaultMinion::DefaultMinion(CardName cardName, int cost, int attack, int defense, string desc):
+    Minion {cardName, cost, desc}, attack {attack}, defense {defense} {}
 
 int DefaultMinion::getAttack() const {
     return attack;
