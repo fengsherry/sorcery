@@ -21,6 +21,20 @@ string cardNameToString(CardName c) {
             return "Apprentice Summoner";
         case CardName::MasterSummoner:
             return "Master Summoner";
+        case CardName::Banish:
+            return "Banish";
+        case CardName::Unsummon:
+            return "Unsummon";
+        case CardName::Recharge:
+            return "Recharge";
+        case CardName::Disenchant:
+            return "Disenchant";
+        case CardName::RaiseDead:
+            return "Raise Dead";
+        case CardName::Blizzard:
+            return "Blizzard";
+
+        // add more
     }
 }
 

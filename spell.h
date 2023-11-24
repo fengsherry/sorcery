@@ -7,7 +7,10 @@
 using namespace std;
 
 class Spell: public Card {
-    // do something
+    ActivatedAbility* aa;
+    
+    public:
+        Spell(CardName cardName, int cost, CardType type, string desc, ActivatedAbility* aa);
     
 };
 

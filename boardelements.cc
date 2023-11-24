@@ -11,6 +11,8 @@ Deck::~Deck() {}
 
 Card* createCard(string cardName) {
     Card* card;
+
+    // minions
     if (cardName == "Air Elemental") card = new DefaultMinion(CardName::AirElemental, 0, CardType::Minion, 1, 1);
     else if (cardName == "Earth Elemental") card = new DefaultMinion(CardName::EarthElemental, 3, CardType::Minion, 4, 4);
     else if (cardName == "Bone Golem") card = new DefaultMinion(CardName::BoneGolem, 2, CardType::Minion, 1, 3, "Gain +1/+1 whenever a minion leaves play.");
@@ -20,6 +22,9 @@ Card* createCard(string cardName) {
     else if (cardName == "Apprentice Summoner") card = new DefaultMinion(CardName::ApprenticeSummoner, 1, CardType::Minion, 1, 1, "Summon a 1/1 air elemental.");
     else if (cardName == "Master Summoner") card = new DefaultMinion(CardName::MasterSummoner, 3, CardType::Minion, 2, 3, "Summon up to three 1/1 air elementals.");
     // to do: add decorators and abilities to minions, add other kinds of cards
+    
+    // spells
+    else if (cardName == "Banish") card = new Spell(CardName::Banish, 2, CardType::Spell, BanishAbility{});
     else return nullptr;
     return card;
 }
