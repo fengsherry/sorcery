@@ -49,7 +49,8 @@ void Player::decreaseLife(int n) {
     life -= n;
 
     // checks if player is still alive
-    if (life <= 0) cout << this->getName() << " is dead D:" << endl;
+    if (life <= 0) cout << this->getName() << " is dead D:" << endl; 
+    // we should throw an exception here
 }
 
 bool Player::play(int i) {

@@ -96,6 +96,6 @@ void Board::restoreAction() {
 
 void Board::TEST_printBoard() {
     for (size_t i = 0; i < theBoard.size(); ++i) {
-        cout << "Board (" << (i+1) << "): " << *theBoard[i] << endl;
+        cout << "Board (" << (i+1) << "): " << *theBoard[i] << " [" << theBoard[i]->getAction() << " action]" << endl;
     }
 }

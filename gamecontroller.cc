@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <sstream>
 #include "gamecontroller.h"
 
 GameController::GameController() {}
@@ -70,6 +71,9 @@ void GameController::go(int argc, char *argv[]) {
 
         } else if (cmd == "end") {
             gm.endTurn();
+            // reset names with new pointer values
+            activePlayerName = gm.getActivePlayer().getName(); 
+            nonactivePlayerName = gm.getNonactivePlayer().getName();
             gm.startTurn();
             cout << "Player " << gm.getTurn() << ": " << activePlayerName << "  It's your turn!" << endl;
         } else if (cmd == "quit") {
@@ -81,24 +85,27 @@ void GameController::go(int argc, char *argv[]) {
         } else if (cmd == "attack") {
             // basic version that only attacks player
 
-            cin >> arg;
-            int arg2;
+            string args;
+            int arg, arg2;
+            getline(cin, args);
+            istringstream iss(args);
+            iss >> arg;
             
-            if (cin >> arg2) { 
+            if (iss >> arg2) { 
                 // "attack i j" - order minion i to attack nonactive player's minion j
                 Minion* attackingMinion = gm.getActivePlayer().getBoard().getCard(arg-1);
                 Minion* victimMinion = gm.getNonactivePlayer().getBoard().getCard(arg2-1);
                 cout << activePlayerName << "'s minion, " << *attackingMinion << " is attacking " <<  nonactivePlayerName 
-                << "'s minion," << *victimMinion << endl;
+                << "'s minion, " << *victimMinion << endl;
 
                 // perform attack
                 bool success = gm.attackMinion(arg-1, arg2-1);  // DOESN'T WORK UNTIL WE IMPLEMENT DECORATOR
 
                 // output new states of players
                 if (!success) cout << attackingMinion->getName() << " has 0 action. Unable to attack." << endl; 
-                if (success) {
-                    cout << attackingMinion << "'s defense remaining: " << attackingMinion->getDefense() << endl;
-                    cout << victimMinion << "'s defense remaining: " << victimMinion->getDefense() << endl;
+                else {
+                    cout <<  attackingMinion->getName() << "'s defense remaining: " << attackingMinion->getDefense() << endl;
+                    cout << victimMinion->getName() << "'s defense remaining: " << victimMinion->getDefense() << endl;
                 }
 
             } else {
@@ -135,8 +142,10 @@ void GameController::go(int argc, char *argv[]) {
         } else if (cmd == "describe") {
 
         } else if (cmd == "hand") {
+            gm.getNonactivePlayer().TEST_printPlayerHand();
 
         } else if (cmd == "board") {
+            gm.getActivePlayer().TEST_printPlayerBoard();
 
         } else if (cmd != "") {
             td.displayMsg("Not a valid command");
