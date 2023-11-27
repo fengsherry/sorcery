@@ -5,6 +5,7 @@ using namespace std;
 
 string cardNameToString(CardName c) {
     switch (c) {
+        /* Minions: */
         case CardName::AirElemental:
             return "Air Elemental";
         case CardName::EarthElemental:
@@ -21,6 +22,17 @@ string cardNameToString(CardName c) {
             return "Apprentice Summoner";
         case CardName::MasterSummoner:
             return "Master Summoner";
+        /* Enchantments: */
+        case CardName::GiantStrength:
+            return "Giant Strength";
+        case CardName::Enrage:
+            return "Enrage";
+        case CardName::Haste:
+            return "Haste";
+        case CardName::MagicFatigue:
+            return "MagicFatigue";
+        case CardName::Silence:
+            return "Silence";
     }
 }
 
