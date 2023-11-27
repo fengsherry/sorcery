@@ -2,6 +2,7 @@
 #include <string>
 #include <iostream>
 #include "gamemaster.h"
+#include "exceptions.h"
 using namespace std;
 
 GameMaster::GameMaster() {} 
@@ -63,33 +64,53 @@ void GameMaster::endTurn() {
     swap(activePlayer, nonactivePlayer);
 }
 
-void attackMinion();
+// NOT DONE YET
+void GameMaster::attackMinion(int i, int j) { // i is attacker, j is victim
+    Minion* attackingMinion = activePlayer->getBoard().getCard(i);
+    Minion* victimMinion = nonactivePlayer->getBoard().getCard(j);
+
+    // check for enough action
+    if (attackingMinion->getAction() == 0) throw not_enough_action{*activePlayer}; 
+
+    attackingMinion->setAction(0);
+    int attackValAttacker = attackingMinion->getAttack();
+    int attackValVictim = victimMinion->getAttack();
+    // victimMinion->
+    // activePlayer
+    
+
+}
 
 
-bool GameMaster::attackPlayer(int i) {
+void GameMaster::attackPlayer(int i) {
     Minion* attackingMinion = activePlayer->getBoard().getCard(i);
 
     // check for enough action
-    if (attackingMinion->getAction() == 0) return false;
+    if (attackingMinion->getAction() == 0) throw not_enough_action{*activePlayer}; 
 
     attackingMinion->setAction(0);
     int attackVal = attackingMinion->getAttack();
     nonactivePlayer->decreaseLife(attackVal);
-    return true;
 }
 
 void activateAbility();
 
 void discard();
 
-bool GameMaster::play(int i) {
-    if(!activePlayer->play(i)) return false;
+void GameMaster::play(int i) {
+    activePlayer->play(i); // may throw exception
     activePlayer->getHand().removeCard(i);
 
     activePlayer->TEST_printPlayerHand();
     activePlayer->TEST_printPlayerBoard();
+}
 
-    return true;
+void GameMaster::play(int i, int j, Player& targetPlayer) {
+    activePlayer->play(i, j, targetPlayer);
+    activePlayer->getHand().removeCard(i);
+
+    activePlayer->TEST_printPlayerHand();
+    activePlayer->TEST_printPlayerBoard();
 }
 
 void notifyObservers();

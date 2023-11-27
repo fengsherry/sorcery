@@ -14,7 +14,7 @@ class DefaultMinion : public Minion {
 
  public:
     // without ability for now
-    DefaultMinion(CardName cardName, int cost, CardType type, int attack, int defense, string desc = "");
+    DefaultMinion(CardName cardName, int cost, int attack, int defense, string desc = "");
     int getAttack() const override;
     int getDefense() const override;
     int getAction() const override;

@@ -5,6 +5,7 @@ using namespace std;
 
 string cardNameToString(CardName c) {
     switch (c) {
+        /* Minions: */
         case CardName::AirElemental:
             return "Air Elemental";
         case CardName::EarthElemental:
@@ -33,19 +34,31 @@ string cardNameToString(CardName c) {
             return "Raise Dead";
         case CardName::Blizzard:
             return "Blizzard";
-
-        // add more
+            
+        /* Enchantments: */
+        case CardName::GiantStrength:
+            return "Giant Strength";
+        case CardName::Enrage:
+            return "Enrage";
+        case CardName::Haste:
+            return "Haste";
+        case CardName::MagicFatigue:
+            return "Magic Fatigue";
+        case CardName::Silence:
+            return "Silence";
     }
 }
 
 // Card::Card() {}
 
-Card::Card(CardName cardName, int cost, CardType type, string desc): 
-name{cardName}, cost{cost}, type{type}, desc{desc} {}
+Card::Card(CardName cardName, int cost, CardType type, bool needTarget, string desc): 
+name{cardName}, cost{cost}, type{type}, needTarget{needTarget}, desc{desc} {}
 
 string Card::getName() const {return cardNameToString(name);}
 
 CardType Card::getType() {return type;}
+
+bool Card::getNeedTarget() {return needTarget;}
 
 int Card::getCost() const {return cost;}
 

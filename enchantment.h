@@ -7,7 +7,14 @@
 using namespace std;
 
 class Enchantment: public Card {
+    CardType type = CardType::Enchantment;
+    bool needTarget = true;
+    string attackModifier;
+    string defenseModifer;
 
+    public:
+        Enchantment(CardName cardName, int cost, string desc, string attackModifier = "", string defenseModifer = "");
+        ~Enchantment();
 };
 
 #endif

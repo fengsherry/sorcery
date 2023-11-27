@@ -9,6 +9,9 @@
 #include "minion.h"
 #include "defaultminion.h"
 #include "spell.h"
+#include "enchantment.h"
+#include "enchantmentdec.h"
+#include "enchantmentdecsconcrete.h"
 using namespace std;
 
 // collection of cards from which players draw cards into their Hand
@@ -34,6 +37,7 @@ class Hand {
 
     public:
         void init(Deck& deck);
+        void addCard(Card* c);
         Card* getCard(int i) const;
 
         void TEST_printHand();
@@ -48,6 +52,7 @@ class Board {
     public:
         Minion* getCard(int i) const;
         void addCard(Minion *m);
+        void enchantMinion(int i, string minionName); // enchant ith Minion with specified enchantment name.
         void restoreAction(); // sets action of Minions to 1
         void TEST_printBoard();
 };

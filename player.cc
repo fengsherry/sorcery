@@ -1,4 +1,5 @@
 #include "player.h"
+#include "exceptions.h"
 
 Player::Player() {
     name = "DEFAULT PLAYER";
@@ -51,31 +52,57 @@ void Player::decreaseLife(int n) {
     life -= n;
 
     // checks if player is still alive
-    if (life <= 0) cout << this->getName() << " is dead D:" << endl;
+    if (life <= 0) cout << this->getName() << " is dead D:" << endl; 
+    // we should throw an exception here
 }
 
-bool Player::play(int i) {
+Card* Player::drawCard() {
+    Card* c = deck.drawCard();
+    hand.addCard(c);
+    return c;
+}
+
+void Player::play(int i) {
     Card* cardToPlay = hand.getCard(i);
+
+    // check if the card can be played without target
+    if (cardToPlay->getNeedTarget() == true) throw no_target_provided(*cardToPlay);
     
     // check if player has enough magic to play the card
     int cost = cardToPlay->getCost();
-    if (cost > magic) return false;
+    if (cost > magic) throw not_enough_magic(*this);
 
     magic -= cost;
 
     if (cardToPlay->getType() == CardType::Minion) {
-        Minion* minionToPlay = dynamic_cast<Minion*>(cardToPlay);
+        Minion* minionToPlay = dynamic_cast<Minion*>(cardToPlay); // fails if cardToPlay is not Minion* type
         board.addCard(minionToPlay);
-    } else if (cardToPlay->getType() == CardType::Ritual) {
-        Ritual* ritualToPlay = dynamic_cast<Ritual*>(cardToPlay);
-        ritual = cardToPlay();
-        // add triggered ability to subject
-
-    } else if (cardToPlay->getType() == CardType::Spell) {
-        if (cardToPlay->getNeedTarget() == true) return false;
-        Sepll* spellToPlay = dynamic_cast<Spell*>(cardToPlay);
-        spellToPlay->applyAbility(*this);
+    } else {
+        cout << "this is not a minion" << endl;
     }
-    return true;
+}
+
+void Player::play(int i, int j, Player& p) {
+    Card* cardToPlay = hand.getCard(i);
+    Card* targetCard = p.getBoard().getCard(j);
+
+    // check if the card needs a target to be played
+    if (cardToPlay->getNeedTarget() == false) throw no_target_needed(*cardToPlay);
+
+    // check if player has enough magic to play the card
+    int cost = cardToPlay->getCost();
+    if (cost > magic) throw not_enough_magic(*this);
+
+    magic -= cost;
+    
+    if (Enchantment* enchantCard = dynamic_cast<Enchantment*>(cardToPlay)) { // enchantment
+        if (Minion* targetMinion = dynamic_cast<Minion*>(targetCard)) {         
+            // place enchantment decorator on the Minion card, converting from enchantment's Card to its Decorator version
+            p.getBoard().enchantMinion(j, enchantCard->getName());
+
+        } else { throw invalid_play{"You cannot play " + cardToPlay->getName() + " on " + targetCard->getName()}; }
+    } else if (cardToPlay->getType() == CardType::Spell) { // spell with target
+        // do something
+    }
 }
 

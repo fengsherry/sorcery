@@ -9,8 +9,9 @@ enum class CardType { Spell, Minion, Enchantment, Ritual };
 
 // contains only minions for now
 enum class CardName { 
-    AirElemental, EarthElemental, BoneGolem, FireElemental, PotionSeller, NovicePyromancer, ApprenticeSummoner, MasterSummoner,
-    Banish, Unsummon, Recharge, Disenchant, RaiseDead, Blizzard
+    /* Minions: */ AirElemental, EarthElemental, BoneGolem, FireElemental, PotionSeller, NovicePyromancer, ApprenticeSummoner, MasterSummoner,
+    /* Enchantments: */ GiantStrength, Enrage, Haste, MagicFatigue, Silence,
+    /* Spells */ Banish, Unsummon, Recharge, Disenchant, RaiseDead, Blizzard
 };
 string cardNameToString(CardName c);
 
@@ -20,14 +21,16 @@ class Card {
     int cost;
     CardType type;
     string desc;
+    bool needTarget; // true if the Card requires a target to be played
 
  public:
     // Card();
-    Card(CardName cardName, int cost, CardType type, string desc = "");
+    Card(CardName cardName, int cost, CardType type, bool needTarget, string desc = "");
     virtual ~Card() = default;
     string getName() const;
     int getCost() const;
     CardType getType();
+    bool getNeedTarget();
 
 };
 

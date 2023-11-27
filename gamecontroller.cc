@@ -1,6 +1,10 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <sstream>
+#include <vector>
+#include <stdexcept>
+#include "exceptions.h"
 #include "gamecontroller.h"
 
 GameController::GameController() {}
@@ -62,84 +66,137 @@ void GameController::go(int argc, char *argv[]) {
     string nonactivePlayerName = gm.getNonactivePlayer().getName();
     cout << "Player " << gm.getTurn() << ": " << activePlayerName << "  It's your turn!" << endl;
     while (true) {
-        
-        cin >> cmd;
+        try { // catches exception
+            cin >> cmd;
 
-        if (cin.eof()) return;
-        if (cmd == "help") { 
+            if (cin.eof()) return;
+            if (cmd == "help") { 
 
-        } else if (cmd == "end") {
-            gm.endTurn();
-            gm.startTurn();
-            
-            activePlayerName = gm.getActivePlayer().getName();
-            nonactivePlayerName = gm.getNonactivePlayer().getName();
+            } else if (cmd == "end") {
+                gm.endTurn();
+                // reset names with new pointer values
+                activePlayerName = gm.getActivePlayer().getName(); 
+                nonactivePlayerName = gm.getNonactivePlayer().getName();
+                gm.startTurn();
+                cout << "Player " << gm.getTurn() << ": " << activePlayerName << "  It's your turn!" << endl;
+            } else if (cmd == "quit") {
 
-            cout << "Player " << gm.getTurn() << ": " << activePlayerName << "  It's your turn!" << endl;
-        } else if (cmd == "quit") {
-
-        } else if (cmd == "draw") {
-            
-        } else if (cmd == "discard") { // only available in -testing mode; how to handle this?
-
-        } else if (cmd == "attack") {
-            // basic version that only attacks player
-
-            cin >> arg1;
-
-            Minion* attackingMinion = gm.getActivePlayer().getBoard().getCard(arg1-1);
-            cout << activePlayerName << " is attacking " <<  nonactivePlayerName 
-            << " with " << *attackingMinion << endl;
-
-            // perform attack
-            bool success = gm.attackPlayer(arg1-1);
-
-            // output new states of players
-            if (!success) cout << attackingMinion->getName() << " has 0 action. Unable to attack." << endl; 
-            if (success) cout << nonactivePlayerName << "'s life remaining: " << gm.getNonactivePlayer().getLife() << endl;
-            
-            cout << endl;
-
-        } else if (cmd == "play") {
-            
-            cin >> arg1;
-            if (cin >> arg2 >> arg3) {
-                // play i p t - plays ith card on card t owned by p
+            } else if (cmd == "draw") {
+                try {
+                    Card* drawnCard = gm.getActivePlayer().drawCard();
+                    cout << "Player " << gm.getTurn() << ": " << activePlayerName << "  drew a " << drawnCard->getName() << endl;
+                } catch (invalid_play e) {cout << e.what() << endl; }
                 
-                // playing spells for now
-                Card& cardToPlay = gm.getActivePlayer().getHand().getCard(arg1-1);
-                Player& targetPlayer = gm.getPlayer(arg2).getName();
-                Card& targetCard;
+            } else if (cmd == "discard") { // only available in -testing mode; how to handle this?
 
-                if (arg3 == 'r') {
-                    targetCard = targetPlayer.getRitual();
+            } else if (cmd == "attack") {
+                // attacks player or minion
+
+                string args;
+                int arg, arg2;
+                getline(cin, args);
+                istringstream iss(args);
+                iss >> arg;
+                
+                if (iss >> arg2) { 
+                    // "attack i j" - order minion i to attack nonactive player's minion j
+                    Minion* attackingMinion = gm.getActivePlayer().getBoard().getCard(arg-1);
+                    Minion* victimMinion = gm.getNonactivePlayer().getBoard().getCard(arg2-1);
+                    cout << activePlayerName << "'s minion, " << *attackingMinion << " is attacking " <<  nonactivePlayerName 
+                    << "'s minion, " << *victimMinion << endl;
+
+                    try {
+                        // perform attack
+                        gm.attackMinion(arg-1, arg2-1);
+                        // output new states of minions
+                        cout <<  attackingMinion->getName() << "'s defense remaining: " << attackingMinion->getDefense() << endl;
+                        cout << victimMinion->getName() << "'s defense remaining: " << victimMinion->getDefense() << endl;
+                    } catch (not_enough_action e) {
+                        cout << e.what() << endl; // error message
+                    }
+
                 } else {
-                    targetCard = targetPlayer.getBoard().getCard(arg3);
+                    // "attack i" - order minion i to attack the nonactive player
+                    cin.clear();
+
+                    Minion* attackingMinion = gm.getActivePlayer().getBoard().getCard(arg-1);
+                    cout << activePlayerName << " is attacking " <<  nonactivePlayerName 
+                    << " with " << *attackingMinion << endl;
+
+                    try {
+                        // perform attack
+                        gm.attackPlayer(arg-1);
+                        // output new states of players
+                        cout << nonactivePlayerName << "'s life remaining: " << gm.getNonactivePlayer().getLife() << endl;
+                        cout << endl;
+                    } catch (not_enough_action e) {
+                        cout << e.what() << endl; // error message
+                    }
                 }
-                cout << activePlayerName << " is playing " << *(cardToPlay) << " on " << targetPlayer << "'s " << targetCard << endl;
+
+            } else if (cmd == "play") {
+                // version that plays minions and enchantments with no abilities
                 
+                vector<int> args;
+                string line;
+                int arg;
+                getline(cin, line);
+                istringstream iss(line);
+                while (iss >> arg) { args.emplace_back(arg); }
 
-            } else {
-                // play i - plays ith card with no target
-                cout << activePlayerName << " is playing " << *(gm.getActivePlayer().getHand().getCard(arg1-1)) << endl;
-                bool playSuccess = gm.play(arg1-1);
-                if (!playSuccess) cout << "Not enough magic. Play failed." << endl;
-                else cout << activePlayerName << "'s magic remaining: " << gm.getActivePlayer().getMagic() << endl;
-                cout << endl;
-            }
-        } else if (cmd == "use") {
+                if (args.size() == 1) { // "play i" - minions, rituals, spells with no targets
+                    cout << activePlayerName << " is playing " << *(gm.getActivePlayer().getHand().getCard(arg-1)) << endl;
+                    try { 
+                        gm.play(args[0]-1); 
+                        cout << activePlayerName << "'s magic remaining: " << gm.getActivePlayer().getMagic() << endl;
+                        cout << endl;
+                    }
+                    catch (not_enough_magic e) { cout << e.what() << endl;}
+                    catch (no_target_provided e) { cout << e.what() << endl;}
 
-        } else if (cmd == "describe") {
+                } else if (args.size() == 3) { // "play i p j" - enchantments, spells with targets
+                    // identify target player
+                    Player* targetPlayer;
+                    if (args[1] != 1 && args[1] != 2) { cout << "Invalid player id." << endl; }
+                    else if (args[1] == gm.getActivePlayer().getId()) { targetPlayer = &gm.getActivePlayer(); } 
+                    else { targetPlayer = &gm.getNonactivePlayer(); }
+                    cout << activePlayerName << " is playing " << *(gm.getActivePlayer().getHand().getCard(args[0]-1)) << 
+                    " on " << targetPlayer->getName() << "'s " << *(targetPlayer->getBoard().getCard(args[2] - 1)) <<endl;
 
-        } else if (cmd == "hand") {
+                    // play the card
+                    try { 
+                        gm.play(args[0]-1, args[2]-1, *targetPlayer);
+                        cout << activePlayerName << "'s magic remaining: " << gm.getActivePlayer().getMagic() << endl;
+                        cout << endl; 
+                    } 
+                    catch(not_enough_magic e) { cout << e.what() << endl; } 
+                    catch(no_target_needed e) { cout << e.what() << endl; } 
+                    catch(invalid_play e) { cout << e.what() << endl; }
 
-        } else if (cmd == "board") {
+                } else {
+                    cout << "Incorrect input." << endl;
+                }
 
-        } else if (cmd != "") {
-            td.displayMsg("Not a valid command");
-            // cout << "Not a valid command" << endl;
-        } 
-     }
+                
+            } else if (cmd == "use") {
+
+            } else if (cmd == "describe") {
+
+            } else if (cmd == "hand") {
+                gm.getActivePlayer().TEST_printPlayerHand();
+
+            } else if (cmd == "board") {
+                gm.getActivePlayer().TEST_printPlayerBoard();
+
+            } else if (cmd != "") {
+                td.displayMsg("Not a valid command");
+                // cout << "Not a valid command" << endl;
+            } 
+
+
+        } catch(out_of_range e) { cout << e.what() << endl; }
+        
+    }
 }
 
 
