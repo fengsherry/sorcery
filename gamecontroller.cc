@@ -90,7 +90,7 @@ void GameController::go(int argc, char *argv[]) {
             } else if (cmd == "discard") { // only available in -testing mode; how to handle this?
 
             } else if (cmd == "attack") {
-                // basic version that only attacks player
+                // attacks player or minion
 
                 string args;
                 int arg, arg2;
@@ -135,7 +135,7 @@ void GameController::go(int argc, char *argv[]) {
                 }
 
             } else if (cmd == "play") {
-                // currently the basic version that only plays a basic minion with no abilities
+                // version that plays minions and enchantments with no abilities
                 
                 vector<int> args;
                 string line;
@@ -172,7 +172,6 @@ void GameController::go(int argc, char *argv[]) {
                     catch(not_enough_magic e) { cout << e.what() << endl; } 
                     catch(no_target_needed e) { cout << e.what() << endl; } 
                     catch(invalid_play e) { cout << e.what() << endl; }
-                    
 
                 } else {
                     cout << "Incorrect input." << endl;
