@@ -34,7 +34,8 @@ class GameMaster {
         void activateAbility();
 
         void discard();
-        bool play(int i);
+        void play(int i); // minions, rituals, spells with no targets
+        void play(int i, int j, Player& targetPlayer); // enchantments, spells with targets
         void notifyObservers();
 
         // displays some visual

@@ -5,6 +5,7 @@
 #include "card.h"
 // #inlcude "ability.h"
 #include <string>
+#include <iostream>
 using namespace std;
 
 class Minion: public Card {
@@ -12,7 +13,7 @@ class Minion: public Card {
     bool needTarget = false;
  public:
     Minion(CardName cardName, int cost, string desc = "");
-    // destructor
+    virtual ~Minion() = default;
 
     virtual int getAttack() const = 0;
     virtual int getDefense() const = 0;
@@ -21,8 +22,12 @@ class Minion: public Card {
 
     virtual void setAction(int n) = 0;
     void decreaseLife(int n);
-    
 
 };
+
+// std::ostream& operator<<(std::ostream& out, const Minion& m) {
+//     out << m.getName() << " ["<< m.getAction() << " action | [" << m.getAttack() << " attack | [" << m.getDefense() << " defense]";
+//     return out;
+// }
 
 #endif

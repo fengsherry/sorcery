@@ -2,6 +2,7 @@
 #include <string>
 #include <iostream>
 #include "gamemaster.h"
+#include "exceptions.h"
 using namespace std;
 
 GameMaster::GameMaster() {} 
@@ -96,14 +97,20 @@ void activateAbility();
 
 void discard();
 
-bool GameMaster::play(int i) {
+void GameMaster::play(int i) {
     activePlayer->play(i); // may throw exception
     activePlayer->getHand().removeCard(i);
 
     activePlayer->TEST_printPlayerHand();
     activePlayer->TEST_printPlayerBoard();
+}
 
-    return true;
+void GameMaster::play(int i, int j, Player& targetPlayer) {
+    activePlayer->play(i, j, targetPlayer);
+    activePlayer->getHand().removeCard(i);
+
+    activePlayer->TEST_printPlayerHand();
+    activePlayer->TEST_printPlayerBoard();
 }
 
 void notifyObservers();

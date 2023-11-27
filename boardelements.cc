@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include "boardelements.h"
+#include "exceptions.h"
 using namespace std;
 
 Deck::Deck() {
@@ -66,6 +67,11 @@ void Hand::init(Deck& deck) {
     }
 }
 
+void Hand::addCard(Card* c) {
+    if (theHand.size() == 5) throw invalid_play{"Hand is already full. Draw failed."};
+    theHand.emplace_back(c);
+}
+
 Card* Hand::getCard(int i) const {
     return theHand[i];
 }
@@ -100,6 +106,14 @@ void Board::addCard(Minion *m) {
     theBoard.emplace_back(m);
 }
 
+void Board::enchantMinion(int i, string minionName) {
+    if (minionName == "Giant Strength") theBoard[i] = new GiantStrength(theBoard[i]); 
+    else if (minionName == "Enrage") theBoard[i] = new Enrage(theBoard[i]);
+    else if (minionName == "Haste") theBoard[i] = new Haste(theBoard[i]);
+    else if (minionName == "Magic Fatigue") theBoard[i] = new MagicFatigue(theBoard[i]);
+    else if (minionName == "Silence") theBoard[i] = new Silence(theBoard[i]);
+}
+
 void Board::restoreAction() {
     for (auto minion : theBoard) {
         minion->setAction(1);
@@ -108,6 +122,7 @@ void Board::restoreAction() {
 
 void Board::TEST_printBoard() {
     for (size_t i = 0; i < theBoard.size(); ++i) {
-        cout << "Board (" << (i+1) << "): " << *theBoard[i] << " [" << theBoard[i]->getAction() << " action]" << endl;
+        // cout << "Board (" << (i+1) << "): " << theBoard[i];
+        cout << "Board (" << (i+1) << "): " << *theBoard[i] <<  " ["<< theBoard[i]->getAction() << " action | " << theBoard[i]->getAttack() << " attack | " << theBoard[i]->getDefense() << " defense]" << endl;
     }
 }

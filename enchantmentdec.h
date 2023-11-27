@@ -5,11 +5,13 @@
 #include "minion.h"
 
 class EnchantmentDec : public Minion {
-    protected:
+    public:
         Minion* next;
     public:
         EnchantmentDec(CardName cardName, int cost, string desc, Minion* next);
         virtual ~EnchantmentDec();
+
+        
 };
 
 #endif

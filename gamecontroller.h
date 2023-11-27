@@ -9,7 +9,7 @@ class GameController {
     TextDisplay td;
     // GraphicsDisplay gd;
 
-    /*private helper functions here */
+    /* private helper functions */
     // helper function to find command line variables
     bool findIndex(int argc, char* argv[], string s, int& i);
 
