@@ -117,7 +117,7 @@ void GameController::go(int argc, char *argv[]) {
                     targetCard = targetPlayer.getBoard().getCard(arg3);
                 }
                 cout << activePlayerName << " is playing " << *(cardToPlay) << " on " << targetPlayer << "'s " << targetCard << endl;
-                gm.
+                
 
             } else {
                 // play i - plays ith card with no target
