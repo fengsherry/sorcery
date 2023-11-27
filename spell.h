@@ -12,7 +12,7 @@ class Spell: public Card {
     bool needTarget;
     
     public:
-        Spell(CardName cardName, int cost, string desc, ActivatedAbility* aa, bool needTarget, Player* target = nullptr);
+        Spell(CardName cardName, int cost, bool needTarget, string desc, ActivatedAbility* aa, Player* target = nullptr);
         bool getNeedTarget();
         void applyAbility(Player& player);
 

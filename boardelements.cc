@@ -30,8 +30,8 @@ Card* createCard(string cardName) {
     else if (cardName == "Silence") card = new Enchantment(CardName::Silence, 1, "Enchanted minion cannot use abilities");
     
     // spells
-    else if (cardName == "Recharge") card = new Spell(CardName::Recharge, 1, "Your ritual gains 3 charges", RechargeAbility{});
-    
+    // else if (cardName == "Recharge") card = new Spell(CardName::Recharge, 1, false, "Your ritual gains 3 charges", RechargeAbility{});
+
     // to do: add decorators (done?) and abilities to minions, add other kinds of cards
     else return nullptr;
     return card;

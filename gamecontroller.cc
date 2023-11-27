@@ -160,8 +160,15 @@ void GameController::go(int argc, char *argv[]) {
                     if (args[1] != 1 && args[1] != 2) { cout << "Invalid player id." << endl; }
                     else if (args[1] == gm.getActivePlayer().getId()) { targetPlayer = &gm.getActivePlayer(); } 
                     else { targetPlayer = &gm.getNonactivePlayer(); }
+
+                    Card* targetCard;
+                    if (args[2] == 'r') {
+                        cout << "targeting a ritual!" << endl;
+                        targetCard = targetPlayer->getRitual();
+                    }
+                    else targetCard = targetPlayer->getBoard().getCard(args[2] - 1);
                     cout << activePlayerName << " is playing " << *(gm.getActivePlayer().getHand().getCard(args[0]-1)) << 
-                    " on " << targetPlayer->getName() << "'s " << *(targetPlayer->getBoard().getCard(args[2] - 1)) <<endl;
+                    " on " << targetPlayer->getName() << "'s " << targetCard->getName() <<endl;
 
                     // play the card
                     try { 
