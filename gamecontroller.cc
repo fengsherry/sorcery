@@ -2,6 +2,8 @@
 #include <string>
 #include <fstream>
 #include <sstream>
+#include <stdexcept>
+#include <vector>
 #include "gamecontroller.h"
 
 GameController::GameController() {}
@@ -98,14 +100,14 @@ void GameController::go(int argc, char *argv[]) {
                 cout << activePlayerName << "'s minion, " << *attackingMinion << " is attacking " <<  nonactivePlayerName 
                 << "'s minion, " << *victimMinion << endl;
 
-                // perform attack
-                bool success = gm.attackMinion(arg-1, arg2-1);  // DOESN'T WORK UNTIL WE IMPLEMENT DECORATOR
-
-                // output new states of players
-                if (!success) cout << attackingMinion->getName() << " has 0 action. Unable to attack." << endl; 
-                else {
+                try {
+                    // perform attack
+                    gm.attackMinion(arg-1, arg2-1);
+                    // output new states of minions
                     cout <<  attackingMinion->getName() << "'s defense remaining: " << attackingMinion->getDefense() << endl;
                     cout << victimMinion->getName() << "'s defense remaining: " << victimMinion->getDefense() << endl;
+                } catch (not_enough_action e) {
+                    cout << e.what() << endl; // error message
                 }
 
             } else {
@@ -116,33 +118,49 @@ void GameController::go(int argc, char *argv[]) {
                 cout << activePlayerName << " is attacking " <<  nonactivePlayerName 
                 << " with " << *attackingMinion << endl;
 
-                // perform attack
-                bool success = gm.attackPlayer(arg-1);
-
-                // output new states of players
-                if (!success) cout << attackingMinion->getName() << " has 0 action. Unable to attack." << endl; 
-                if (success) cout << nonactivePlayerName << "'s life remaining: " << gm.getNonactivePlayer().getLife() << endl;
-                
-                cout << endl;
-
+                try {
+                    // perform attack
+                    gm.attackPlayer(arg-1);
+                    // output new states of players
+                    cout << nonactivePlayerName << "'s life remaining: " << gm.getNonactivePlayer().getLife() << endl;
+                    cout << endl;
+                } catch (not_enough_action e) {
+                    cout << e.what() << endl; // error message
+                }
             }
 
         } else if (cmd == "play") {
             // currently the basic version that only plays a basic minion with no abilities
             
-            cin >> arg;
+            vector<int> args;
+            string line;
+            int arg;
+            getline(cin, line);
+            istringstream iss(line);
+            while (iss >> arg) { args.emplace_back(arg); }
 
-            cout << activePlayerName << " is playing " << *(gm.getActivePlayer().getHand().getCard(arg-1)) << endl;
-            bool playSuccess = gm.play(arg-1);
-            if (!playSuccess) cout << "Not enough magic. Play failed." << endl;
-            else cout << activePlayerName << "'s magic remaining: " << gm.getActivePlayer().getMagic() << endl;
-            cout << endl;
+            if (args.size() == 1) { // "play i"
+                cout << activePlayerName << " is playing " << *(gm.getActivePlayer().getHand().getCard(arg-1)) << endl;
+                try { 
+                    gm.play(arg-1); 
+                    cout << activePlayerName << "'s magic remaining: " << gm.getActivePlayer().getMagic() << endl;
+                    cout << endl;
+                }
+                catch (not_enough_magic e) { cout << e.what() << endl;}
+                catch (no_target_provided e) { cout << e.what() << endl;}
+            } else if (args.size() == 3) { // "play i p j"
+                
+            } else {
+                cout << "Incorrect input." << endl;
+            }
+
+            
         } else if (cmd == "use") {
 
         } else if (cmd == "describe") {
 
         } else if (cmd == "hand") {
-            gm.getNonactivePlayer().TEST_printPlayerHand();
+            gm.getActivePlayer().TEST_printPlayerHand();
 
         } else if (cmd == "board") {
             gm.getActivePlayer().TEST_printPlayerBoard();

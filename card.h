@@ -20,14 +20,16 @@ class Card {
     int cost;
     CardType type;
     string desc;
+    bool needTarget; // true if the Card requires a target to be played
 
  public:
     // Card();
-    Card(CardName cardName, int cost, CardType type, string desc = "");
+    Card(CardName cardName, int cost, CardType type, bool needTarget, string desc = "");
     virtual ~Card() = default;
     string getName() const;
     int getCost() const;
     CardType getType();
+    bool getNeedTarget();
 
 };
 

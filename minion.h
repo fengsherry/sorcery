@@ -9,6 +9,7 @@ using namespace std;
 
 class Minion: public Card {
     CardType type = CardType::Minion;
+    bool needTarget = false;
  public:
     Minion(CardName cardName, int cost, string desc = "");
     // destructor

@@ -7,6 +7,7 @@
 using namespace std;
 
 class Spell: public Card {
+    bool needTarget; // spell may or may not need target
     // do something
     
 };

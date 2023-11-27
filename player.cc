@@ -53,12 +53,17 @@ void Player::decreaseLife(int n) {
     // we should throw an exception here
 }
 
-bool Player::play(int i) {
+void Player::play(int i) {
     Card* cardToPlay = hand.getCard(i);
+
+    // check if the card can be played without target
+    // if (cardToPlay->getNeedTarget() == true) return false;
+    if (cardToPlay->getNeedTarget() == true) throw no_target_provided(*cardToPlay);
     
     // check if player has enough magic to play the card
     int cost = cardToPlay->getCost();
-    if (cost > magic) return false;
+    // if (cost > magic) return false;
+    if (cost > magic) throw not_enough_magic(*this);
 
     magic -= cost;
 
@@ -66,7 +71,8 @@ bool Player::play(int i) {
     if (cardToPlay->getType() == CardType::Minion) {
         Minion* minionToPlay = dynamic_cast<Minion*>(cardToPlay); // fails if cardToPlay is not Minion* type
         board.addCard(minionToPlay);
+    } else {
+        cout << "this is not a minion" << endl;
     }
-    return true;
 }
 

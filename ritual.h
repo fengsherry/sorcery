@@ -9,6 +9,7 @@ using namespace std;
 class Ritual: public Card {
     int activationCost;
     int charge;
+    bool needTarget = false;
     //TriggeredAbility trigAbility;
  
 };

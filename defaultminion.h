@@ -8,7 +8,6 @@
 using namespace std;
 
 class DefaultMinion : public Minion {
-    CardType type = CardType::Minion;
     int attack, defense;
     int action = 0;
     // Ability ability;

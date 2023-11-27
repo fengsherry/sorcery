@@ -1,5 +1,6 @@
 #ifndef __GAMECONTROLLER_H__
 #define __GAMECONTROLLER_H__
+#include <stdexcept>
 #include "gamemaster.h"
 #include "textdisplay.h"
 

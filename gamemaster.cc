@@ -64,33 +64,32 @@ void GameMaster::endTurn() {
 }
 
 // NOT DONE YET
-bool GameMaster::attackMinion(int i, int j) { // i is attacker, j is victim
+void GameMaster::attackMinion(int i, int j) { // i is attacker, j is victim
     Minion* attackingMinion = activePlayer->getBoard().getCard(i);
     Minion* victimMinion = nonactivePlayer->getBoard().getCard(j);
 
     // check for enough action
-    if (attackingMinion->getAction() == 0) return false;
+    if (attackingMinion->getAction() == 0) throw not_enough_action{*activePlayer}; 
 
     attackingMinion->setAction(0);
     int attackValAttacker = attackingMinion->getAttack();
     int attackValVictim = victimMinion->getAttack();
     // victimMinion->
     // activePlayer
-    return true;
+    
 
 }
 
 
-bool GameMaster::attackPlayer(int i) {
+void GameMaster::attackPlayer(int i) {
     Minion* attackingMinion = activePlayer->getBoard().getCard(i);
 
     // check for enough action
-    if (attackingMinion->getAction() == 0) return false;
+    if (attackingMinion->getAction() == 0) throw not_enough_action{*activePlayer}; 
 
     attackingMinion->setAction(0);
     int attackVal = attackingMinion->getAttack();
     nonactivePlayer->decreaseLife(attackVal);
-    return true;
 }
 
 void activateAbility();
@@ -98,7 +97,7 @@ void activateAbility();
 void discard();
 
 bool GameMaster::play(int i) {
-    if(!activePlayer->play(i)) return false;
+    activePlayer->play(i); // may throw exception
     activePlayer->getHand().removeCard(i);
 
     activePlayer->TEST_printPlayerHand();

@@ -41,12 +41,37 @@ class Player {
 
         // plays the ith card int he player's hand with no target (i.e. minions, rituals, spells)
         // returns true if successful, false otherwise
-        bool play(int i); 
+        void play(int i); 
         void init(string name, int id, ifstream& deckIn);
         
         void TEST_printPlayerDeck();
         void TEST_printPlayerHand();
         void TEST_printPlayerBoard();
+};
+
+class not_enough_action : public std::exception {
+    Player p;
+    public:
+        not_enough_action(Player& p) : p{p} {}
+        string what () {
+            return p.getName() + " has 0 action. Unable to attack.";
+        }
+};
+class not_enough_magic : public std::exception {
+    Player p;
+    public:
+        not_enough_magic(Player& p) : p{p} {}
+        string what () {
+            return p.getName() + " does not have enough magic. Play failed.";
+        }
+};
+class no_target_provided : public std::exception {
+    Card c;
+    public:
+        no_target_provided(Card& c) : c{c} {}
+        string what () {
+            return c.getName() + " cannot be played without a target. Play failed.";
+        }
 };
 
 

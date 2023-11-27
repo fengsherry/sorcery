@@ -79,8 +79,11 @@ void Hand::TEST_printHand() {
 void Hand::restoreAction() {
     for (auto card : theHand) {
         // type check for Minions
-        Minion* minionCard = dynamic_cast<Minion*>(card);
-        minionCard->setAction(1);
+        if (Minion* minionCard = dynamic_cast<Minion*>(card)) {
+            minionCard->setAction(1);
+        }
+        // Minion* minionCard = dynamic_cast<Minion*>(card);
+        // minionCard->setAction(1);
     }
 }
 
