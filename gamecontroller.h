@@ -6,7 +6,7 @@
 
 class GameController {
     GameMaster gm; 
-    TextDisplay td;
+    TextDisplay *td = nullptr;
     // GraphicsDisplay gd;
 
     /* private helper functions */

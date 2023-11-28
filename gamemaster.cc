@@ -77,7 +77,6 @@ void GameMaster::attackMinion(int i, int j) { // i is attacker, j is victim
     int attackValVictim = victimMinion->getAttack();
     // victimMinion->
     // activePlayer
-    
 
 }
 

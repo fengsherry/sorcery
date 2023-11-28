@@ -18,7 +18,7 @@ bool GameController::findIndex(int argc, char* argv[], string s, int& i) {
 }
 
 void GameController::testCmdArg(string arg, string filename) { 
-    td.displayMsg("You have activated the " + arg + " command argument, and " + filename + " file ");
+    td->displayMsg("You have activated the " + arg + " command argument, and " + filename + " file ");
     // cout << "You have activated the " << arg << " command argument, and " << filename << " file " << endl; 
 }
 
@@ -54,10 +54,13 @@ void GameController::go(int argc, char *argv[]) {
     ifstream in2 = deck2Flag ? ifstream(deck2File.c_str()) : ifstream("default.deck");
 
     // initialize the game
-    GameMaster gm{}; 
+    GameMaster gm{};
 
     // initialize Players, their Decks, and their Hands
     gm.initPlayers(in1, in2);
+
+    // create a new textdisplay
+    td = new TextDisplay();
 
     string cmd;
     int arg1, arg2, arg3;
@@ -196,7 +199,7 @@ void GameController::go(int argc, char *argv[]) {
                 gm.getActivePlayer().TEST_printPlayerBoard();
 
             } else if (cmd != "") {
-                td.displayMsg("Not a valid command");
+                td->displayMsg("Not a valid command");
                 // cout << "Not a valid command" << endl;
             } 
 
