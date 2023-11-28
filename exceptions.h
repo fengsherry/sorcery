@@ -45,4 +45,13 @@ class invalid_play : public std::exception {
         }
 };
 
+class deck_empty : public std::exception {
+    Player* p;
+ public:
+    deck_empty(Player* p): p {p} {}
+    string what() {
+        return p->getName() + "'s deck is empty. Unable to draw card.";
+    }
+};
+
 #endif

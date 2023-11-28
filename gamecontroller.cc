@@ -79,6 +79,8 @@ void GameController::go(int argc, char *argv[]) {
                 nonactivePlayerName = gm.getNonactivePlayer().getName();
                 gm.startTurn();
                 cout << "Player " << gm.getTurn() << ": " << activePlayerName << "  It's your turn!" << endl;
+                cout << activePlayerName << "'s life: " << gm.getActivePlayer().getLife() << endl;
+                cout << activePlayerName << "'s magic: " << gm.getActivePlayer().getMagic() << endl;
             } else if (cmd == "quit") {
 
             } else if (cmd == "draw") {
@@ -94,7 +96,7 @@ void GameController::go(int argc, char *argv[]) {
 
                 string args;
                 int arg, arg2;
-                getline(cin, args);
+                getline(cin, args); // wait why not just >> arg >> arg2
                 istringstream iss(args);
                 iss >> arg;
                 
@@ -109,8 +111,8 @@ void GameController::go(int argc, char *argv[]) {
                         // perform attack
                         gm.attackMinion(arg-1, arg2-1);
                         // output new states of minions
-                        cout <<  attackingMinion->getName() << "'s defense remaining: " << attackingMinion->getDefense() << endl;
-                        cout << victimMinion->getName() << "'s defense remaining: " << victimMinion->getDefense() << endl;
+                        cout <<  attackingMinion->getName() << "'s defense: " << attackingMinion->getDefense() << endl;
+                        cout << victimMinion->getName() << "'s defense: " << victimMinion->getDefense() << endl;
                     } catch (not_enough_action e) {
                         cout << e.what() << endl; // error message
                     }
@@ -127,7 +129,7 @@ void GameController::go(int argc, char *argv[]) {
                         // perform attack
                         gm.attackPlayer(arg-1);
                         // output new states of players
-                        cout << nonactivePlayerName << "'s life remaining: " << gm.getNonactivePlayer().getLife() << endl;
+                        cout << nonactivePlayerName << "'s life: " << gm.getNonactivePlayer().getLife() << endl;
                         cout << endl;
                     } catch (not_enough_action e) {
                         cout << e.what() << endl; // error message
@@ -148,7 +150,7 @@ void GameController::go(int argc, char *argv[]) {
                     cout << activePlayerName << " is playing " << *(gm.getActivePlayer().getHand().getCard(arg-1)) << endl;
                     try { 
                         gm.play(args[0]-1); 
-                        cout << activePlayerName << "'s magic remaining: " << gm.getActivePlayer().getMagic() << endl;
+                        cout << activePlayerName << "'s magic: " << gm.getActivePlayer().getMagic() << endl;
                         cout << endl;
                     }
                     catch (not_enough_magic e) { cout << e.what() << endl;}
@@ -173,7 +175,7 @@ void GameController::go(int argc, char *argv[]) {
                     // play the card
                     try { 
                         gm.play(args[0]-1, args[2]-1, *targetPlayer);
-                        cout << activePlayerName << "'s magic remaining: " << gm.getActivePlayer().getMagic() << endl;
+                        cout << activePlayerName << "'s magic: " << gm.getActivePlayer().getMagic() << endl;
                         cout << endl; 
                     } 
                     catch(not_enough_magic e) { cout << e.what() << endl; } 
@@ -194,6 +196,7 @@ void GameController::go(int argc, char *argv[]) {
 
             } else if (cmd == "board") {
                 gm.getActivePlayer().TEST_printPlayerBoard();
+                gm.getActivePlayer().TEST_printPlayerRitual();
 
             } else if (cmd != "") {
                 td.displayMsg("Not a valid command");
