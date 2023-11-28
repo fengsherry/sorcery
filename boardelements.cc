@@ -10,7 +10,7 @@ Deck::Deck() {
 
 Deck::~Deck() {}
 
-Card* createCard(string cardName) {
+Card* createCard(string cardName, Player* p) {
     Card* card;
     /* Minions: */
     if (cardName == "Air Elemental") card = new DefaultMinion(CardName::AirElemental, 0, 1, 1);
@@ -33,18 +33,18 @@ Card* createCard(string cardName) {
     else if (cardName == "Recharge") card = new Spell(CardName::Recharge, 1, false, "Your ritual gains 3 charges", new RechargeAbility{});
 
     /* Rituals: */ 
-    else if (cardName == "Dark Ritual") card = new Ritual(CardName::DarkRitual, "At the start of your turn, gain 1 magic", 0, 1, 5);
+    else if (cardName == "Dark Ritual") card = new Ritual(CardName::DarkRitual, "At the start of your turn, gain 1 magic", 0, 1, 5, new DarkRitualAbility{p});
     // to do: add decorators (done?) and abilities to minions, add other kinds of cards
     else return nullptr;
     return card;
 }
 
-void Deck::init(ifstream& file) {
+void Deck::init(ifstream& file, Player* p) {
     string cardName;
     while (getline(file, cardName) && cardName != "") {
         // an function to make the different cards?
 
-        Card* newCard = createCard(cardName);
+        Card* newCard = createCard(cardName, p);
 
         // add to theDeck if it is a valid card (not nullptr)
         if (newCard) theDeck.emplace_back(newCard);
@@ -80,6 +80,8 @@ void Hand::addCard(Card* c) {
 Card* Hand::getCard(int i) const {
     return theHand[i];
 }
+
+size_t Hand::getSize() {return theHand.size();}
 
 void Hand::TEST_printHand() {
     for (size_t i = 0; i < theHand.size(); ++i) {

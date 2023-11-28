@@ -9,6 +9,7 @@
 #include "minion.h"
 #include "defaultminion.h"
 #include "spell.h"
+#include "triggeredability.h"
 #include "enchantment.h"
 #include "enchantmentdec.h"
 #include "enchantmentdecsconcrete.h"
@@ -23,7 +24,7 @@ class Deck {
     Deck();
     ~Deck();
 
-    void init(ifstream& file);
+    void init(ifstream& file, Player* p);
     void shuffle();
     Card* drawCard();
     size_t getSize();
@@ -39,7 +40,7 @@ class Hand {
         void init(Deck& deck);
         void addCard(Card* c);
         Card* getCard(int i) const;
-
+        size_t getSize();
         void TEST_printHand();
         void restoreAction(); // sets action of Minions to 1
         void removeCard(int i);

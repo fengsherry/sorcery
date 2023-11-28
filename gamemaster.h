@@ -15,7 +15,7 @@ class GameMaster {
     int numPlayers = 2;
     Player* activePlayer;
     Player* nonactivePlayer;
-    // vector<TriggeredAbility*> observers;
+    vector<TriggeredAbility*> observers;
     
     public:
         GameMaster(); 
@@ -24,6 +24,10 @@ class GameMaster {
         // methods to initialize the players
         void initPlayers(ifstream& deck1In, ifstream& deck2In);
         // void initDecks(ifstream& deck1In, ifstream& deck2In);
+
+        // observer pattern methods
+        void attach(TriggeredAbility* o);
+        void notifyStartTurnObservers();
 
         // methods correlating to commands recieved in main:
         void startTurn();
@@ -36,7 +40,6 @@ class GameMaster {
         void discard();
         void play(int i); // minions, rituals, spells with no targets
         void play(int i, int j, Player& targetPlayer); // enchantments, spells with targets
-        void notifyObservers();
 
         // displays some visual
         void describe();
