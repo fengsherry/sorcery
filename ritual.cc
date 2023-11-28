@@ -12,5 +12,7 @@ void Ritual::decreaseCharge(int n) {charge -= n;}
 void Ritual::increaseCharge(int n) {charge += n;}
 
 void Ritual::printRitual() {
-    cout << this->getName() << " [" << this->getCharge() << " charge | " << this->getActivationCost() << " activation cost]" << endl;
+    if (this) cout << this->getName() << " [" << this->getCharge() << " charge | " << this->getActivationCost() << " activation cost]" << endl;
+    else cout << "no ritual" << endl;
+
 }
