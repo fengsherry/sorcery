@@ -46,6 +46,10 @@ string cardNameToString(CardName c) {
             return "Magic Fatigue";
         case CardName::Silence:
             return "Silence";
+
+        /* Rituals: */
+        case CardName::DarkRitual:
+            return "Dark Ritual";
     }
 }
 

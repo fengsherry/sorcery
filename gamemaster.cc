@@ -103,6 +103,7 @@ void GameMaster::play(int i) {
 
     activePlayer->TEST_printPlayerHand();
     activePlayer->TEST_printPlayerBoard();
+    activePlayer->TEST_printPlayerRitual();
 }
 
 void GameMaster::play(int i, int j, Player& targetPlayer) {

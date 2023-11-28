@@ -12,13 +12,16 @@ class Ritual: public Card {
     bool needTarget = false;
     //TriggeredAbility trigAbility;
     public:
-        Ritual(int ac, int charge);
+    //     Card(CardName cardName, int cost, CardType type, bool needTarget, string desc = "");
+
+        Ritual(CardName cardName, string desc, int cost, int ac, int charge);
 
         int getActivationCost();
         int getCharge();
 
         void decreaseCharge(int n);
         void increaseCharge(int n);
+        void printRitual();
 };
 
 #endif

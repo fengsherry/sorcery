@@ -1,6 +1,7 @@
 #include "activatedability.h"
-
-ActivatedAbility::ActivatedAbility(Player& target, int activationCost): target{target}, activationCost{activationCost} {}
+#include "player.h"
+// class Player;
+ActivatedAbility::ActivatedAbility(Player* target, int activationCost): target{target}, activationCost{activationCost} {}
 
 // void BanishAbility::applyAbility(Card* c) {
 //     if (c->getType != CardType::Ritual && c->getType != CardType::Minion) return false;
@@ -8,7 +9,7 @@ ActivatedAbility::ActivatedAbility(Player& target, int activationCost): target{t
 //     return true;
 // }
 
-// RechargeAbility::RechargeAbility() {}
+RechargeAbility::RechargeAbility() : ActivatedAbility{nullptr, 1} {}
 
 void RechargeAbility::applyAbility(Player& player) {
     if (!player.getRitual()) return;

@@ -29,9 +29,11 @@ Card* createCard(string cardName) {
     else if (cardName == "Magic Fatigue") card = new Enchantment(CardName::MagicFatigue, 0, "Enchanted minion's activated ability costs 2 more");
     else if (cardName == "Silence") card = new Enchantment(CardName::Silence, 1, "Enchanted minion cannot use abilities");
     
-    // spells
-    // else if (cardName == "Recharge") card = new Spell(CardName::Recharge, 1, false, "Your ritual gains 3 charges", RechargeAbility{});
+    /* Spells: */ 
+    else if (cardName == "Recharge") card = new Spell(CardName::Recharge, 1, false, "Your ritual gains 3 charges", new RechargeAbility{});
 
+    /* Rituals: */ 
+    else if (cardName == "Dark Ritual") card = new Ritual(CardName::DarkRitual, "At the start of your turn, gain 1 magic", 0, 1, 5);
     // to do: add decorators (done?) and abilities to minions, add other kinds of cards
     else return nullptr;
     return card;

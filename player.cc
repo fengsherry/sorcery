@@ -35,6 +35,12 @@ void Player::TEST_printPlayerBoard() {
     cout << endl;
 }
 
+void Player::TEST_printPlayerRitual() {
+    cout << "Player " << id << " " << name << "'s Ritual: " << endl;
+    ritual->printRitual();
+    cout << endl;
+}
+
 string Player::getName() const {return name;}
 int Player::getId() const {return id;}
 int Player::getLife() const {return life;}
@@ -77,8 +83,11 @@ void Player::play(int i) {
     if (cardToPlay->getType() == CardType::Minion) {
         Minion* minionToPlay = dynamic_cast<Minion*>(cardToPlay); // fails if cardToPlay is not Minion* type
         board.addCard(minionToPlay);
-    } else {
-        cout << "this is not a minion" << endl;
+    } else if (Ritual* ritualToPlay = dynamic_cast<Ritual*>(cardToPlay)) {
+        // cout << "this is not a minion" << endl;
+        ritual = ritualToPlay;
+    } else if (Spell* spellToPlay = dynamic_cast<Spell*>(cardToPlay)) {
+        spellToPlay->applyAbility(*this);
     }
 }
 

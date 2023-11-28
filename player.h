@@ -53,6 +53,7 @@ class Player {
         void TEST_printPlayerDeck();
         void TEST_printPlayerHand();
         void TEST_printPlayerBoard();
+        void TEST_printPlayerRitual();
 };
 
 // class not_enough_action : public std::exception {
