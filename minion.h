@@ -22,7 +22,7 @@ class Minion: public Card {
 
     virtual void setAction(int n) = 0;
     void stripEnchants(Minion& m); // implement this
-    void decreaseLife(int n);
+    void decreaseDefense(int n);
 
 };
 
