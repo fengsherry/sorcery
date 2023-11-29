@@ -10,7 +10,8 @@ enum class CardType { Spell, Minion, Enchantment, Ritual };
 // contains only minions for now
 enum class CardName { 
     /* Minions: */ AirElemental, EarthElemental, BoneGolem, FireElemental, PotionSeller, NovicePyromancer, ApprenticeSummoner, MasterSummoner,
-    /* Enchantments: */ GiantStrength, Enrage, Haste, MagicFatigue, Silence,
+    /* Enchantments (non-hidden): */ GiantStrength, Enrage, Haste, MagicFatigue, Silence,
+    /* Enchantments (hidden:) */ ModifyAttack, ModifyDefense,
     /* Spells */ Banish, Unsummon, Recharge, Disenchant, RaiseDead, Blizzard,
     /* Rituals */ DarkRitual
 };

@@ -109,7 +109,9 @@ void GameController::go(int argc, char *argv[]) {
                         // perform attack
                         gm.attackMinion(arg-1, arg2-1);
                         // output new states of minions
-                        cout <<  attackingMinion->getName() << "'s defense remaining: " << attackingMinion->getDefense() << endl;
+                        attackingMinion = gm.getActivePlayer().getBoard().getCard(arg-1);
+                        victimMinion = gm.getNonactivePlayer().getBoard().getCard(arg2-1);
+                        cout << attackingMinion->getName() << "'s defense remaining: " << attackingMinion->getDefense() << endl;
                         cout << victimMinion->getName() << "'s defense remaining: " << victimMinion->getDefense() << endl;
                     } catch (not_enough_action e) {
                         cout << e.what() << endl; // error message
@@ -165,7 +167,7 @@ void GameController::go(int argc, char *argv[]) {
                     if (args[2] == 'r') {
                         cout << "targeting a ritual!" << endl;
                         targetCard = targetPlayer->getRitual();
-                    }
+                    }  
                     else targetCard = targetPlayer->getBoard().getCard(args[2] - 1);
                     cout << activePlayerName << " is playing " << *(gm.getActivePlayer().getHand().getCard(args[0]-1)) << 
                     " on " << targetPlayer->getName() << "'s " << targetCard->getName() <<endl;

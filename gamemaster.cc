@@ -75,10 +75,8 @@ void GameMaster::attackMinion(int i, int j) { // i is attacker, j is victim
     attackingMinion->setAction(0);
     int attackValAttacker = attackingMinion->getAttack();
     int attackValVictim = victimMinion->getAttack();
-    // victimMinion->
-    // activePlayer
-    
-
+    activePlayer->getBoard().enchantMinion(i, "Modify Defense", -attackValVictim);
+    nonactivePlayer->getBoard().enchantMinion(j, "Modify Defense", -attackValAttacker);
 }
 
 

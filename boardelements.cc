@@ -111,12 +111,14 @@ void Board::addCard(Minion *m) {
     theBoard.emplace_back(m);
 }
 
-void Board::enchantMinion(int i, string minionName) {
+void Board::enchantMinion(int i, string minionName, int modifyval) {
     if (minionName == "Giant Strength") theBoard[i] = new GiantStrength(theBoard[i]); 
     else if (minionName == "Enrage") theBoard[i] = new Enrage(theBoard[i]);
     else if (minionName == "Haste") theBoard[i] = new Haste(theBoard[i]);
     else if (minionName == "Magic Fatigue") theBoard[i] = new MagicFatigue(theBoard[i]);
     else if (minionName == "Silence") theBoard[i] = new Silence(theBoard[i]);
+    else if (minionName == "Modify Attack") theBoard[i] = new ModifyAttack(theBoard[i], modifyval);
+    else if (minionName == "Modify Defense") theBoard[i] = new ModifyDefense(theBoard[i], modifyval);
 }
 
 void Board::restoreAction() {

@@ -15,12 +15,14 @@ class Minion: public Card {
     Minion(CardName cardName, int cost, string desc = "");
     virtual ~Minion() = default;
 
+    // virtual CardName getDefaultMinionName();
     virtual int getAttack() const = 0;
     virtual int getDefense() const = 0;
     virtual int getAction() const = 0;
     // virtual Ability getAbility() = 0;
 
     virtual void setAction(int n) = 0;
+    // void enchant(string minionName);
     void decreaseLife(int n);
 
 };

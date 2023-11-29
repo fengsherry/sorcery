@@ -52,7 +52,7 @@ class Board {
     public:
         Minion* getCard(int i) const;
         void addCard(Minion *m);
-        void enchantMinion(int i, string minionName); // enchant ith Minion with specified enchantment name.
+        void enchantMinion(int i, string minionName, int modifyval = 0); // enchant ith Minion with specified enchantment name.
         void restoreAction(); // sets action of Minions to 1
         void TEST_printBoard();
 };

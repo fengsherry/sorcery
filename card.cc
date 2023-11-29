@@ -46,6 +46,10 @@ string cardNameToString(CardName c) {
             return "Magic Fatigue";
         case CardName::Silence:
             return "Silence";
+        case CardName::ModifyAttack:
+            return "Modify Attack";
+        case CardName::ModifyDefense:
+            return "Modify Defense";
 
         /* Rituals: */
         case CardName::DarkRitual:
@@ -58,7 +62,9 @@ string cardNameToString(CardName c) {
 Card::Card(CardName cardName, int cost, CardType type, bool needTarget, string desc): 
 name{cardName}, cost{cost}, type{type}, needTarget{needTarget}, desc{desc} {}
 
-string Card::getName() const {return cardNameToString(name);}
+string Card::getName() const {
+    return cardNameToString(name);
+}
 
 CardType Card::getType() {return type;}
 

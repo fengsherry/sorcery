@@ -55,4 +55,26 @@ class Silence : public EnchantmentDec {
         void setAction(int n);
 };
 
+class ModifyAttack : public EnchantmentDec {
+    int ModifyAttackVal;
+    public:
+        ModifyAttack(Minion* next, int ModifyAttackVal);
+        int getAttack() const override;
+        int getDefense() const override;
+        int getAction() const override;
+        // Ability getAbility() const override; // ADD THIS BACK ONCE IMPLEMENTED ABILITIES
+        void setAction(int n);
+};
+
+class ModifyDefense : public EnchantmentDec {
+    int ModifyDefenseVal;
+    public:
+        ModifyDefense(Minion* next, int ModifyDefenseVal);
+        int getAttack() const override;
+        int getDefense() const override;
+        int getAction() const override;
+        // Ability getAbility() const override; // ADD THIS BACK ONCE IMPLEMENTED ABILITIES
+        void setAction(int n);
+};
+
 #endif
