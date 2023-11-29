@@ -1,14 +1,16 @@
 #include <string>
 #include <vector>
+#include <string>
 #include "defaultminion.h"
+#include "sorceryutil.h"
 using namespace std;
 
 DefaultMinion::DefaultMinion(CardName cardName, int cost, int attack, int defense, string desc):
-    Minion {cardName, cost, desc}, attack {attack}, defense {defense} {}
+    Minion {cardName, cost, desc}, cardName{cardName}, attack {attack}, defense {defense} {}
 
-// CardName DefaultMinion::getDefaultMinionName() {
-//     return cardName;
-// }
+string DefaultMinion::getDefaultMinionName() const {
+    return cardNameToString(cardName);
+}
 
 int DefaultMinion::getAttack() const {
     return attack;

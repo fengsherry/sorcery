@@ -84,7 +84,7 @@ void GameController::go(int argc, char *argv[]) {
             } else if (cmd == "draw") {
                 try {
                     Card* drawnCard = gm.getActivePlayer().drawCard();
-                    cout << "Player " << gm.getTurn() << ": " << activePlayerName << "  drew a " << drawnCard->getName() << endl;
+                    cout << "Player " << gm.getTurn() << ": " << activePlayerName << "  drew a " << drawnCard << endl;
                 } catch (invalid_play e) {cout << e.what() << endl; }
                 
             } else if (cmd == "discard") { // only available in -testing mode; how to handle this?
@@ -102,8 +102,8 @@ void GameController::go(int argc, char *argv[]) {
                     // "attack i j" - order minion i to attack nonactive player's minion j
                     Minion* attackingMinion = gm.getActivePlayer().getBoard().getCard(arg-1);
                     Minion* victimMinion = gm.getNonactivePlayer().getBoard().getCard(arg2-1);
-                    cout << activePlayerName << "'s minion, " << *attackingMinion << " is attacking " <<  nonactivePlayerName 
-                    << "'s minion, " << *victimMinion << endl;
+                    cout << activePlayerName << "'s minion, " << attackingMinion << " is attacking " <<  nonactivePlayerName 
+                    << "'s minion, " << victimMinion << endl;
 
                     try {
                         // perform attack
@@ -111,8 +111,8 @@ void GameController::go(int argc, char *argv[]) {
                         // output new states of minions
                         attackingMinion = gm.getActivePlayer().getBoard().getCard(arg-1);
                         victimMinion = gm.getNonactivePlayer().getBoard().getCard(arg2-1);
-                        cout << attackingMinion->getName() << "'s defense remaining: " << attackingMinion->getDefense() << endl;
-                        cout << victimMinion->getName() << "'s defense remaining: " << victimMinion->getDefense() << endl;
+                        cout << attackingMinion << "'s defense remaining: " << attackingMinion->getDefense() << endl;
+                        cout << victimMinion << "'s defense remaining: " << victimMinion->getDefense() << endl;
                     } catch (not_enough_action e) {
                         cout << e.what() << endl; // error message
                     }
@@ -123,7 +123,7 @@ void GameController::go(int argc, char *argv[]) {
 
                     Minion* attackingMinion = gm.getActivePlayer().getBoard().getCard(arg-1);
                     cout << activePlayerName << " is attacking " <<  nonactivePlayerName 
-                    << " with " << *attackingMinion << endl;
+                    << " with " << attackingMinion << endl;
 
                     try {
                         // perform attack
@@ -147,7 +147,7 @@ void GameController::go(int argc, char *argv[]) {
                 while (iss >> arg) { args.emplace_back(arg); }
 
                 if (args.size() == 1) { // "play i" - minions, rituals, spells with no targets
-                    cout << activePlayerName << " is playing " << *(gm.getActivePlayer().getHand().getCard(arg-1)) << endl;
+                    cout << activePlayerName << " is playing " << gm.getActivePlayer().getHand().getCard(arg-1) << endl;
                     try { 
                         gm.play(args[0]-1); 
                         cout << activePlayerName << "'s magic remaining: " << gm.getActivePlayer().getMagic() << endl;
@@ -169,8 +169,8 @@ void GameController::go(int argc, char *argv[]) {
                         targetCard = targetPlayer->getRitual();
                     }  
                     else targetCard = targetPlayer->getBoard().getCard(args[2] - 1);
-                    cout << activePlayerName << " is playing " << *(gm.getActivePlayer().getHand().getCard(args[0]-1)) << 
-                    " on " << targetPlayer->getName() << "'s " << targetCard->getName() <<endl;
+                    cout << activePlayerName << " is playing " << gm.getActivePlayer().getHand().getCard(args[0]-1) << 
+                    " on " << targetPlayer->getName() << "'s " << targetCard <<endl;
 
                     // play the card
                     try { 

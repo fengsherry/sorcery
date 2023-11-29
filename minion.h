@@ -8,6 +8,9 @@
 #include <iostream>
 using namespace std;
 
+class DefaultMinion;
+class EnchantmentDec;
+
 class Minion: public Card {
     CardType type = CardType::Minion;
     bool needTarget = false;
@@ -15,7 +18,8 @@ class Minion: public Card {
     Minion(CardName cardName, int cost, string desc = "");
     virtual ~Minion() = default;
 
-    // virtual CardName getDefaultMinionName();
+    // string getName() const override;
+    virtual string getDefaultMinionName() const = 0;
     virtual int getAttack() const = 0;
     virtual int getDefense() const = 0;
     virtual int getAction() const = 0;
@@ -27,9 +31,7 @@ class Minion: public Card {
 
 };
 
-// std::ostream& operator<<(std::ostream& out, const Minion& m) {
-//     out << m.getName() << " ["<< m.getAction() << " action | [" << m.getAttack() << " attack | [" << m.getDefense() << " defense]";
-//     return out;
-// }
+
+std::ostream& operator<<(std::ostream& out, const Minion* m);
 
 #endif

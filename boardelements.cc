@@ -42,7 +42,6 @@ Card* createCard(string cardName) {
 void Deck::init(ifstream& file) {
     string cardName;
     while (getline(file, cardName) && cardName != "") {
-        // an function to make the different cards?
 
         Card* newCard = createCard(cardName);
 
@@ -52,7 +51,7 @@ void Deck::init(ifstream& file) {
 }
 
 void Deck::TEST_printDeck() {
-    for (auto s : theDeck) { cout << *s << endl; }
+    for (auto s : theDeck) { cout << s << endl; }
 }
 
 Card* Deck::drawCard() {
@@ -83,7 +82,7 @@ Card* Hand::getCard(int i) const {
 
 void Hand::TEST_printHand() {
     for (size_t i = 0; i < theHand.size(); ++i) {
-        cout << "Hand (" << (i+1) << "): " << *theHand[i] << endl;
+        cout << "Hand (" << (i+1) << "): " << theHand[i] << endl;
     }
 }
 
@@ -130,6 +129,6 @@ void Board::restoreAction() {
 void Board::TEST_printBoard() {
     for (size_t i = 0; i < theBoard.size(); ++i) {
         // cout << "Board (" << (i+1) << "): " << theBoard[i];
-        cout << "Board (" << (i+1) << "): " << *theBoard[i] <<  " ["<< theBoard[i]->getAction() << " action | " << theBoard[i]->getAttack() << " attack | " << theBoard[i]->getDefense() << " defense]" << endl;
+        cout << "Board (" << (i+1) << "): " << theBoard[i] <<  " ["<< theBoard[i]->getAction() << " action | " << theBoard[i]->getAttack() << " attack | " << theBoard[i]->getDefense() << " defense]" << endl;
     }
 }
