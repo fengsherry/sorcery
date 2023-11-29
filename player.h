@@ -43,6 +43,8 @@ class Player {
         void increaseMagic(int n);
         void decreaseLife(int n);
         Card* drawCard();
+        
+        void destroyRitual();
 
         // plays the ith card int he player's hand with no target (i.e. minions, rituals, spells)
         // throws exception if unsucessful

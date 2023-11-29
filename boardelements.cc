@@ -125,9 +125,38 @@ void Board::restoreAction() {
     }
 }
 
+void Board::destroyMinion(int i) {
+    theBoard.erase(theBoard.begin() + i);
+}
+
+int Board::size() { return static_cast<int>(theBoard.size()); }
+
 void Board::TEST_printBoard() {
     for (size_t i = 0; i < theBoard.size(); ++i) {
         // cout << "Board (" << (i+1) << "): " << theBoard[i];
         cout << "Board (" << (i+1) << "): " << *theBoard[i] <<  " ["<< theBoard[i]->getAction() << " action | " << theBoard[i]->getAttack() << " attack | " << theBoard[i]->getDefense() << " defense]" << endl;
     }
 }
+
+/* GRAVEYARD */
+bool Graveyard::isEmpty() { return theGrave.empty(); }
+
+void Graveyard::push(Minion* m) { theGrave.push(m); }
+
+Minion* Graveyard::top() {
+    if (theGrave.empty()) throw empty_grave();
+    else return theGrave.top();
+}
+
+Minion* Graveyard::pop() {
+    if (theGrave.empty()) throw empty_grave();
+    else {
+        Minion* temp = theGrave.top();
+        theGrave.pop();
+        return temp;
+    }
+}
+
+Graveyard::Graveyard() {}
+
+Graveyard::~Graveyard() {}

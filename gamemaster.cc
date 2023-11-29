@@ -97,6 +97,7 @@ void activateAbility();
 
 void discard();
 
+// without target
 void GameMaster::play(int i) {
     activePlayer->play(i); // may throw exception
     activePlayer->getHand().removeCard(i);
@@ -106,6 +107,7 @@ void GameMaster::play(int i) {
     activePlayer->TEST_printPlayerRitual();
 }
 
+// with target
 void GameMaster::play(int i, int j, Player& targetPlayer) {
     activePlayer->play(i, j, targetPlayer);
     activePlayer->getHand().removeCard(i);

@@ -11,22 +11,60 @@ class Player;
 
 class ActivatedAbility {
     int activationCost;
-    Player* target;
     
     public:
-        ActivatedAbility(Player* target, int activationCost = 0);
-        virtual void applyAbility(Player& player) = 0;
+        explicit ActivatedAbility(int activationCost = 0);
+        virtual ~ActivatedAbility() = default;
+        virtual void applyAbility(Player& player, int i = 0) = 0;
 };
 
-// class BanishAbility : public ActivatedAbility{
-//     public:
-//         void applyAbility(Card* c);
-// }
+/* Abilities for Spells with targets: */
+
+class BanishAbility : public ActivatedAbility{
+    public:
+        BanishAbility();
+        ~BanishAbility();
+        void applyAbility(Player& player, int i = 0) override;
+};
+
+class UnsummonAbility : public ActivatedAbility{
+    public:
+        UnsummonAbility();
+        ~UnsummonAbility(); 
+        void applyAbility(Player& player, int i = 0) override;
+};
+
+class DisenchantAbility : public ActivatedAbility{
+    public:
+        DisenchantAbility();
+        ~DisenchantAbility();
+        void applyAbility(Player& player, int i = 0) override;
+};
+
+/* Abilities for Spells without targets: */
 
 class RechargeAbility : public ActivatedAbility {
     public:
         RechargeAbility();
-        void applyAbility(Player& player);
+        ~RechargeAbility();
+        void applyAbility(Player& player, int i = 0) override;
+};
+
+class RaiseDeadAbility : public ActivatedAbility {
+    public:
+        RaiseDeadAbility();
+        ~RaiseDeadAbility();
+        void applyAbility(Player& player, int i = 0) override;
 
 };
+
+// note: this is an ability that effects more than one player
+class BlizzardAbility : public ActivatedAbility {
+    public:
+        BlizzardAbility();
+        ~BlizzardAbility();
+        void applyAbility(Player& player, int i = 0) override;
+
+};
+
 #endif

@@ -54,12 +54,22 @@ class Board {
         void addCard(Minion *m);
         void enchantMinion(int i, string minionName); // enchant ith Minion with specified enchantment name.
         void restoreAction(); // sets action of Minions to 1
+        void destroyMinion(int i);
+        int size();
         void TEST_printBoard();
 };
 
 // collection of dead Minions
 class Graveyard {
     stack<Minion*> theGrave;
+
+    public:
+        bool isEmpty();
+        void push(Minion* m);
+        Minion* top();
+        Minion* pop();
+        Graveyard();
+        ~Graveyard();
 };
 
 #endif

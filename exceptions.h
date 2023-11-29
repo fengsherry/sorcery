@@ -45,4 +45,21 @@ class invalid_play : public std::exception {
         }
 };
 
+class empty_grave : public std::exception {
+    string msg;
+    public:
+        empty_grave() {}
+        string what () {
+            return "The graveyard is empty.";
+        }
+};
+
+class outside_range : public std::exception {
+    public:
+        outside_range() {}
+        string what () {
+            return "Out of range.";
+        }
+};
+
 #endif

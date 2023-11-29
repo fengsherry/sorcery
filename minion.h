@@ -21,6 +21,7 @@ class Minion: public Card {
     // virtual Ability getAbility() = 0;
 
     virtual void setAction(int n) = 0;
+    void stripEnchants(Minion& m); // implement this
     void decreaseLife(int n);
 
 };

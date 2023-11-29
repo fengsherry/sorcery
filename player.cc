@@ -62,12 +62,18 @@ void Player::decreaseLife(int n) {
     // we should throw an exception here
 }
 
+void Player::destroyRitual() {
+    Ritual* temp = ritual; // will go out of scope after method goes out of scope
+    ritual = nullptr;
+}
+
 Card* Player::drawCard() {
     Card* c = deck.drawCard();
     hand.addCard(c);
     return c;
 }
 
+// without target
 void Player::play(int i) {
     Card* cardToPlay = hand.getCard(i);
 
@@ -80,17 +86,16 @@ void Player::play(int i) {
 
     magic -= cost;
 
-    if (cardToPlay->getType() == CardType::Minion) {
-        Minion* minionToPlay = dynamic_cast<Minion*>(cardToPlay); // fails if cardToPlay is not Minion* type
+    if (Minion* minionToPlay = dynamic_cast<Minion*>(cardToPlay)) { // false if cardToPlay is not Minion* type
         board.addCard(minionToPlay);
     } else if (Ritual* ritualToPlay = dynamic_cast<Ritual*>(cardToPlay)) {
-        // cout << "this is not a minion" << endl;
         ritual = ritualToPlay;
     } else if (Spell* spellToPlay = dynamic_cast<Spell*>(cardToPlay)) {
         spellToPlay->applyAbility(*this);
     }
 }
 
+// with target
 void Player::play(int i, int j, Player& p) {
     Card* cardToPlay = hand.getCard(i);
     Card* targetCard = p.getBoard().getCard(j);
@@ -104,14 +109,14 @@ void Player::play(int i, int j, Player& p) {
 
     magic -= cost;
     
-    if (Enchantment* enchantCard = dynamic_cast<Enchantment*>(cardToPlay)) { // enchantment
+    if (Enchantment* enchantToPlay = dynamic_cast<Enchantment*>(cardToPlay)) { // enchantment
         if (Minion* targetMinion = dynamic_cast<Minion*>(targetCard)) {         
-            // place enchantment decorator on the Minion card, converting from enchantment's Card to its Decorator version
-            p.getBoard().enchantMinion(j, enchantCard->getName());
+            // enchant the minion. Note the conversion from Enchantment (Card) to EnchantmentDec (Decorator)
+            p.getBoard().enchantMinion(j, enchantToPlay->getName());
 
         } else { throw invalid_play{"You cannot play " + cardToPlay->getName() + " on " + targetCard->getName()}; }
-    } else if (cardToPlay->getType() == CardType::Spell) { // spell with target
-        // do something
+    } else if (Spell* spellToPlay = dynamic_cast<Spell*>(cardToPlay)) { // spell with target
+        spellToPlay->applyAbility(p);
     }
 }
 
