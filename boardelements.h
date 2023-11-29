@@ -39,6 +39,7 @@ class Hand {
         void init(Deck& deck);
         void addCard(Card* c);
         Card* getCard(int i) const;
+        int getSize();
 
         void TEST_printHand();
         void restoreAction(); // sets action of Minions to 1

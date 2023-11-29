@@ -60,7 +60,7 @@ void GameController::go(int argc, char *argv[]) {
     gm.initPlayers(in1, in2);
 
     // create a new textdisplay
-    td = new TextDisplay();
+    td = new TextDisplay(&gm);
 
     string cmd;
     int arg1, arg2, arg3;

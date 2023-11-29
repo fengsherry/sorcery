@@ -8,19 +8,17 @@ class GameMaster;
 
 class TextDisplay : public Display {
  private:
-    std::vector<std::vector<char>> theBoard;
-    std::vector<std::vector<char>> theHand;
+   //  std::vector<std::vector<char>> theBoard;
+   //  std::vector<std::vector<char>> theHand;
+   GameMaster *gm;
 
  public:
-    TextDisplay();
+    TextDisplay(GameMaster *_gm);
     ~TextDisplay();
-    void notify(GameMaster &gm) override;
     void displayMsg(string msg) override;
     void displaySorceryBoard() override;
-    void displayHand() override;
+    void displayHand(int p) override;
     void displayMinion() override;
-
-    friend std::ostream &operator<<(std::ostream &out, const TextDisplay &td);
 };
 
 #endif

@@ -102,6 +102,8 @@ void Hand::removeCard(int i) {
     theHand.erase(theHand.begin() + i);
 }
 
+int Hand::getSize() { return theHand.size(); }
+
 /* BOARD */
 Minion* Board::getCard(int i) const {
     return theBoard[i];
