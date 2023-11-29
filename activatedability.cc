@@ -63,6 +63,7 @@ BlizzardAbility::BlizzardAbility() : ActivatedAbility{3, true} {}
 BlizzardAbility::~BlizzardAbility() {}
 void BlizzardAbility::doEffect(Player& player, int i) {
     for (int i = 0; i < player.getBoard().size(); i++) {
+        // decrease defense isn't implemented yet so doesn't work. 
         player.getBoard().getCard(i)->decreaseDefense(2);
     }
 }
