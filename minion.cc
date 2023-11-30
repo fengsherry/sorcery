@@ -22,6 +22,15 @@ bool Minion::isDead() {
     return getDefense() <= 0;
 }
 
+void Minion::TEST_printInspectMinion() {
+    if (DefaultMinion* dm = dynamic_cast<DefaultMinion*>(this)) {
+        cout << dm->getName() << endl;
+    } else {
+        EnchantmentDec* ed = dynamic_cast<EnchantmentDec*>(this);
+        cout << ed->getName() << " -> ";
+        ed->getNext()->TEST_printInspectMinion();
+    }
+}
 
 std::ostream& operator<<(std::ostream& out, const Minion* m) {
     if (const DefaultMinion* dm = dynamic_cast<const DefaultMinion*>(m)) {

@@ -54,7 +54,8 @@ class Board {
         void addCard(Minion *m);
         void removeCard(int i);
         void enchantMinion(int i, string minionName, int modifyval = 0); // enchant ith Minion with specified enchantment name.
-        void stripEnchants(int i); 
+        void stripEnchants(int i);
+        void stripTopEnchant(int i); 
         void restoreAction(); // sets action of Minions to 1
         void destroyMinion(int i);
         int size();

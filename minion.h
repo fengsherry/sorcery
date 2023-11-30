@@ -31,6 +31,8 @@ class Minion: public Card {
     
     // void decreaseDefense(int n);
     bool isDead();
+    
+    void TEST_printInspectMinion();
 
 };
 

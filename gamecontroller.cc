@@ -165,7 +165,7 @@ void GameController::go(int argc, char *argv[]) {
                     if (args[1] != 1 && args[1] != 2) { cout << "Invalid player id." << endl; }
                     else if (args[1] == gm.getActivePlayer().getId()) { targetPlayer = &gm.getActivePlayer(); } 
                     else { targetPlayer = &gm.getNonactivePlayer(); }
-        
+
                     Card* targetCard;
                     if (args[2] == 'r') {
                         cout << "targeting a ritual!" << endl;
@@ -199,7 +199,10 @@ void GameController::go(int argc, char *argv[]) {
                 
             } else if (cmd == "use") {
 
-            } else if (cmd == "describe") {
+            } else if (cmd == "describe") { 
+                int i;
+                cin >> i;
+                gm.getActivePlayer().getBoard().getCard(i-1)->TEST_printInspectMinion();
 
             } else if (cmd == "hand") {
                 gm.getActivePlayer().TEST_printPlayerHand();
