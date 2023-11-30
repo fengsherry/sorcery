@@ -34,6 +34,10 @@ void GameMaster::initPlayers(ifstream& deck1In, ifstream& deck2In) {
 
 }
 
+void GameMaster::attach(TriggeredAbility* observer) {
+    observers.emplace_back(observer);
+}
+
 // // SET DECKS, initialize Decks
 // void GameMaster::initDecks(ifstream& deck1In, ifstream& deck2In) {
 //     Deck deck1, deck2;
@@ -48,7 +52,11 @@ void GameMaster::initPlayers(ifstream& deck1In, ifstream& deck2In) {
 
 // starts a turn, switches active and nonactive players, notifies corresponding observers
 void GameMaster::startTurn() {
+    this->notifyStartTurnObservers();
     activePlayer->increaseMagic(1);
+    try {
+        if (activePlayer->getHandSize() < 5) activePlayer->drawCard();
+    } catch (deck_empty e) {cout << e.what() << endl;}
     activePlayer->getBoard().restoreAction();
     activePlayer->getHand().restoreAction(); // can we combine these two
     // notify
@@ -107,8 +115,11 @@ void activateAbility();
 
 void discard();
 
+// play without target
 void GameMaster::play(int i) {
-    activePlayer->play(i); // may throw exception
+    TriggeredAbility* ta = activePlayer->play(i); // may throw exception
+    if (ta) this->attach(ta);
+
     activePlayer->getHand().removeCard(i);
 
     activePlayer->TEST_printPlayerHand();
@@ -116,6 +127,7 @@ void GameMaster::play(int i) {
     activePlayer->TEST_printPlayerRitual();
 }
 
+// play with target
 void GameMaster::play(int i, int j, Player& targetPlayer) {
     activePlayer->play(i, j, targetPlayer);
     activePlayer->getHand().removeCard(i);
@@ -124,7 +136,11 @@ void GameMaster::play(int i, int j, Player& targetPlayer) {
     activePlayer->TEST_printPlayerBoard();
 }
 
-void notifyObservers();
+void GameMaster::notifyStartTurnObservers() {
+    for (auto o : observers) {
+        if (o->getType() == TriggerType::StartTurn) o->applyAbility(activePlayer);
+    }
+}
 
 // displays some visual
 void describe();

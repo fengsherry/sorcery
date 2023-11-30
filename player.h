@@ -35,6 +35,7 @@ class Player {
         int getLife() const;
         int getMagic() const;
         Hand& getHand();
+        size_t getHandSize();
         Board& getBoard();
         Ritual* getRitual();
         Graveyard& getGrave();
@@ -42,12 +43,13 @@ class Player {
         void setLife(int n);
         void setMagic(int n);
         void increaseMagic(int n);
+        void increaseLife(int n);
         void decreaseLife(int n);
         Card* drawCard();
 
         // plays the ith card int he player's hand with no target (i.e. minions, rituals, spells)
         // throws exception if unsucessful
-        void play(int i); 
+        TriggeredAbility* play(int i); 
         void play(int i, int j, Player& p); 
         void init(string name, int id, ifstream& deckIn);
         

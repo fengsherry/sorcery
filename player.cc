@@ -13,7 +13,7 @@ Player::~Player() {}
 void Player::init(string name, int id, ifstream& deckIn) {
     this->name = name;
     this->id = id;
-    deck.init(deckIn);
+    deck.init(deckIn, this);
     hand.init(deck);
 }
 
@@ -53,6 +53,7 @@ int Player::getLife() const {return life;}
 int Player::getMagic() const {return magic;}
 
 Hand& Player::getHand() {return hand;}
+size_t Player::getHandSize() {return hand.getSize();}
 Board& Player::getBoard() {return board;}
 Ritual* Player::getRitual() {return ritual;}
 Graveyard& Player::getGrave() { return grave; }
@@ -69,13 +70,16 @@ void Player::decreaseLife(int n) {
     // we should throw an exception here
 }
 
+void Player::increaseLife(int n) {life += n;}
+
 Card* Player::drawCard() {
+    if (deck.getSize() == 0) throw deck_empty(this);
     Card* c = deck.drawCard();
     hand.addCard(c);
     return c;
 }
 
-void Player::play(int i) {
+TriggeredAbility* Player::play(int i) {
     Card* cardToPlay = hand.getCard(i);
 
     // check if the card can be played without target
@@ -83,7 +87,7 @@ void Player::play(int i) {
     
     // check if player has enough magic to play the card
     int cost = cardToPlay->getCost();
-    if (cost > magic) throw not_enough_magic(*this);
+    if (cost > magic) throw not_enough_magic(*this); // why *this not this
 
     magic -= cost;
 
@@ -91,11 +95,12 @@ void Player::play(int i) {
         Minion* minionToPlay = dynamic_cast<Minion*>(cardToPlay); // fails if cardToPlay is not Minion* type
         board.addCard(minionToPlay);
     } else if (Ritual* ritualToPlay = dynamic_cast<Ritual*>(cardToPlay)) {
-        // cout << "this is not a minion" << endl;
         ritual = ritualToPlay;
+        return ritual->getAbility();
     } else if (Spell* spellToPlay = dynamic_cast<Spell*>(cardToPlay)) {
         spellToPlay->applyAbility(*this);
     }
+    return nullptr;
 }
 
 void Player::play(int i, int j, Player& p) {
