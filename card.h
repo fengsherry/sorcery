@@ -13,7 +13,7 @@ enum class CardName {
     /* Enchantments (non-hidden): */ GiantStrength, Enrage, Haste, MagicFatigue, Silence,
     /* Enchantments (hidden:) */ ModifyAttack, ModifyDefense, ModifyAbility,
     /* Spells */ Banish, Unsummon, Recharge, Disenchant, RaiseDead, Blizzard,
-    /* Rituals */ DarkRitual
+    /* Rituals */ DarkRitual 
 };
 string cardNameToString(CardName c);
 

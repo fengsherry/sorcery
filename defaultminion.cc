@@ -28,4 +28,9 @@ int DefaultMinion::getAction() const {
 void DefaultMinion::setAction(int n) {
     action = n;
 }
+
+void DefaultMinion::setDefense(int n) {
+    defense = n;
+}
+
 //Ability getAbility();

@@ -28,7 +28,11 @@ class Minion: public Card {
     virtual void setAction(int n) = 0;
     // void enchant(string minionName);
     // void decreaseLife(int n);
+    
+    // void decreaseDefense(int n);
     bool isDead();
+    
+    void TEST_printInspectMinion();
 
 };
 

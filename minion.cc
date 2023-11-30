@@ -13,12 +13,23 @@ Minion::Minion(CardName cardName, int cost, string desc):
 
 // string Minion::getName() const { return getDefaultMinionName(); }
 
+// void Minion::decreaseDefense(int n) {}
 // void Minion::setAction(int n) {
 //     action = n;
 // }
 
 bool Minion::isDead() {
     return getDefense() <= 0;
+}
+
+void Minion::TEST_printInspectMinion() {
+    if (DefaultMinion* dm = dynamic_cast<DefaultMinion*>(this)) {
+        cout << dm->getName() << endl;
+    } else {
+        EnchantmentDec* ed = dynamic_cast<EnchantmentDec*>(this);
+        cout << ed->getName() << " -> ";
+        ed->getNext()->TEST_printInspectMinion();
+    }
 }
 
 std::ostream& operator<<(std::ostream& out, const Minion* m) {

@@ -1,10 +1,7 @@
 #include "player.h"
 #include "exceptions.h"
 
-Player::Player() {
-    name = "DEFAULT PLAYER";
-    id = 0;
-}
+Player::Player() {}
 
 // Player::Player(string name, int id) : name{name}, id{id} {}
 
@@ -72,6 +69,11 @@ void Player::decreaseLife(int n) {
 
 void Player::increaseLife(int n) {life += n;}
 
+void Player::destroyRitual() {
+    Ritual* temp = ritual; // will go out of scope after method goes out of scope
+    ritual = nullptr;
+}
+
 Card* Player::drawCard() {
     if (deck.getSize() == 0) throw deck_empty(this);
     Card* c = deck.drawCard();
@@ -91,18 +93,18 @@ TriggeredAbility* Player::play(int i) {
 
     magic -= cost;
 
-    if (cardToPlay->getType() == CardType::Minion) {
-        Minion* minionToPlay = dynamic_cast<Minion*>(cardToPlay); // fails if cardToPlay is not Minion* type
+    if (Minion* minionToPlay = dynamic_cast<Minion*>(cardToPlay)) { // false if cardToPlay is not Minion* type
         board.addCard(minionToPlay);
     } else if (Ritual* ritualToPlay = dynamic_cast<Ritual*>(cardToPlay)) {
         ritual = ritualToPlay;
         return ritual->getAbility();
     } else if (Spell* spellToPlay = dynamic_cast<Spell*>(cardToPlay)) {
-        spellToPlay->applyAbility(*this);
+        spellToPlay->applyAbility(*this, nonActivePlayer);
     }
     return nullptr;
 }
 
+// with target
 void Player::play(int i, int j, Player& p) {
     Card* cardToPlay = hand.getCard(i);
     Card* targetCard = p.getBoard().getCard(j);
@@ -116,14 +118,14 @@ void Player::play(int i, int j, Player& p) {
 
     magic -= cost;
     
-    if (Enchantment* enchantCard = dynamic_cast<Enchantment*>(cardToPlay)) { // enchantment
+    if (Enchantment* enchantToPlay = dynamic_cast<Enchantment*>(cardToPlay)) { // enchantment
         if (Minion* targetMinion = dynamic_cast<Minion*>(targetCard)) {         
-            // place enchantment decorator on the Minion card, converting from enchantment's Card to its Decorator version
-            p.getBoard().enchantMinion(j, enchantCard->getName());
+            // enchant the minion. Note the conversion from Enchantment (Card) to EnchantmentDec (Decorator)
+            p.getBoard().enchantMinion(j, enchantToPlay->getName());
 
         } else { throw invalid_play{"You cannot play " + cardToPlay->getName() + " on " + targetCard->getName()}; }
-    } else if (cardToPlay->getType() == CardType::Spell) { // spell with target
-        // do something
+    } else if (Spell* spellToPlay = dynamic_cast<Spell*>(cardToPlay)) { // spell with target
+        spellToPlay->applyAbility(p, *this, j); // might be sus - *this is a dummy value - should be nullptr but that means the argument needs to be a pointer, will do later if have time
     }
 }
 

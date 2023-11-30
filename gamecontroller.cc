@@ -170,10 +170,17 @@ void GameController::go(int argc, char *argv[]) {
                     if (args[2] == 'r') {
                         cout << "targeting a ritual!" << endl;
                         targetCard = targetPlayer->getRitual();
+                        cout << activePlayerName << " is playing " << gm.getActivePlayer().getHand().getCard(args[0]-1) << 
+                        " on " << targetPlayer->getName() << "'s " << targetCard <<endl;
                     }  
-                    else targetCard = targetPlayer->getBoard().getCard(args[2] - 1);
-                    cout << activePlayerName << " is playing " << gm.getActivePlayer().getHand().getCard(args[0]-1) << 
-                    " on " << targetPlayer->getName() << "'s " << targetCard <<endl;
+                    else {
+                        targetCard = targetPlayer->getBoard().getCard(args[2] - 1);
+                        Minion* targetMinion = dynamic_cast<Minion*>(targetCard);
+                        cout << activePlayerName << " is playing " << gm.getActivePlayer().getHand().getCard(args[0]-1) << 
+                        " on " << targetPlayer->getName() << "'s " << targetMinion <<endl;
+                    }
+                    // cout << activePlayerName << " is playing " << gm.getActivePlayer().getHand().getCard(args[0]-1) << 
+                    // " on " << targetPlayer->getName() << "'s " << targetCard <<endl;
 
                     // play the card
                     try { 
@@ -192,7 +199,10 @@ void GameController::go(int argc, char *argv[]) {
                 
             } else if (cmd == "use") {
 
-            } else if (cmd == "describe") {
+            } else if (cmd == "describe") { 
+                int i;
+                cin >> i;
+                gm.getActivePlayer().getBoard().getCard(i-1)->TEST_printInspectMinion();
 
             } else if (cmd == "hand") {
                 gm.getActivePlayer().TEST_printPlayerHand();

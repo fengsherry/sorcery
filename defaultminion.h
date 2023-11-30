@@ -25,6 +25,7 @@ class DefaultMinion : public Minion {
     //Ability getAbility();
 
     void setAction(int n);
+    void setDefense(int n);
 };
 
 #endif

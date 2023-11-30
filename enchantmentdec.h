@@ -18,6 +18,8 @@ class EnchantmentDec : public Minion {
         bool isHidden();
         
         string getDefaultMinionName() const override;
+        Minion* getNext();
+        void setNext(Minion* newnext);
         // CardName getDefaultMinionName() override;
 };
 
