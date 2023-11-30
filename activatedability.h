@@ -11,60 +11,60 @@ class Player;
 
 class ActivatedAbility {
     int activationCost;
-    
+    virtual void doEffect(Player& player, int i = 0) = 0;
+    bool hitBoth = false;
+
     public:
-        explicit ActivatedAbility(int activationCost = 0);
+        explicit ActivatedAbility(int activationCost = 0, bool hitBoth = false);
         virtual ~ActivatedAbility() = default;
-        virtual void applyAbility(Player& player, int i = 0) = 0;
+        virtual void applyAbility(Player& player1, Player& player2, int i = 0);
 };
 
 /* Abilities for Spells with targets: */
 
 class BanishAbility : public ActivatedAbility{
+    void doEffect(Player& player, int i = 0) override;
     public:
         BanishAbility();
         ~BanishAbility();
-        void applyAbility(Player& player, int i = 0) override;
 };
 
 class UnsummonAbility : public ActivatedAbility{
+    void doEffect(Player& player, int i = 0) override;
     public:
         UnsummonAbility();
         ~UnsummonAbility(); 
-        void applyAbility(Player& player, int i = 0) override;
 };
 
 class DisenchantAbility : public ActivatedAbility{
+    void doEffect(Player& player, int i = 0) override;
     public:
         DisenchantAbility();
         ~DisenchantAbility();
-        void applyAbility(Player& player, int i = 0) override;
 };
 
 /* Abilities for Spells without targets: */
 
 class RechargeAbility : public ActivatedAbility {
+    void doEffect(Player& player, int i = 0) override;
     public:
         RechargeAbility();
         ~RechargeAbility();
-        void applyAbility(Player& player, int i = 0) override;
 };
 
 class RaiseDeadAbility : public ActivatedAbility {
+    void doEffect(Player& player, int i = 0) override;
     public:
         RaiseDeadAbility();
         ~RaiseDeadAbility();
-        void applyAbility(Player& player, int i = 0) override;
-
 };
 
 // note: this is an ability that effects more than one player
 class BlizzardAbility : public ActivatedAbility {
+    void doEffect(Player& player, int i = 0) override;
     public:
         BlizzardAbility();
         ~BlizzardAbility();
-        void applyAbility(Player& player, int i = 0) override;
-
 };
 
 #endif

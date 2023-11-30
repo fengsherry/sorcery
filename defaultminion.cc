@@ -28,4 +28,5 @@ int DefaultMinion::getAction() const {
 void DefaultMinion::setAction(int n) {
     action = n;
 }
+
 //Ability getAbility();

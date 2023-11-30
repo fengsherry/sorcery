@@ -9,13 +9,10 @@ using namespace std;
 
 class Spell: public Card {
     ActivatedAbility* aa;
-    bool needTarget;
     
     public:
         Spell(CardName cardName, int cost, bool needTarget, string desc, ActivatedAbility* aa, Player* target = nullptr);
-        bool getNeedTarget();
-        void applyAbility(Player& player);
-
+        void applyAbility(Player& player1, Player& player2);
 };
 
 #endif

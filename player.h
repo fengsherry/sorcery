@@ -13,15 +13,15 @@
 using namespace std;
 
 class Player {
-    string name;
-    int id; // player 1 or 2
+    string name = "DEFAULT PLAYER";
+    int id = 0; // player 1 or 2
     int life = 20; // health points
     int magic = 3; // way to place cards on the board, etc
     Deck deck;
     Hand hand; // players start with 5 cards in their hand
     Board board;
     Graveyard grave;
-    Ritual* ritual;
+    Ritual* ritual = nullptr;
  
  public:
     Player(); // default ctor to be called when GameMaster is initialized
@@ -49,7 +49,7 @@ class Player {
 
         // plays the ith card int he player's hand with no target (i.e. minions, rituals, spells)
         // throws exception if unsucessful
-        void play(int i); 
+        void play(int i, Player& nonActivePlayer); 
         void play(int i, int j, Player& p); 
         void init(string name, int id, ifstream& deckIn);
         

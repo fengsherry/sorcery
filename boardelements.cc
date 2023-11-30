@@ -31,6 +31,7 @@ Card* createCard(string cardName) {
     
     /* Spells: */ 
     else if (cardName == "Recharge") card = new Spell(CardName::Recharge, 1, false, "Your ritual gains 3 charges", new RechargeAbility{});
+    else if (cardName == "Blizzard") card = new Spell(CardName::Blizzard, 1, false, "Deals 2 damage to all minions", new BlizzardAbility{});
 
     /* Rituals: */ 
     else if (cardName == "Dark Ritual") card = new Ritual(CardName::DarkRitual, "At the start of your turn, gain 1 magic", 0, 1, 5);

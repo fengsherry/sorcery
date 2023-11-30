@@ -109,7 +109,7 @@ void discard();
 
 // without target
 void GameMaster::play(int i) {
-    activePlayer->play(i); // may throw exception
+    activePlayer->play(i, *nonactivePlayer); // may throw exception
     activePlayer->getHand().removeCard(i);
 
     activePlayer->TEST_printPlayerHand();

@@ -1,10 +1,7 @@
 #include "player.h"
 #include "exceptions.h"
 
-Player::Player() {
-    name = "DEFAULT PLAYER";
-    id = 0;
-}
+Player::Player() {}
 
 // Player::Player(string name, int id) : name{name}, id{id} {}
 
@@ -81,7 +78,7 @@ Card* Player::drawCard() {
 }
 
 // without target
-void Player::play(int i) {
+void Player::play(int i, Player& nonActivePlayer) {
     Card* cardToPlay = hand.getCard(i);
 
     // check if the card can be played without target
@@ -98,7 +95,7 @@ void Player::play(int i) {
     } else if (Ritual* ritualToPlay = dynamic_cast<Ritual*>(cardToPlay)) {
         ritual = ritualToPlay;
     } else if (Spell* spellToPlay = dynamic_cast<Spell*>(cardToPlay)) {
-        spellToPlay->applyAbility(*this);
+        spellToPlay->applyAbility(*this, nonActivePlayer);
     }
 }
 
@@ -123,7 +120,7 @@ void Player::play(int i, int j, Player& p) {
 
         } else { throw invalid_play{"You cannot play " + cardToPlay->getName() + " on " + targetCard->getName()}; }
     } else if (Spell* spellToPlay = dynamic_cast<Spell*>(cardToPlay)) { // spell with target
-        spellToPlay->applyAbility(p);
+        spellToPlay->applyAbility(p, *this); // might be sus - *this is a dummy value - should be nullptr but that means the argument needs to be a pointer, will do later if have time
     }
 }
 
