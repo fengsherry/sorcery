@@ -37,6 +37,7 @@ class Player {
         Hand& getHand();
         Board& getBoard();
         Ritual* getRitual();
+        Graveyard& getGrave();
 
         void setLife(int n);
         void setMagic(int n);
@@ -56,6 +57,7 @@ class Player {
         void TEST_printPlayerHand();
         void TEST_printPlayerBoard();
         void TEST_printPlayerRitual();
+        void TEST_printPlayerGrave();
 };
 
 // class not_enough_action : public std::exception {

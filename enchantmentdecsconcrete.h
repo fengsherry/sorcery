@@ -12,7 +12,7 @@ class GiantStrength : public EnchantmentDec {
         int getDefense() const override;
         int getAction() const override;
         // Ability getAbility() const override; // ADD THIS BACK ONCE IMPLEMENTED ABILITIES
-        void setAction(int n);
+        //void setAction(int n);
 };
 
 class Enrage : public EnchantmentDec {
@@ -22,7 +22,7 @@ class Enrage : public EnchantmentDec {
         int getDefense() const override;
         int getAction() const override;
         // Ability getAbility() const override; // ADD THIS BACK ONCE IMPLEMENTED ABILITIES
-        void setAction(int n);
+        //void setAction(int n);
 };
 
 class Haste : public EnchantmentDec {
@@ -32,7 +32,7 @@ class Haste : public EnchantmentDec {
         int getDefense() const override;
         int getAction() const override;
         // Ability getAbility() const override; // ADD THIS BACK ONCE IMPLEMENTED ABILITIES
-        void setAction(int n);
+        //void setAction(int n);
 };
 
 class MagicFatigue : public EnchantmentDec {
@@ -42,7 +42,7 @@ class MagicFatigue : public EnchantmentDec {
         int getDefense() const override;
         int getAction() const override;
         // Ability getAbility() const override; // ADD THIS BACK ONCE IMPLEMENTED ABILITIES
-        void setAction(int n);
+        //void setAction(int n);
 };
 
 class Silence : public EnchantmentDec {
@@ -52,7 +52,40 @@ class Silence : public EnchantmentDec {
         int getDefense() const override;
         int getAction() const override;
         // Ability getAbility() const override; // ADD THIS BACK ONCE IMPLEMENTED ABILITIES
-        void setAction(int n);
+        //void setAction(int n);
+};
+
+class ModifyAttack : public EnchantmentDec {
+    int ModifyAttackVal;
+    public:
+        ModifyAttack(Minion* next, int ModifyAttackVal);
+        int getAttack() const override;
+        int getDefense() const override;
+        int getAction() const override;
+        // Ability getAbility() const override; // ADD THIS BACK ONCE IMPLEMENTED ABILITIES
+        //void setAction(int n);
+};
+
+class ModifyDefense : public EnchantmentDec {
+    int ModifyDefenseVal;
+    public:
+        ModifyDefense(Minion* next, int ModifyDefenseVal);
+        int getAttack() const override;
+        int getDefense() const override;
+        int getAction() const override;
+        // Ability getAbility() const override; // ADD THIS BACK ONCE IMPLEMENTED ABILITIES
+        //void setAction(int n);
+};
+
+// doesn't work yet
+class ModifyAbility : public EnchantmentDec {
+    public:
+        ModifyAbility(Minion* next, int ModifyDefenseVal);
+        int getAttack() const override;
+        int getDefense() const override;
+        int getAction() const override;
+        // Ability getAbility() const override; // ADD THIS BACK ONCE IMPLEMENTED ABILITIES
+        // //void setAction(int n);
 };
 
 #endif

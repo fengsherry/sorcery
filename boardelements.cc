@@ -42,7 +42,6 @@ Card* createCard(string cardName) {
 void Deck::init(ifstream& file) {
     string cardName;
     while (getline(file, cardName) && cardName != "") {
-        // an function to make the different cards?
 
         Card* newCard = createCard(cardName);
 
@@ -52,7 +51,7 @@ void Deck::init(ifstream& file) {
 }
 
 void Deck::TEST_printDeck() {
-    for (auto s : theDeck) { cout << *s << endl; }
+    for (auto s : theDeck) { cout << s << endl; }
 }
 
 Card* Deck::drawCard() {
@@ -83,7 +82,7 @@ Card* Hand::getCard(int i) const {
 
 void Hand::TEST_printHand() {
     for (size_t i = 0; i < theHand.size(); ++i) {
-        cout << "Hand (" << (i+1) << "): " << *theHand[i] << endl;
+        cout << "Hand (" << (i+1) << "): " << theHand[i] << endl;
     }
 }
 
@@ -107,16 +106,26 @@ Minion* Board::getCard(int i) const {
     return theBoard[i];
 }
 
+void Board::removeCard(int i) {
+    if (static_cast<int>(theBoard.size()) > i) {
+        theBoard.erase(theBoard.begin() + i);
+    } else {throw invalid_play{"Cannot access index " + to_string(i) + " in the board."}; } // should never happen
+    
+}
+
+
 void Board::addCard(Minion *m) {
     theBoard.emplace_back(m);
 }
 
-void Board::enchantMinion(int i, string minionName) {
+void Board::enchantMinion(int i, string minionName, int modifyval) {
     if (minionName == "Giant Strength") theBoard[i] = new GiantStrength(theBoard[i]); 
     else if (minionName == "Enrage") theBoard[i] = new Enrage(theBoard[i]);
     else if (minionName == "Haste") theBoard[i] = new Haste(theBoard[i]);
     else if (minionName == "Magic Fatigue") theBoard[i] = new MagicFatigue(theBoard[i]);
     else if (minionName == "Silence") theBoard[i] = new Silence(theBoard[i]);
+    else if (minionName == "Modify Attack") theBoard[i] = new ModifyAttack(theBoard[i], modifyval);
+    else if (minionName == "Modify Defense") theBoard[i] = new ModifyDefense(theBoard[i], modifyval);
 }
 
 void Board::restoreAction() {
@@ -134,29 +143,24 @@ int Board::size() { return static_cast<int>(theBoard.size()); }
 void Board::TEST_printBoard() {
     for (size_t i = 0; i < theBoard.size(); ++i) {
         // cout << "Board (" << (i+1) << "): " << theBoard[i];
-        cout << "Board (" << (i+1) << "): " << *theBoard[i] <<  " ["<< theBoard[i]->getAction() << " action | " << theBoard[i]->getAttack() << " attack | " << theBoard[i]->getDefense() << " defense]" << endl;
+        cout << "Board (" << (i+1) << "): " << theBoard[i] <<  " ["<< theBoard[i]->getAction() << " action | " << theBoard[i]->getAttack() << " attack | " << theBoard[i]->getDefense() << " defense]" << endl;
     }
 }
 
-/* GRAVEYARD */
+Graveyard::Graveyard(){}
+Graveyard::~Graveyard(){}
 bool Graveyard::isEmpty() { return theGrave.empty(); }
+Minion* Graveyard::getTop() { return theGrave.top(); }
+void Graveyard::removeTop() { return theGrave.pop(); }
+void Graveyard::push(Minion* m) { return theGrave.push(m); }
 
-void Graveyard::push(Minion* m) { theGrave.push(m); }
-
-Minion* Graveyard::top() {
-    if (theGrave.empty()) throw empty_grave();
-    else return theGrave.top();
-}
-
-Minion* Graveyard::pop() {
-    if (theGrave.empty()) throw empty_grave();
-    else {
-        Minion* temp = theGrave.top();
-        theGrave.pop();
-        return temp;
+void Graveyard::TEST_printGrave() {
+    stack<Minion*> temp = theGrave;
+    int i = 1;
+    while (!temp.empty()) {
+        cout << "Grave (" << i << "): " << temp.top() << endl;
+        temp.pop();
+        ++i;
     }
 }
 
-Graveyard::Graveyard() {}
-
-Graveyard::~Graveyard() {}
