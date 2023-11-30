@@ -32,6 +32,7 @@ Card* createCard(string cardName) {
     /* Spells: */ 
     else if (cardName == "Recharge") card = new Spell(CardName::Recharge, 1, false, "Your ritual gains 3 charges", new RechargeAbility{});
     else if (cardName == "Blizzard") card = new Spell(CardName::Blizzard, 1, false, "Deals 2 damage to all minions", new BlizzardAbility{});
+    else if (cardName == "Unsummon") card = new Spell(CardName::Unsummon, 1, true, "Return target minion to its owner's hand", new UnsummonAbility{});
 
     /* Rituals: */ 
     else if (cardName == "Dark Ritual") card = new Ritual(CardName::DarkRitual, "At the start of your turn, gain 1 magic", 0, 1, 5);
@@ -127,6 +128,13 @@ void Board::enchantMinion(int i, string minionName, int modifyval) {
     else if (minionName == "Silence") theBoard[i] = new Silence(theBoard[i]);
     else if (minionName == "Modify Attack") theBoard[i] = new ModifyAttack(theBoard[i], modifyval);
     else if (minionName == "Modify Defense") theBoard[i] = new ModifyDefense(theBoard[i], modifyval);
+    // need option another for Modify Ability 
+}
+
+void Board::stripEnchants(int i) {
+    Card* noenchantMinionCard = createCard(theBoard[i]->getDefaultMinionName());
+    Minion* noenchantMinion = dynamic_cast<Minion*>(noenchantMinionCard);
+    theBoard[i] = noenchantMinion;
 }
 
 void Board::restoreAction() {

@@ -13,7 +13,7 @@ Minion::Minion(CardName cardName, int cost, string desc):
 
 // string Minion::getName() const { return getDefaultMinionName(); }
 
-void Minion::decreaseDefense(int n) {}
+// void Minion::decreaseDefense(int n) {}
 // void Minion::setAction(int n) {
 //     action = n;
 // }
@@ -21,6 +21,7 @@ void Minion::decreaseDefense(int n) {}
 bool Minion::isDead() {
     return getDefense() <= 0;
 }
+
 
 std::ostream& operator<<(std::ostream& out, const Minion* m) {
     if (const DefaultMinion* dm = dynamic_cast<const DefaultMinion*>(m)) {

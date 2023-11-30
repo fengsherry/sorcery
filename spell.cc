@@ -8,3 +8,7 @@ Spell::Spell(CardName cardName, int cost, bool needTarget, string desc, Activate
 void Spell::applyAbility(Player& player1, Player& player2) {
     aa->applyAbility(player1, player2);
 }
+
+void Spell::applyAbility(Player& player1, Player& player2, int i) {
+    aa->applyAbility(player1, player2, i);
+}

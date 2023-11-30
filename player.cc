@@ -120,7 +120,7 @@ void Player::play(int i, int j, Player& p) {
 
         } else { throw invalid_play{"You cannot play " + cardToPlay->getName() + " on " + targetCard->getName()}; }
     } else if (Spell* spellToPlay = dynamic_cast<Spell*>(cardToPlay)) { // spell with target
-        spellToPlay->applyAbility(p, *this); // might be sus - *this is a dummy value - should be nullptr but that means the argument needs to be a pointer, will do later if have time
+        spellToPlay->applyAbility(p, *this, j); // might be sus - *this is a dummy value - should be nullptr but that means the argument needs to be a pointer, will do later if have time
     }
 }
 

@@ -29,10 +29,10 @@ void BanishAbility::doEffect(Player& player, int i) {
 UnsummonAbility::UnsummonAbility() : ActivatedAbility{1} {}
 UnsummonAbility::~UnsummonAbility() {}
 void UnsummonAbility::doEffect(Player& player, int i) {
-    Minion* temp = player.getBoard().getCard(i - 1);
-    player.getBoard().destroyMinion(i - 1);
-    // need to strip the minion of enchantments
-    player.getHand().addCard(temp);
+    player.getBoard().stripEnchants(i); // remove any enchantments from minion
+    Minion* temp = player.getBoard().getCard(i);
+    player.getBoard().destroyMinion(i); // remove it from the Board
+    player.getHand().addCard(temp); // add it into the Hand
 }
 
 // DOES NOTHING YET - need enchantment decorators to be finalized
@@ -64,6 +64,7 @@ BlizzardAbility::~BlizzardAbility() {}
 void BlizzardAbility::doEffect(Player& player, int i) {
     for (int i = 0; i < player.getBoard().size(); i++) {
         // decrease defense isn't implemented yet so doesn't work. 
-        player.getBoard().getCard(i)->decreaseDefense(2);
+        player.getBoard().enchantMinion(i, "Modify Defense", -2);
+        // player.getBoard().getCard(i)->decreaseDefense(2);
     }
 }
