@@ -111,8 +111,11 @@ void GameController::go(int argc, char *argv[]) {
                         // output new states of minions
                         attackingMinion = gm.getActivePlayer().getBoard().getCard(arg-1);
                         victimMinion = gm.getNonactivePlayer().getBoard().getCard(arg2-1);
-                        cout << attackingMinion << "'s defense remaining: " << attackingMinion->getDefense() << endl;
-                        cout << victimMinion << "'s defense remaining: " << victimMinion->getDefense() << endl;
+                        
+                        if (attackingMinion->isDead()) cout << attackingMinion << " has died." << endl;
+                        else cout << attackingMinion << "'s defense remaining: " << attackingMinion->getDefense() << endl;
+                        if (victimMinion->isDead()) cout << victimMinion << " has died." << endl;
+                        else cout << victimMinion << "'s defense remaining: " << victimMinion->getDefense() << endl;
                     } catch (not_enough_action e) {
                         cout << e.what() << endl; // error message
                     }
@@ -193,15 +196,14 @@ void GameController::go(int argc, char *argv[]) {
 
             } else if (cmd == "hand") {
                 gm.getActivePlayer().TEST_printPlayerHand();
-
             } else if (cmd == "board") {
                 gm.getActivePlayer().TEST_printPlayerBoard();
-
+            } else if (cmd == "grave") {
+                gm.getActivePlayer().TEST_printPlayerGrave();
             } else if (cmd != "") {
                 td.displayMsg("Not a valid command");
                 // cout << "Not a valid command" << endl;
             } 
-
 
         } catch(out_of_range e) { cout << e.what() << endl; }
         

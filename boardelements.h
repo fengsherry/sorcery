@@ -52,6 +52,7 @@ class Board {
     public:
         Minion* getCard(int i) const;
         void addCard(Minion *m);
+        void removeCard(int i);
         void enchantMinion(int i, string minionName, int modifyval = 0); // enchant ith Minion with specified enchantment name.
         void restoreAction(); // sets action of Minions to 1
         void TEST_printBoard();
@@ -60,6 +61,15 @@ class Board {
 // collection of dead Minions
 class Graveyard {
     stack<Minion*> theGrave;
+
+    public:
+        Graveyard();
+        ~Graveyard();
+        bool isEmpty();
+        Minion* getTop();
+        void removeTop();
+        void push(Minion* m);
+        void TEST_printGrave();
 };
 
 #endif

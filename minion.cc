@@ -7,15 +7,19 @@ using namespace std;
 Minion::Minion(CardName cardName, int cost, string desc): 
     Card{cardName, cost, CardType::Minion, false, desc} {}
 
-void Minion::decreaseLife(int n) {
+// void Minion::decreaseLife(int n) {
 
-}
+// }
 
 // string Minion::getName() const { return getDefaultMinionName(); }
 
 // void Minion::setAction(int n) {
 //     action = n;
 // }
+
+bool Minion::isDead() {
+    return getDefense() <= 0;
+}
 
 std::ostream& operator<<(std::ostream& out, const Minion* m) {
     if (const DefaultMinion* dm = dynamic_cast<const DefaultMinion*>(m)) {

@@ -41,6 +41,12 @@ void Player::TEST_printPlayerRitual() {
     cout << endl;
 }
 
+void Player::TEST_printPlayerGrave() {
+    cout << "Player " << id << " " << name << "'s Graveyard: " << endl;
+    grave.TEST_printGrave();
+    cout << endl;
+}
+
 string Player::getName() const {return name;}
 int Player::getId() const {return id;}
 int Player::getLife() const {return life;}
@@ -49,6 +55,7 @@ int Player::getMagic() const {return magic;}
 Hand& Player::getHand() {return hand;}
 Board& Player::getBoard() {return board;}
 Ritual* Player::getRitual() {return ritual;}
+Graveyard& Player::getGrave() { return grave; }
 
 
 void Player::setLife(int n) {life = n;}

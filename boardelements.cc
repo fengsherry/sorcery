@@ -106,6 +106,14 @@ Minion* Board::getCard(int i) const {
     return theBoard[i];
 }
 
+void Board::removeCard(int i) {
+    if (static_cast<int>(theBoard.size()) > i) {
+        theBoard.erase(theBoard.begin() + i);
+    } else {throw invalid_play{"Cannot access index " + to_string(i) + " in the board."}; } // should never happen
+    
+}
+
+
 void Board::addCard(Minion *m) {
     theBoard.emplace_back(m);
 }
@@ -132,3 +140,21 @@ void Board::TEST_printBoard() {
         cout << "Board (" << (i+1) << "): " << theBoard[i] <<  " ["<< theBoard[i]->getAction() << " action | " << theBoard[i]->getAttack() << " attack | " << theBoard[i]->getDefense() << " defense]" << endl;
     }
 }
+
+Graveyard::Graveyard(){}
+Graveyard::~Graveyard(){}
+bool Graveyard::isEmpty() { return theGrave.empty(); }
+Minion* Graveyard::getTop() { return theGrave.top(); }
+void Graveyard::removeTop() { return theGrave.pop(); }
+void Graveyard::push(Minion* m) { return theGrave.push(m); }
+
+void Graveyard::TEST_printGrave() {
+    stack<Minion*> temp = theGrave;
+    int i = 1;
+    while (!temp.empty()) {
+        cout << "Grave (" << i << "): " << temp.top() << endl;
+        temp.pop();
+        ++i;
+    }
+}
+
