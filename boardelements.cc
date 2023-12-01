@@ -34,7 +34,9 @@ Card* createCard(string cardName, Player* p) {
 
     /* Rituals: */ 
     else if (cardName == "Dark Ritual") card = new Ritual(CardName::DarkRitual, "At the start of your turn, gain 1 magic", 0, 1, 5, new DarkRitualAbility{p});
-    // to do: add decorators (done?) and abilities to minions, add other kinds of cards
+    else if (cardName == "Aura of Power") card = new Ritual(CardName::AuraOfPower, "Whenever a minion enters play under your control, it gains +1/+1", 1, 1, 4, new AuraOfPowerAbility{p});
+    else if (cardName == "Standstill") card = new Ritual(CardName::Standstill, "Whenever a minion enters play under your control, destroy it", 3, 2, 4, new StandstillAbility{p});
+    
     else return nullptr;
     return card;
 }
@@ -104,13 +106,37 @@ void Hand::removeCard(int i) {
     theHand.erase(theHand.begin() + i);
 }
 
+
 /* BOARD */
+void Board::attach(TriggeredAbility* o) {
+    boardObservers.emplace_back(o);
+}
+
+void Board::notifyMinionEnterObservers(Minion* targetMinion) {
+    for (auto o : boardObservers) {
+        if (o->getType() == TriggerType::MinionEnter) {
+            o->setTargetMinion(targetMinion);
+            o->applyAbility();
+        }
+    }
+}
+
+void Board::notifyMinionLeaveObservers(Minion* targetMinion) {
+    for (auto o : boardObservers) {
+        if (o->getType() == TriggerType::MinionLeave) {
+            o->setTargetMinion(targetMinion);
+            o->applyAbility();
+        }
+    }
+}
+
 Minion* Board::getCard(int i) const {
     return theBoard[i];
 }
 
 void Board::addCard(Minion *m) {
     theBoard.emplace_back(m);
+    notifyMinionEnterObservers(m);
 }
 
 void Board::enchantMinion(int i, string minionName) {
@@ -125,6 +151,12 @@ void Board::restoreAction() {
     for (auto minion : theBoard) {
         minion->setAction(1);
     }
+}
+
+bool Board::contains(Minion* m) {
+    auto it = find(theBoard.begin(), theBoard.end(), m);
+    if (it != theBoard.end()) return true; // found
+    return false;
 }
 
 void Board::TEST_printBoard() {

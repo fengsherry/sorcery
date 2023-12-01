@@ -38,6 +38,7 @@ class Player {
         size_t getHandSize();
         Board& getBoard();
         Ritual* getRitual();
+        bool onBoard(Minion* m);
 
         void setLife(int n);
         void setMagic(int n);

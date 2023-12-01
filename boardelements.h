@@ -49,6 +49,7 @@ class Hand {
 // Minions the player has played, not yet dead
 class Board {
     vector<Minion*> theBoard;
+    vector<TriggeredAbility*> boardObservers;
 
     public:
         Minion* getCard(int i) const;
@@ -56,6 +57,12 @@ class Board {
         void enchantMinion(int i, string minionName); // enchant ith Minion with specified enchantment name.
         void restoreAction(); // sets action of Minions to 1
         void TEST_printBoard();
+        bool contains(Minion* m);
+
+        // observer pattern methods
+        void attach(TriggeredAbility* o);
+        void notifyMinionEnterObservers(Minion* targetMinion);
+        void notifyMinionLeaveObservers(Minion* targetMinion);
 };
 
 // collection of dead Minions

@@ -12,7 +12,7 @@ enum class CardName {
     /* Minions: */ AirElemental, EarthElemental, BoneGolem, FireElemental, PotionSeller, NovicePyromancer, ApprenticeSummoner, MasterSummoner,
     /* Enchantments: */ GiantStrength, Enrage, Haste, MagicFatigue, Silence,
     /* Spells */ Banish, Unsummon, Recharge, Disenchant, RaiseDead, Blizzard,
-    /* Rituals */ DarkRitual
+    /* Rituals */ DarkRitual, AuraOfPower, Standstill
 };
 string cardNameToString(CardName c);
 

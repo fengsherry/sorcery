@@ -50,6 +50,10 @@ string cardNameToString(CardName c) {
         /* Rituals: */
         case CardName::DarkRitual:
             return "Dark Ritual";
+        case CardName::AuraOfPower:
+            return "Aura of Power";
+        case CardName::Standstill:
+            return "Standstill";
     }
 }
 

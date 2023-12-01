@@ -15,7 +15,7 @@ class GameMaster {
     int numPlayers = 2;
     Player* activePlayer;
     Player* nonactivePlayer;
-    vector<TriggeredAbility*> observers;
+    vector<TriggeredAbility*> gameObservers;
     
     public:
         GameMaster(); 
@@ -28,6 +28,7 @@ class GameMaster {
         // observer pattern methods
         void attach(TriggeredAbility* o);
         void notifyStartTurnObservers();
+        void notifyEndTurnObservers();
 
         // methods correlating to commands recieved in main:
         void startTurn();

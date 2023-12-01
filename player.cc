@@ -120,3 +120,6 @@ void Player::play(int i, int j, Player& p) {
     }
 }
 
+bool Player::onBoard(Minion*  m) {
+    return board.contains(m);
+}
