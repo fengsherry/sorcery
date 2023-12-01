@@ -50,9 +50,8 @@ class Player {
         void destroyRitual();
 
         // plays the ith card int he player's hand with no target (i.e. minions, rituals, spells)
-        // throws exception if unsucessful
-        TriggeredAbility* play(int i); 
-        void play(int i, Player& nonActivePlayer); 
+        // throws exception if unsucessful 
+        TriggeredAbility* play(int i, Player& nonActivePlayer); 
         void play(int i, int j, Player& p); 
         void init(string name, int id, ifstream& deckIn);
         

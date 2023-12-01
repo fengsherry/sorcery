@@ -138,8 +138,8 @@ void Board::enchantMinion(int i, string minionName, int modifyval) {
     // need option another for Modify Ability 
 }
 
-void Board::stripEnchants(int i, Player *p) {
-    Card* noenchantMinionCard = createCard(theBoard[i]->getDefaultMinionName(), p);
+void Board::stripEnchants(int i, Player& p) {
+    Card* noenchantMinionCard = createCard(theBoard[i]->getDefaultMinionName(), nullptr);
     Minion* noenchantMinion = dynamic_cast<Minion*>(noenchantMinionCard);
     theBoard[i] = noenchantMinion;
 }
