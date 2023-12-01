@@ -93,6 +93,30 @@ TriggeredAbility* Player::play(int i) {
 
     magic -= cost;
 
+    if (cardToPlay->getType() == CardType::Minion) {
+        Minion* minionToPlay = dynamic_cast<Minion*>(cardToPlay); // fails if cardToPlay is not Minion* type
+        board.addCard(minionToPlay);
+    } else if (Ritual* ritualToPlay = dynamic_cast<Ritual*>(cardToPlay)) {
+        ritual = ritualToPlay;
+        return ritual->getAbility();
+    } else if (Spell* spellToPlay = dynamic_cast<Spell*>(cardToPlay)) {
+        spellToPlay->applyAbility(*this);
+    }
+    return nullptr;
+}
+
+TriggeredAbility* Player::play(int i) {
+    Card* cardToPlay = hand.getCard(i);
+
+    // check if the card can be played without target
+    if (cardToPlay->getNeedTarget() == true) throw no_target_provided(*cardToPlay);
+    
+    // check if player has enough magic to play the card
+    int cost = cardToPlay->getCost();
+    if (cost > magic) throw not_enough_magic(*this); // why *this not this
+
+    magic -= cost;
+
     if (Minion* minionToPlay = dynamic_cast<Minion*>(cardToPlay)) { // false if cardToPlay is not Minion* type
         board.addCard(minionToPlay);
     } else if (Ritual* ritualToPlay = dynamic_cast<Ritual*>(cardToPlay)) {

@@ -117,7 +117,7 @@ void discard();
 
 // play without target
 void GameMaster::play(int i) {
-    TriggeredAbility* ta = activePlayer->play(i); // may throw exception
+    TriggeredAbility* ta = activePlayer->play(i, *nonactivePlayer); // may throw exception
     if (ta) this->attach(ta);
 
     activePlayer->getHand().removeCard(i);

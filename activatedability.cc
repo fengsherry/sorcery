@@ -29,7 +29,7 @@ void BanishAbility::doEffect(Player& player, int i) {
 UnsummonAbility::UnsummonAbility() : ActivatedAbility{1} {}
 UnsummonAbility::~UnsummonAbility() {}
 void UnsummonAbility::doEffect(Player& player, int i) {
-    player.getBoard().stripEnchants(i); // remove any enchantments from minion
+    player.getBoard().stripEnchants(i, *player); // remove any enchantments from minion
     Minion* temp = player.getBoard().getCard(i);
     player.getBoard().destroyMinion(i); // remove it from the Board
     player.getHand().addCard(temp); // add it into the Hand
