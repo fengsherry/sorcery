@@ -67,4 +67,6 @@ class BlizzardAbility : public ActivatedAbility {
         ~BlizzardAbility();
 };
 
+
+
 #endif
