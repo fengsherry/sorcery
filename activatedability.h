@@ -69,6 +69,26 @@ class BlizzardAbility : public ActivatedAbility {
 
 /* Activated Abilities for Minions: */
 
+class NovicePyromancerAbility : public ActivatedAbility {
+    void doEffect(Player& player, int i = 0) override;
+    public:
+        NovicePyromancerAbility();
+        ~NovicePyromancerAbility();
+};
+
+class ApprenticeSummonerAbility : public ActivatedAbility {
+    void doEffect(Player& player, int i = 0) override;
+    public:
+        ApprenticeSummonerAbility();
+        ~ApprenticeSummonerAbility();
+};
+
+class MasterSummonerAbility : public ActivatedAbility {
+    void doEffect(Player& player, int i = 0) override;
+    public:
+        MasterSummonerAbility();
+        ~MasterSummonerAbility();
+};
 
 
 

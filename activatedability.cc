@@ -2,6 +2,8 @@
 #include "activatedability.h"
 #include "player.h"
 #include "exceptions.h"
+// #include "boardelements.h"
+#include "sorceryutil.h"
 
 ActivatedAbility::ActivatedAbility(int activationCost, bool hitBoth): 
 activationCost{activationCost}, hitBoth {hitBoth} {}
@@ -56,7 +58,7 @@ RaiseDeadAbility::RaiseDeadAbility() : ActivatedAbility{1} {}
 RaiseDeadAbility::~RaiseDeadAbility() {}
 void RaiseDeadAbility::doEffect(Player& player, int i) {
     if (player.getGrave().isEmpty()) throw empty_grave();
-    // if (player.getBoard().size() == 5) throw full_hand(); // already checked in addCard() method
+
     // ressurect top minion in graveyard
     Minion* m = player.getGrave().getTop();
     player.getGrave().removeTop();
@@ -65,16 +67,6 @@ void RaiseDeadAbility::doEffect(Player& player, int i) {
     player.getBoard().addCard(m);
     int index = player.getBoard().size() - 1;
     player.getBoard().enchantMinion(index, "Modify Defense", modifyDefenseVal);
-
-    // if (DefaultMinion* dm = dynamic_cast<DefaultMinion*>(m)) {
-    //     dm->setDefense(1);
-    //     player.getHand().addCard(m);
-    // } else {
-    //     cout << "what??? how is this possible?? it shouldn't be possible." << endl;
-    // }
-    // player.getHand().addCard(m);
-
-    // set defense to 1
 }
 
 // note: this is an ability that effects more than one player
@@ -82,8 +74,36 @@ BlizzardAbility::BlizzardAbility() : ActivatedAbility{3, true} {}
 BlizzardAbility::~BlizzardAbility() {}
 void BlizzardAbility::doEffect(Player& player, int i) {
     for (int i = 0; i < player.getBoard().size(); i++) {
-        // decrease defense isn't implemented yet so doesn't work. 
         player.getBoard().enchantMinion(i, "Modify Defense", -2);
-        // player.getBoard().getCard(i)->decreaseDefense(2);
     }
+}
+
+/* Activated Abilities for Minions: */
+
+// deal 1 damage to target minion
+NovicePyromancerAbility::NovicePyromancerAbility() {}
+NovicePyromancerAbility::~NovicePyromancerAbility() {}
+void NovicePyromancerAbility::doEffect(Player& player, int i) {
+    player.getBoard().enchantMinion(i, "Modify Defense", -1);
+}
+
+// summon a 1/1 air elemental
+ApprenticeSummonerAbility::ApprenticeSummonerAbility() {}
+ApprenticeSummonerAbility::~ApprenticeSummonerAbility() {}
+void ApprenticeSummonerAbility::doEffect(Player& player, int i) {
+    if (player.getBoard().size() == 5) throw full_board{};
+    else player.getBoard().addCard(dynamic_cast<Minion*>(createCard("Air Elemental", nullptr)));
+}
+
+// summon up to three 1/1 air elementals
+MasterSummonerAbility::MasterSummonerAbility() {}
+MasterSummonerAbility::~MasterSummonerAbility() {}
+void MasterSummonerAbility::doEffect(Player& player, int i) {
+    if (player.getBoard().size() == 5) throw full_board{};
+    else {
+        while (player.getBoard().size() != 5) {
+            player.getBoard().addCard(dynamic_cast<Minion*>(createCard("Air Elemental", nullptr)));
+        }
+    }
+
 }
