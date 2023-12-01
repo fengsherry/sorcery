@@ -67,6 +67,9 @@ class BlizzardAbility : public ActivatedAbility {
         ~BlizzardAbility();
 };
 
+/* Activated Abilities for Minions: */
+
+
 
 
 #endif

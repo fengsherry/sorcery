@@ -5,8 +5,12 @@
 #include "sorceryutil.h"
 using namespace std;
 
-DefaultMinion::DefaultMinion(CardName cardName, int cost, int attack, int defense, string desc):
-    Minion {cardName, cost, desc}, cardName{cardName}, attack {attack}, defense {defense} {}
+DefaultMinion::DefaultMinion(CardName cardName, int cost, int attack, int defense,
+                                variant<ActivatedAbility*, TriggeredAbility*, monostate> ability, string desc):
+    Minion {cardName, cost, desc}, // Minion fields
+    cardName{cardName}, attack {attack}, defense {defense}, // DefaultMinion fields
+    ability{ability} // either Activated or TriggeredAbility
+    {}
 
 string DefaultMinion::getDefaultMinionName() const {
     return cardNameToString(cardName);

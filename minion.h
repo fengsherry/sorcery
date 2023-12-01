@@ -3,7 +3,8 @@
 #ifndef __MINION_H__
 #define __MINION_H__
 #include "card.h"
-// #inlcude "ability.h"
+// #include "activatedability.h"
+// #include "triggeredability.h"
 #include <string>
 #include <iostream>
 using namespace std;
@@ -14,6 +15,7 @@ class EnchantmentDec;
 class Minion: public Card {
     CardType type = CardType::Minion;
     bool needTarget = false;
+
  public:
     Minion(CardName cardName, int cost, string desc = "");
     virtual ~Minion() = default;
