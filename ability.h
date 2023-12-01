@@ -8,14 +8,14 @@ using namespace std;
 
 class Ability {
     vector<Player*> targetPlayers; 
-    vector<Minion*> targetMinions;
+    vector<MinionPtr> targetMinions;
 
     public:   
         Ability(vector<Player*> targetPlayers = {}, vector<Minion*> targetMinions = {}); 
         virtual bool applyAbility() = 0; 
 
         vector<Player*>& getTargetPlayers();
-        vector<Minion*>& getTargetMinions();
+        vector<MinionPtr>& getTargetMinions();
 };
 
 #endif

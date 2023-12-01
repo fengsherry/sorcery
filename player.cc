@@ -48,7 +48,7 @@ int Player::getMagic() const {return magic;}
 
 Hand& Player::getHand() {return hand;}
 Board& Player::getBoard() {return board;}
-Ritual* Player::getRitual() {return ritual;}
+RitualPtr Player::getRitual() {return ritual;}
 
 
 void Player::setLife(int n) {life = n;}
@@ -62,14 +62,14 @@ void Player::decreaseLife(int n) {
     // we should throw an exception here
 }
 
-Card* Player::drawCard() {
-    Card* c = deck.drawCard();
+CardPtr Player::drawCard() {
+    CardPtr c = deck.drawCard();
     hand.addCard(c);
     return c;
 }
 
 void Player::play(int i) {
-    Card* cardToPlay = hand.getCard(i);
+    CardPtr cardToPlay = hand.getCard(i);
 
     // check if the card can be played without target
     if (cardToPlay->getNeedTarget() == true) throw no_target_provided(*cardToPlay);
@@ -81,19 +81,21 @@ void Player::play(int i) {
     magic -= cost;
 
     if (cardToPlay->getType() == CardType::Minion) {
-        Minion* minionToPlay = dynamic_cast<Minion*>(cardToPlay); // fails if cardToPlay is not Minion* type
+        MinionPtr minionToPlay = dynamic_pointer_cast<Minion>(cardToPlay); // fails if cardToPlay is not MinionPtr type
         board.addCard(minionToPlay);
-    } else if (Ritual* ritualToPlay = dynamic_cast<Ritual*>(cardToPlay)) {
+    } else if (cardToPlay->getType() == CardType::Ritual) {
+        RitualPtr ritualToPlay = dynamic_pointer_cast<Ritual>(cardToPlay);
         // cout << "this is not a minion" << endl;
         ritual = ritualToPlay;
-    } else if (Spell* spellToPlay = dynamic_cast<Spell*>(cardToPlay)) {
+    } else if (cardToPlay->getType() == CardType::Spell) {
+        SpellPtr spellToPlay = dynamic_pointer_cast<Spell>(cardToPlay);
         spellToPlay->applyAbility(*this);
     }
 }
 
 void Player::play(int i, int j, Player& p) {
-    Card* cardToPlay = hand.getCard(i);
-    Card* targetCard = p.getBoard().getCard(j);
+    CardPtr cardToPlay = hand.getCard(i);
+    CardPtr targetCard = p.getBoard().getCard(j);
 
     // check if the card needs a target to be played
     if (cardToPlay->getNeedTarget() == false) throw no_target_needed(*cardToPlay);
@@ -104,13 +106,15 @@ void Player::play(int i, int j, Player& p) {
 
     magic -= cost;
     
-    if (Enchantment* enchantCard = dynamic_cast<Enchantment*>(cardToPlay)) { // enchantment
-        if (Minion* targetMinion = dynamic_cast<Minion*>(targetCard)) {         
+    if(cardToPlay->getType() ==   CardType::Enchantment && targetCard->getType() == CardType::Spell)
+    {
+        EnchantmentPtr enchantCard = dynamic_pointer_cast<Enchantment>(cardToPlay);
+        MinionPtr targetMinion = dynamic_pointer_cast<Minion>(targetCard);         
             // place enchantment decorator on the Minion card, converting from enchantment's Card to its Decorator version
-            p.getBoard().enchantMinion(j, enchantCard->getName());
-
-        } else { throw invalid_play{"You cannot play " + cardToPlay->getName() + " on " + targetCard->getName()}; }
-    } else if (cardToPlay->getType() == CardType::Spell) { // spell with target
+        p.getBoard().enchantMinion(j, enchantCard->getName());
+        
+    }
+    else if (cardToPlay->getType() == CardType::Spell) { // spell with target
         // do something
     }
 }

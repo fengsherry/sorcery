@@ -16,7 +16,7 @@ using namespace std;
 
 // collection of cards from which players draw cards into their Hand
 class Deck {
-    vector<Card*> theDeck;
+    vector<CardPtr> theDeck;
     //vector<string*> theDeck;
 
  public:
@@ -25,7 +25,7 @@ class Deck {
 
     void init(ifstream& file);
     void shuffle();
-    Card* drawCard();
+    CardPtr drawCard();
     size_t getSize();
 
     void TEST_printDeck();
@@ -33,12 +33,12 @@ class Deck {
 
 // cards a player is holding, but has not placed
 class Hand {
-    vector<Card*> theHand;
+    vector<CardPtr> theHand;
 
     public:
         void init(Deck& deck);
-        void addCard(Card* c);
-        Card* getCard(int i) const;
+        void addCard(CardPtr c);
+        CardPtr getCard(int i) const;
         int getSize();
 
         void TEST_printHand();
@@ -48,7 +48,7 @@ class Hand {
 
 // Minions the player has played, not yet dead
 class Board {
-    vector<Minion*> theBoard;
+    vector<MinionPtr> theBoard;
 
     public:
         Minion* getCard(int i) const;
@@ -56,11 +56,13 @@ class Board {
         void enchantMinion(int i, string minionName); // enchant ith Minion with specified enchantment name.
         void restoreAction(); // sets action of Minions to 1
         void TEST_printBoard();
+        int getBoardSize();
+
 };
 
 // collection of dead Minions
 class Graveyard {
-    stack<Minion*> theGrave;
+    stack<MinionPtr> theGrave;
 };
 
 #endif

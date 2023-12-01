@@ -17,4 +17,6 @@ class Enchantment: public Card {
         ~Enchantment();
 };
 
+typedef shared_ptr<Enchantment> EnchantmentPtr;
+
 #endif

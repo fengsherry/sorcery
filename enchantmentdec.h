@@ -6,9 +6,9 @@
 
 class EnchantmentDec : public Minion {
     public:
-        Minion* next;
+        MinionPtr next;
     public:
-        EnchantmentDec(CardName cardName, int cost, string desc, Minion* next);
+        EnchantmentDec(CardName cardName, int cost, string desc, MinionPtr next);
         virtual ~EnchantmentDec();
 
         

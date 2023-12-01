@@ -19,6 +19,9 @@ class TextDisplay : public Display {
     void displaySorceryBoard() override;
     void displayHand(int p) override;
     void displayMinion() override;
+
+    // friend ostream &operator<<(ostream &out, const card_template_t &t);
+
 };
 
 #endif

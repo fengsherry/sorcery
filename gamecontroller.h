@@ -4,6 +4,7 @@
 #include "gamemaster.h"
 #include "textdisplay.h"
 
+
 class GameController {
     GameMaster gm; 
     TextDisplay *td = nullptr;

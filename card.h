@@ -3,6 +3,7 @@
 #ifndef __CARD_H__
 #define __CARD_H__
 #include <string>
+#include <memory>
 using namespace std;
 
 enum class CardType { Spell, Minion, Enchantment, Ritual };
@@ -36,6 +37,7 @@ class Card {
     bool getNeedTarget();
 
 };
+typedef std::shared_ptr<Card> CardPtr;
 
 ostream &operator<< (ostream &out, const Card &c);
 

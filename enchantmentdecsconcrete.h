@@ -7,7 +7,7 @@
 
 class GiantStrength : public EnchantmentDec {
     public:
-        GiantStrength(Minion* next);
+        GiantStrength(MinionPtr next);
         int getAttack() const override;
         int getDefense() const override;
         int getAction() const override;
@@ -17,7 +17,7 @@ class GiantStrength : public EnchantmentDec {
 
 class Enrage : public EnchantmentDec {
     public:
-        Enrage(Minion* next);
+        Enrage(MinionPtr next);
         int getAttack() const override;
         int getDefense() const override;
         int getAction() const override;
@@ -27,7 +27,7 @@ class Enrage : public EnchantmentDec {
 
 class Haste : public EnchantmentDec {
     public:
-        Haste(Minion* next);
+        Haste(MinionPtr next);
         int getAttack() const override;
         int getDefense() const override;
         int getAction() const override;
@@ -37,7 +37,7 @@ class Haste : public EnchantmentDec {
 
 class MagicFatigue : public EnchantmentDec {
     public:
-        MagicFatigue(Minion* next);
+        MagicFatigue(MinionPtr next);
         int getAttack() const override;
         int getDefense() const override;
         int getAction() const override;
@@ -47,7 +47,7 @@ class MagicFatigue : public EnchantmentDec {
 
 class Silence : public EnchantmentDec {
     public:
-        Silence(Minion* next);
+        Silence(MinionPtr next);
         int getAttack() const override;
         int getDefense() const override;
         int getAction() const override;

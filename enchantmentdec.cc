@@ -1,6 +1,6 @@
 #include "enchantmentdec.h"
 
-EnchantmentDec::EnchantmentDec(CardName cardName, int cost, string desc, Minion* next) : 
+EnchantmentDec::EnchantmentDec(CardName cardName, int cost, string desc, MinionPtr next) : 
     Minion{cardName, cost, desc}, next{next} {}
 
-EnchantmentDec::~EnchantmentDec() { delete next; }
+EnchantmentDec::~EnchantmentDec() { next.reset(); }

@@ -1,13 +1,13 @@
 #include "enchantmentdecsconcrete.h"
 
-GiantStrength::GiantStrength(Minion* next) : EnchantmentDec{CardName::GiantStrength, 1, "", next} {}
+GiantStrength::GiantStrength(MinionPtr next) : EnchantmentDec{CardName::GiantStrength, 1, "", next} {}
 int GiantStrength::getAttack() const { return 2 + next->getAttack(); }
 int GiantStrength::getDefense() const { return 2 + next->getDefense(); }
 int GiantStrength::getAction() const { return next->getAction(); }
 // Ability GiantStrength::getAbility() const; // ADD THIS BACK ONCE IMPLEMENTED ABILITIES
 void GiantStrength::setAction(int n) { next->setAction(n); }
 
-Enrage::Enrage(Minion* next) : EnchantmentDec{CardName::Enrage, 2, "", next} {}
+Enrage::Enrage(MinionPtr next) : EnchantmentDec{CardName::Enrage, 2, "", next} {}
 int Enrage::getAttack() const { return 2 * next->getAttack(); }
 int Enrage::getDefense() const { return 2 * next->getDefense(); }
 int Enrage::getAction() const { return next->getAction(); }
@@ -15,7 +15,7 @@ int Enrage::getAction() const { return next->getAction(); }
 void Enrage::setAction(int n) { next->setAction(n); }
 
 // does nothing for now, we need to make this into a triggered ability and add it to the list of observers
-Haste::Haste(Minion* next) : EnchantmentDec{
+Haste::Haste(MinionPtr next) : EnchantmentDec{
     CardName::Haste, 
     1, 
     "Enchanted minion gains +1 action each turn", 
@@ -27,7 +27,7 @@ int Haste::getAction() const { return next->getAction(); }
 void Haste::setAction(int n) { next->setAction(n); }
 
 // does nothing for now, we need to implement Abilities so that we can modify the cost field in the Ability object.
-MagicFatigue::MagicFatigue(Minion* next) : EnchantmentDec{
+MagicFatigue::MagicFatigue(MinionPtr next) : EnchantmentDec{
     CardName::MagicFatigue, 
     0, 
     "Enchanted minion's activated ability costs 2 more", 
@@ -39,7 +39,7 @@ int MagicFatigue::getAction() const { return next->getAction(); }
 void MagicFatigue::setAction(int n) { next->setAction(n); }
 
 // does nothing for now, we need to implement Abilities so that we can modify the method ?? in the Ability object.
-Silence::Silence(Minion* next) : EnchantmentDec{
+Silence::Silence(MinionPtr next) : EnchantmentDec{
     CardName::Silence, 
     0, 
     "Enchanted minion cannot use abilities", 

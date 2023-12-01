@@ -24,4 +24,6 @@ class Ritual: public Card {
         void printRitual();
 };
 
+typedef shared_ptr<Ritual>  RitualPtr;
+
 #endif

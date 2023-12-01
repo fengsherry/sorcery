@@ -7,6 +7,9 @@
 #include "exceptions.h"
 #include "gamecontroller.h"
 
+#include "ascii_graphics.h"
+#include "textdisplay.h"
+
 GameController::GameController() {}
 GameController::~GameController() {}
 
@@ -62,6 +65,10 @@ void GameController::go(int argc, char *argv[]) {
     // create a new textdisplay
     td = new TextDisplay(&gm);
 
+    //TEMP ____________________________________________________________________________________________________________________
+    td->displayHand(1);
+    //TEMP____________________________________________________________________________________________________________________
+
     string cmd;
     int arg1, arg2, arg3;
     gm.startTurn();
@@ -86,7 +93,7 @@ void GameController::go(int argc, char *argv[]) {
 
             } else if (cmd == "draw") {
                 try {
-                    Card* drawnCard = gm.getActivePlayer().drawCard();
+                    CardPtr drawnCard = gm.getActivePlayer().drawCard();
                     cout << "Player " << gm.getTurn() << ": " << activePlayerName << "  drew a " << drawnCard->getName() << endl;
                 } catch (invalid_play e) {cout << e.what() << endl; }
                 
@@ -103,8 +110,8 @@ void GameController::go(int argc, char *argv[]) {
                 
                 if (iss >> arg2) { 
                     // "attack i j" - order minion i to attack nonactive player's minion j
-                    Minion* attackingMinion = gm.getActivePlayer().getBoard().getCard(arg-1);
-                    Minion* victimMinion = gm.getNonactivePlayer().getBoard().getCard(arg2-1);
+                    MinionPtr attackingMinion = gm.getActivePlayer().getBoard().getCard(arg-1);
+                    MinionPtr victimMinion = gm.getNonactivePlayer().getBoard().getCard(arg2-1);
                     cout << activePlayerName << "'s minion, " << *attackingMinion << " is attacking " <<  nonactivePlayerName 
                     << "'s minion, " << *victimMinion << endl;
 
@@ -122,7 +129,7 @@ void GameController::go(int argc, char *argv[]) {
                     // "attack i" - order minion i to attack the nonactive player
                     cin.clear();
 
-                    Minion* attackingMinion = gm.getActivePlayer().getBoard().getCard(arg-1);
+                    MinionPtr attackingMinion = gm.getActivePlayer().getBoard().getCard(arg-1);
                     cout << activePlayerName << " is attacking " <<  nonactivePlayerName 
                     << " with " << *attackingMinion << endl;
 
@@ -167,9 +174,9 @@ void GameController::go(int argc, char *argv[]) {
                     Card* targetCard;
                     if (args[2] == 'r') {
                         cout << "targeting a ritual!" << endl;
-                        targetCard = targetPlayer->getRitual();
+                        targetCard = targetPlayer->getRitual().get();
                     }
-                    else targetCard = targetPlayer->getBoard().getCard(args[2] - 1);
+                    else targetCard = targetPlayer->getBoard().getCard(args[2] - 1).get();
                     cout << activePlayerName << " is playing " << *(gm.getActivePlayer().getHand().getCard(args[0]-1)) << 
                     " on " << targetPlayer->getName() << "'s " << targetCard->getName() <<endl;
 
