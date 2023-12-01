@@ -80,13 +80,23 @@ void GameMaster::attackMinion(int i, int j) { // i is attacker, j is victim
     // check for enough action
     if (attackingMinion->getAction() == 0) throw not_enough_action{*activePlayer}; 
 
+    // minions attack each other
     attackingMinion->setAction(0);
     int attackValAttacker = attackingMinion->getAttack();
     int attackValVictim = victimMinion->getAttack();
-    // victimMinion->
-    // activePlayer
-    
+    activePlayer->getBoard().enchantMinion(i, "Modify Defense", -attackValVictim);
+    nonactivePlayer->getBoard().enchantMinion(j, "Modify Defense", -attackValAttacker);
 
+    // check if minions are dead 
+    if (activePlayer->getBoard().getCard(i)->isDead()) {
+        // send to graveyard
+        activePlayer->getGrave().push(activePlayer->getBoard().getCard(i));
+        activePlayer->getBoard().removeCard(i);
+    }
+    if (nonactivePlayer->getBoard().getCard(j)->isDead()) {
+        nonactivePlayer->getGrave().push(nonactivePlayer->getBoard().getCard(j));
+        nonactivePlayer->getBoard().removeCard(j);
+    }
 }
 
 

@@ -54,4 +54,46 @@ class deck_empty : public std::exception {
     }
 };
 
+class empty_grave : public std::exception {
+    string msg;
+    public:
+        empty_grave() {}
+        string what () {
+            return "The graveyard is empty.";
+        }
+};
+
+class full_hand : public std::exception {
+    public:
+        full_hand() {}
+        string what() {
+            return "The hand is full.";
+        }
+};
+
+class full_board : public std::exception {
+    public:
+        full_board() {}
+        string what() {
+            return "The board is full.";
+        }
+};
+
+class outside_range : public std::exception {
+    public:
+        outside_range() {}
+        string what () {
+            return "Out of range.";
+        }
+};
+
+class no_enchantments : public std::exception {
+    Minion* m;
+    public:
+        no_enchantments(Minion* m) : m{m} {}
+        string what () {
+            return m->getName() + " has no enchanments.";
+        }
+};
+
 #endif

@@ -10,7 +10,8 @@ enum class CardType { Spell, Minion, Enchantment, Ritual };
 // contains only minions for now
 enum class CardName { 
     /* Minions: */ AirElemental, EarthElemental, BoneGolem, FireElemental, PotionSeller, NovicePyromancer, ApprenticeSummoner, MasterSummoner,
-    /* Enchantments: */ GiantStrength, Enrage, Haste, MagicFatigue, Silence,
+    /* Enchantments (non-hidden): */ GiantStrength, Enrage, Haste, MagicFatigue, Silence,
+    /* Enchantments (hidden:) */ ModifyAttack, ModifyDefense, ModifyAbility,
     /* Spells */ Banish, Unsummon, Recharge, Disenchant, RaiseDead, Blizzard,
     /* Rituals */ DarkRitual, AuraOfPower, Standstill
 };
@@ -28,13 +29,13 @@ class Card {
     // Card();
     Card(CardName cardName, int cost, CardType type, bool needTarget, string desc = "");
     virtual ~Card() = default;
-    string getName() const;
+    virtual string getName() const;
     int getCost() const;
     CardType getType();
     bool getNeedTarget();
 
 };
 
-ostream &operator<< (ostream &out, const Card &c);
+ostream &operator<< (ostream &out, const Card *c);
 
 #endif
