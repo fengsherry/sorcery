@@ -10,14 +10,17 @@ using namespace std;
 class Player;
 
 class ActivatedAbility {
-    int activationCost;
+    int activationCost = 0;
     virtual void doEffect(Player& player, int i = 0) = 0;
     bool hitBoth = false;
+    bool needTarget;
 
     public:
-        explicit ActivatedAbility(int activationCost = 0, bool hitBoth = false);
+        ActivatedAbility(int activationCost = 0, bool needTarget = false, bool hitBoth = false);
         virtual ~ActivatedAbility() = default;
         virtual void applyAbility(Player& player1, Player& player2, int i = 0);
+        bool getNeedTarget();
+        int getActivationCost();
 };
 
 /* Abilities for Spells with targets: */

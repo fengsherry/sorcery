@@ -136,6 +136,21 @@ void GameMaster::play(int i, int j, Player& targetPlayer) {
     activePlayer->TEST_printPlayerBoard();
 }
 
+void GameMaster::useAbility(int i) {
+    activePlayer->useAbility(i, *nonactivePlayer);
+
+    activePlayer->TEST_printPlayerHand();
+    activePlayer->TEST_printPlayerBoard();
+}
+
+void GameMaster::useAbility(int i, int j, Player& targetPlayer) {
+    activePlayer->useAbility(i, j, targetPlayer);
+
+    activePlayer->TEST_printPlayerHand();
+    activePlayer->TEST_printPlayerBoard();
+}
+
+
 void GameMaster::notifyStartTurnObservers() {
     for (auto o : observers) {
         if (o->getType() == TriggerType::StartTurn) o->applyAbility(activePlayer);

@@ -28,7 +28,8 @@ class Player {
     // Player(string name, int id);
     ~Player();
 
-        void init(string name, int id);
+        // void init(string name, int id);
+        void init(string name, int id, ifstream& deckIn);
 
         string getName() const;
         int getId() const;
@@ -53,7 +54,10 @@ class Player {
         // throws exception if unsucessful 
         TriggeredAbility* play(int i, Player& nonActivePlayer); 
         void play(int i, int j, Player& p); 
-        void init(string name, int id, ifstream& deckIn);
+
+        void useAbility(int i, Player& nonActivePlayer);
+        void useAbility(int i, int j, Player &p);
+        
         
         void TEST_printPlayerDeck();
         void TEST_printPlayerHand();

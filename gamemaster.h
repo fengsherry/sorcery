@@ -41,6 +41,9 @@ class GameMaster {
         void play(int i); // minions, rituals, spells with no targets
         void play(int i, int j, Player& targetPlayer); // enchantments, spells with targets
 
+        void useAbility(int i); // activated ability
+        void useAbility(int i, int j, Player& targetPlayer); // activated ability
+
         // displays some visual
         void describe();
         void hand();

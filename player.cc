@@ -1,5 +1,9 @@
+#include <variant>
 #include "player.h"
 #include "exceptions.h"
+#include "activatedability.h"
+#include "triggeredability.h"
+using namespace std;
 
 Player::Player() {}
 
@@ -129,3 +133,49 @@ void Player::play(int i, int j, Player& p) {
     }
 }
 
+void Player::useAbility(int i, Player& nonActivePlayer) {
+    Minion* minionToUse = dynamic_cast<Minion*>(board.getCard(i));
+    
+    try {
+        // check if minion has an activated ability
+        ActivatedAbility* aaToUse = get<ActivatedAbility*>(minionToUse->getAbility());
+        // check if ability can be used without target
+        if (aaToUse->getNeedTarget()) throw no_target_provided(*minionToUse);
+        // check if player has enough action
+        if (minionToUse->getAction() == 0) throw not_enough_action{*this}; 
+        // check if player has enough magic to play the card
+        int cost = aaToUse->getActivationCost();
+        if (cost > magic) throw not_enough_magic(*this);
+        magic -= cost;
+
+        // use the ability
+        aaToUse->applyAbility(*this, nonActivePlayer);
+    } catch (bad_variant_access&) {
+        throw invalid_play(minionToUse->getName() + " has no activated ability");
+    }
+
+    // check if activated ability can be 
+}
+
+void Player::useAbility(int i, int j, Player &p) {
+    Minion* minionToUse = dynamic_cast<Minion*>(board.getCard(i));
+
+    try {
+        // check if minion has an activated ability
+        ActivatedAbility* aaToUse = get<ActivatedAbility*>(minionToUse->getAbility());
+        // check if ability can be played on a target
+        if (!aaToUse->getNeedTarget()) throw no_target_needed(*minionToUse);
+        // check if player has enough action
+        if (minionToUse->getAction() == 0) throw not_enough_action{*this}; 
+        // check if player has enough magic to play the card
+        int cost = aaToUse->getActivationCost();
+        if (cost > magic) throw not_enough_magic(*this);
+        magic -= cost;
+
+        // use the ability
+        aaToUse->applyAbility(p, *this, j);
+    } catch (bad_variant_access&) {
+        throw invalid_play(minionToUse->getName() + " has no activated ability");
+    }
+
+}

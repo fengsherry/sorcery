@@ -140,7 +140,6 @@ void GameController::go(int argc, char *argv[]) {
                 }
 
             } else if (cmd == "play") {
-                // version that plays minions and enchantments with no abilities
                 
                 vector<int> args;
                 string line;
@@ -150,7 +149,9 @@ void GameController::go(int argc, char *argv[]) {
                 while (iss >> arg) { args.emplace_back(arg); }
 
                 if (args.size() == 1) { // "play i" - minions, rituals, spells with no targets
-                    cout << activePlayerName << " is playing " << gm.getActivePlayer().getHand().getCard(arg-1) << endl;
+                    // check if i within range
+
+                    cout << activePlayerName << " is playing " << gm.getActivePlayer().getHand().getCard(args[0]-1) << endl;
                     try { 
                         gm.play(args[0]-1); 
                         cout << activePlayerName << "'s magic remaining: " << gm.getActivePlayer().getMagic() << endl;
@@ -160,12 +161,15 @@ void GameController::go(int argc, char *argv[]) {
                     catch (no_target_provided e) { cout << e.what() << endl;}
 
                 } else if (args.size() == 3) { // "play i p j" - enchantments, spells with targets
+                    // check if i and j within range
+
                     // identify target player
                     Player* targetPlayer;
                     if (args[1] != 1 && args[1] != 2) { cout << "Invalid player id." << endl; }
                     else if (args[1] == gm.getActivePlayer().getId()) { targetPlayer = &gm.getActivePlayer(); } 
                     else { targetPlayer = &gm.getNonactivePlayer(); }
 
+                    // identify target card
                     Card* targetCard;
                     if (args[2] == 'r') {
                         cout << "targeting a ritual!" << endl;
@@ -191,9 +195,60 @@ void GameController::go(int argc, char *argv[]) {
 
                 
             } else if (cmd == "use") {
-                // use i (activated ability without target)
+                vector<int> args;
+                string line;
+                int arg;
+                getline(cin, line);
+                istringstream iss(line);
+                while (iss >> arg) { args.emplace_back(arg); }
 
-                // use i p j (activated ability with target)
+                // use i        (activated ability without target)
+                if (args.size() == 1) {
+                    // check if i within range
+                    cout << activePlayerName << " is using " << gm.getActivePlayer().getBoard().getCard(args[0]-1) << "'s activated ability" << endl;
+
+                    // use the ability
+                    try {
+                        gm.useAbility(args[0]-1);
+                    } 
+                    catch (no_target_provided e) { cout << e.what() << endl; }
+                    catch (not_enough_magic e) { cout << e.what() << endl; } 
+                    catch (not_enough_magic e) { cout << e.what() << endl; }
+                    catch (invalid_play e) { cout << e.what() << endl; }
+                }
+                
+                // use i p j    (activated ability with target)
+                else if (args.size() == 3) {
+                    // check if i and j within range
+
+                    // identify target player
+                    Player* targetPlayer;
+                    if (args[1] != 1 && args[1] != 2) { cout << "Invalid player id." << endl; }
+                    else if (args[1] == gm.getActivePlayer().getId()) { targetPlayer = &gm.getActivePlayer(); } 
+                    else { targetPlayer = &gm.getNonactivePlayer(); }
+
+                    // // identify target card
+                    // Card* targetCard = targetPlayer->getBoard().getCard(args[2] - 1);
+
+                    cout << activePlayerName << " is using " << gm.getActivePlayer().getBoard().getCard(args[0]) << 
+                    "'s activated ability on " << targetPlayer->getName() << "'s " << targetPlayer->getBoard().getCard(args[2]-1) << endl;
+
+                    // use the ability
+                    try {
+                        gm.useAbility(args[0]-1, args[2]-1, *targetPlayer);
+                    } 
+                    catch (no_target_needed e) { cout << e.what() << endl; }
+                    catch (not_enough_magic e) { cout << e.what() << endl; } 
+                    catch (not_enough_magic e) { cout << e.what() << endl; }
+                    catch (invalid_play e) { cout << e.what() << endl; }
+
+                }
+
+                else {
+                    cout << "Incorrect input." << endl;
+                }
+
+                
 
             } else if (cmd == "describe") {
                 int i;
@@ -208,7 +263,6 @@ void GameController::go(int argc, char *argv[]) {
                 gm.getActivePlayer().TEST_printPlayerGrave();
             } else if (cmd != "") {
                 td.displayMsg("Not a valid command");
-                // cout << "Not a valid command" << endl;
             } 
 
         } catch(out_of_range e) { cout << e.what() << endl; }

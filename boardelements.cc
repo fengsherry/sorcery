@@ -102,8 +102,6 @@ void Hand::restoreAction() {
         if (Minion* minionCard = dynamic_cast<Minion*>(card)) {
             minionCard->setAction(1);
         }
-        // Minion* minionCard = dynamic_cast<Minion*>(card);
-        // minionCard->setAction(1);
     }
 }
 
@@ -151,7 +149,7 @@ void Board::stripTopEnchant(int i) {
     if (DefaultMinion* dm = dynamic_cast<DefaultMinion*>(m)) {
         throw no_enchantments(m);
     } else { // m points at hidden or non-hidden enchantment decorator
-        // careful that EnchantmentDecs also contain "hidden" Enchantments, which are not legit Enchantments in this context
+        // careful that EnchantmentDecs also contain "hidden" Enchantments, which are not legit Enchantments
         EnchantmentDec* curr = dynamic_cast<EnchantmentDec*>(m);
         EnchantmentDec* prev = curr;
         EnchantmentDec* ednext; // will be set if applicable
