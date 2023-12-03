@@ -28,10 +28,10 @@ void GraphicsDisplay::displayCard(int x, int y, int colour) {
 void GraphicsDisplay::displayCard(int x, int y, int colour, Player* p) {
     displayCard(x, y, colour);
     if (p->getName() != "DEFAULT PLAYER") {
-        cout << "p->getId: " << p->getId() << endl;
+        // cout << "p->getId: " << p->getId() << endl;
         w->drawString(playerpsn[p->getId()-1][0] + 43, playerpsn[p->getId()-1][1] + 42, p->getName());
-        w->drawString(playerpsn[p->getId()-1][0] + 5, playerpsn[p->getId()-1][1] + 110, to_string(p->getLife()));
-        w->drawString(playerpsn[p->getId()-1][0] + 107, playerpsn[p->getId()-1][1] + 110, to_string(p->getMagic()));
+        w->drawString(playerpsn[p->getId()-1][0] + 8, playerpsn[p->getId()-1][1] + 110, to_string(p->getLife()));
+        w->drawString(playerpsn[p->getId()-1][0] + 105, playerpsn[p->getId()-1][1] + 110, to_string(p->getMagic()));
     }
     
 }
@@ -39,7 +39,7 @@ void GraphicsDisplay::displayCard(int x, int y, int colour, Player* p) {
 void GraphicsDisplay::displaySorceryBoard(){
     // cout << "hi" << endl;
     for (int p = 0; p <= 1; ++p) { // looping through player 1 and 2
-        cout << "p: " << p << endl;
+        // cout << "p: " << p << endl;
         // board
         for (int i = 0; i < 5; ++i) {
             if (i < gm->getPlayer(p+1).getBoard().size()) {
