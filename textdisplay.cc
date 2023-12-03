@@ -40,22 +40,19 @@ void printBottomBorder() {
 }
 
 void TextDisplay::printPlayerBoardRow(int p) {
-  cout << "test0" << endl;
   // print the top row for player 1
   vector<card_template_t> toPrint;
-  cout << "test00" << endl;
+  cout << p << endl;
 
   // Print the ritual card
-  string player1_name = gm->getPlayer(p).getRitual()->getName();
-  cout << player1_name << endl;
-  int player1_cost = gm->getPlayer(p).getRitual()->getCost();
-  int player1_ritual_cost = gm->getPlayer(p).getRitual()->getActivationCost();
-  string player1_ritual_desc = gm->getPlayer(p).getRitual()->getDesc();
-  int player1_ritual_charges = gm->getPlayer(p).getRitual()->getCharge();
+  string player_ritual_name = gm->getPlayer(p).getRitual()->getName();
+  int player_r_cost = gm->getPlayer(p).getRitual()->getCost();
+  int player_ritual_cost = gm->getPlayer(p).getRitual()->getActivationCost();
+  string player_ritual_desc = gm->getPlayer(p).getRitual()->getDesc();
+  int player_ritual_charges = gm->getPlayer(p).getRitual()->getCharge();
 
-  toPrint.emplace_back(display_ritual(player1_name, player1_cost, player1_ritual_cost, player1_ritual_desc, player1_ritual_charges));
+  toPrint.emplace_back(display_ritual(player_ritual_name, player_r_cost, player_ritual_cost, player_ritual_desc, player_ritual_charges));
   toPrint.emplace_back(CARD_TEMPLATE_EMPTY);
-  cout << "test1" << endl;
 
   // Print the name card
   string player_name = gm->getPlayer(p).getName();
@@ -63,19 +60,15 @@ void TextDisplay::printPlayerBoardRow(int p) {
   int player_mana = gm->getPlayer(p).getMagic();
   toPrint.emplace_back(display_player_card(p, player_name, player_life, player_mana));
   toPrint.emplace_back(CARD_TEMPLATE_EMPTY);
-  cout << "test2" << endl;
 
   // Print the graveyard card
   gm->getPlayer(1).getGrave().getGrave().top();
-  cout << "test3" << endl;
 
   string grave_name = gm->getPlayer(p).getGrave().getGrave().top()->getName();
   int grave_cost = gm->getPlayer(p).getGrave().getGrave().top()->getCost();
   int grave_attack = gm->getPlayer(p).getGrave().getGrave().top()->getAttack();
   int grave_defense = gm->getPlayer(p).getGrave().getGrave().top()->getDefense();
-  cout << "test4" << endl;
   toPrint.emplace_back(display_minion_no_ability(grave_name, grave_cost, grave_attack, grave_defense));
-  cout << "test5" << endl;
   printCardRow(toPrint);
   toPrint.clear();
 }
@@ -167,7 +160,6 @@ void TextDisplay::displayMinion() {
 
 void TextDisplay::displaySorceryBoard() {
   printTopBorder();
-  cout << "done" << endl;
   printPlayerBoardRow(1);
 
   // create a vector of all cardtemplates to print 
