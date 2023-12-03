@@ -94,6 +94,7 @@ TriggeredAbility* Player::play(int i, Player& nonActivePlayer) {
     magic -= cost;
 
     if (Minion* minionToPlay = dynamic_cast<Minion*>(cardToPlay)) { // false if cardToPlay is not Minion* type
+        minionToPlay->setBoard(&board);
         board.addCard(minionToPlay);
     } else if (Ritual* ritualToPlay = dynamic_cast<Ritual*>(cardToPlay)) {
         ritual = ritualToPlay;

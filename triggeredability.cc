@@ -1,9 +1,10 @@
 #include "triggeredability.h"
 #include "player.h"
+#include "minion.h"
 #include <iostream> //remove later
 
-TriggeredAbility:: TriggeredAbility(TriggerType type, Player* owner):
-    type {type}, owner {owner} {}
+TriggeredAbility:: TriggeredAbility(TriggerType type, Player* owner, Minion* ownerMinion):
+    type {type}, owner {owner}, ownerMinion {ownerMinion} {}
 
 TriggerType TriggeredAbility::getType() {return type;}
 
@@ -37,11 +38,10 @@ TriggeredAbility{TriggerType::MinionEnter, owner} {}
 void AuraOfPowerAbility::applyAbility() {
     // targetMinion (the minion that just entered) should be added to targetMinions
     if (owner->onBoard(targetMinions[0])) {
-        // targetMinions[0]->increaseLife(1);
-        // targetMinions[0]->increaseDefence(1);
-        // increaseLife and increaseDefence not implemented
+        targetMinions[0]->increaseAttack(1);
+        targetMinions[0]->increaseDefence(1);
     }
-    cout << "!!! increasing life and defence for " << targetMinions[0]->getName() << "!!!!" << endl;
+    cout << "TEST: !!! increasing life and defence for " << targetMinions[0]->getName() << "!!!!" << endl;
 }
 
 
@@ -50,27 +50,43 @@ StandstillAbility::StandstillAbility(Player* owner):
 TriggeredAbility{TriggerType::MinionEnter, owner} {}
 
 void StandstillAbility::applyAbility() {
-    //targetMinion[0].destroy();
+    targetMinions[0]->destroy();
+    cout << "!! triggering StandstillAbility for " << targetMinions[0]->getName() << "!!!!" << endl;
 }
 
 
 /* Bone Golem */
-BoneGolemAbility::BoneGolemAbility(Player* owner):
-TriggeredAbility{TriggerType::MinionLeave, owner} {}
+BoneGolemAbility::BoneGolemAbility(Player* owner, Minion* ownerMinion):
+TriggeredAbility{TriggerType::MinionLeave, owner, ownerMinion} {}
 
 void BoneGolemAbility::applyAbility() {
-    // targetMinions[0] has been set to 
+    ownerMinion->increaseAttack(1);
+    ownerMinion->increaseDefence(1);
 }
 
 
 /* Fire Elemental */
-FireElementalAbility::FireElementalAbility(Player* owner):
-TriggeredAbility{TriggerType::MinionEnter, owner} {}
+FireElementalAbility::FireElementalAbility(Player* owner,  Minion* ownerMinion):
+TriggeredAbility{TriggerType::MinionEnter, owner, ownerMinion} {}
 
-void FireElementalAbility::applyAbility() {}
+void FireElementalAbility::applyAbility() {
+    // targetMinons[0] was set to minion that just entered
+
+    // deal damage if minion isn't owned by owner
+    if (!owner->onBoard(targetMinions[0])) targetMinions[0]->increaseDefence(-1);
+
+}
 
 /* Potion Seller */
-PotionSellerAbility::PotionSellerAbility(Player* owner):
-TriggeredAbility{TriggerType::EndTurn, owner} {}
+PotionSellerAbility::PotionSellerAbility(Player* owner, Minion* ownerMinion):
+TriggeredAbility{TriggerType::EndTurn, owner, ownerMinion} {}
 
-void PotionSellerAbility::applyAbility() {}
+void PotionSellerAbility::applyAbility() {
+    // targetPlayers[0] has been set to the activePlayer
+    if (owner == targetPlayers[0]) {
+        Board* b = &(owner->getBoard());
+        for (int i = 0; i < b->size(); i++) {
+            b->getCard(i)->increaseDefence(1);
+        }
+    }
+}

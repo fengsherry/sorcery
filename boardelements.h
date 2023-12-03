@@ -61,8 +61,9 @@ class Board {
         void restoreAction(); // sets action of Minions to 1
         void destroyMinion(int i);
         int size();
-        void TEST_printBoard();
+        int find(Minion* m); // returns index of m in theBoard, -1 if not found
         bool contains(Minion* m);
+        void TEST_printBoard();
 
         // observer pattern methods
         void attach(TriggeredAbility* o);

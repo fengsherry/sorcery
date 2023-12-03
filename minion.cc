@@ -1,6 +1,7 @@
 #include "minion.h"
 #include "defaultminion.h"
 #include "enchantmentdec.h"
+#include "boardelements.h"
 #include <string>
 using namespace std;
 
@@ -17,6 +18,25 @@ Minion::Minion(CardName cardName, int cost, string desc):
 // void Minion::setAction(int n) {
 //     action = n;
 // }
+void Minion::destroy() {
+    int i = board->find(this);
+    board->destroyMinion(i);
+}
+
+void Minion::increaseDefence(int n) {
+    int i = board->find(this);
+    cout << "old defense" << board->getCard(i)->getDefense();
+    board->enchantMinion(i, "Modify Defense", n);
+    cout << "new defense" << board->getCard(i)->getDefense();
+
+}
+
+void Minion::increaseAttack(int n) {
+    int i = board->find(this);
+    board->enchantMinion(i, "Modify Attack", n);
+}
+
+void Minion::setBoard(Board* b) {board = b;}
 
 bool Minion::isDead() {
     return getDefense() <= 0;

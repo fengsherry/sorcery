@@ -16,11 +16,12 @@ class TriggeredAbility {
   Player* p1;
   Player* p2;
   Player* owner; // some abilities need to know difference between owner and opponent
+  Minion* ownerMinion; // only set if the ta belongs to a minion (not a ritual)
   vector<Player*> targetPlayers;
   vector<Minion*> targetMinions;
 
  public:
-  TriggeredAbility(TriggerType type, Player* owner);
+  TriggeredAbility(TriggerType type, Player* owner, Minion* ownerMinion = nullptr);
   virtual void applyAbility() = 0; 
   virtual TriggerType getType();
   virtual void setTargetPlayer(Player* targetPlayer);
@@ -53,19 +54,19 @@ class StandstillAbility : public TriggeredAbility {
 
 class BoneGolemAbility : public TriggeredAbility {
   public:
-    BoneGolemAbility(Player* owner); 
+    BoneGolemAbility(Player* owner, Minion* ownerMinion); 
     void applyAbility();
 };
 
 class FireElementalAbility : public TriggeredAbility {
   public:
-    FireElementalAbility(Player* owner); 
+    FireElementalAbility(Player* owner, Minion* ownerMinion); 
     void applyAbility();
 };
 
 class PotionSellerAbility : public TriggeredAbility {
   public:
-    PotionSellerAbility(Player* owner); 
+    PotionSellerAbility(Player* owner, Minion* ownerMinion); 
     void applyAbility();
 };
 
