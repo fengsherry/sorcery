@@ -1,13 +1,16 @@
 #ifndef __GAMECONTROLLER_H__
 #define __GAMECONTROLLER_H__
 #include <stdexcept>
+#include <vector>
 #include "gamemaster.h"
+#include "sorcerydisplay.h"
 #include "textdisplay.h"
 #include "graphicsdisplay.h"
 
-
 class GameController {
     GameMaster gm; 
+    std::vector<SorceryDisplay*> displays;
+
     TextDisplay *td = nullptr;
     GraphicsDisplay *gd = nullptr;
 

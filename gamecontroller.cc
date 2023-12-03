@@ -6,7 +6,6 @@
 #include <stdexcept>
 #include "exceptions.h"
 #include "gamecontroller.h"
-
 #include "ascii_graphics.h"
 #include "textdisplay.h"
 #include "graphicsdisplay.h"
@@ -23,16 +22,10 @@ bool GameController::findIndex(int argc, char* argv[], string s, int& i) {
 }
 
 void GameController::testCmdArg(string arg, string filename) { 
-    // cout << td << endl;
-    td->displayMsg("You have activated the " + arg + " command argument, and " + filename + " file ");
-    // cout << "You have activated the " << arg << " command argument, and " << filename << " file " << endl; 
+    cout << "You have activated the " + arg + " command argument, and " + filename + " file " << endl;
 }
 
 void GameController::go(int argc, char *argv[]) {
-
-    // create a new textdisplay
-    td = new TextDisplay(&gm);
-
     // potential command line arguments: -deck1 (filename), -deck2 (filename), -init (filename), -testing
     int i;
     bool deck1Flag = false;
@@ -62,13 +55,15 @@ void GameController::go(int argc, char *argv[]) {
         testCmdArg("graphics");
     }
 
-
     // create input file streams for each deck file location
     ifstream in1 = deck1Flag ? ifstream(deck1File.c_str()) : ifstream("default.deck");
     ifstream in2 = deck2Flag ? ifstream(deck2File.c_str()) : ifstream("default.deck");
 
     // initialize the game
     GameMaster gm{};
+
+    // create a new textdisplay
+    td = new TextDisplay(&gm);
 
     // create a new graphics display if required
     if (graphicsFlag) gd = new GraphicsDisplay{&gm};
@@ -77,8 +72,6 @@ void GameController::go(int argc, char *argv[]) {
     gm.initPlayers(in1, in2);
 
     if (graphicsFlag) gd->displaySorceryBoard();
-
-    
 
     //TEMP ____________________________________________________________________________________________________________________
     //TEMP____________________________________________________________________________________________________________________
@@ -287,8 +280,6 @@ void GameController::go(int argc, char *argv[]) {
                     cout << "Incorrect input." << endl;
                 }
 
-                
-
             } else if (cmd == "describe") {
                 int i;
                 cin >> i;
@@ -300,7 +291,7 @@ void GameController::go(int argc, char *argv[]) {
 
             } else if (cmd == "board") {
                 gm.getActivePlayer().TEST_printPlayerBoard();
-                // td->displaySorceryBoard();
+                td->displaySorceryBoard();
                 if (graphicsFlag) gd->displaySorceryBoard();
 
             } else if (cmd == "grave") {
