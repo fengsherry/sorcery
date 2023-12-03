@@ -190,11 +190,12 @@ vector<card_template_t> &addEnchantmentPrint(const MinionPtr m, vector<card_temp
 
 void TextDisplay::displayMinion(const MinionPtr m) {
   vector<card_template_t> toPrint;
-  print(display_minion_no_ability(m->getName(), m->getCost(), m->getAttack(), m->getDefense()));
+  cout << "test1" << endl;
+  //print(display_minion_no_ability(m->getName(), m->getCost(), m->getAttack(), m->getDefense()));
 
-  addEnchantmentPrint(m, toPrint);
-  printCardRow(toPrint);
-  toPrint.clear();
+  // addEnchantmentPrint(m, toPrint);
+  // printCardRow(toPrint);
+  // toPrint.clear();
 }
 
 

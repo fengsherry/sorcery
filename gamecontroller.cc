@@ -28,9 +28,6 @@ void GameController::testCmdArg(string arg, string filename) {
 }
 
 void GameController::go(int argc, char *argv[]) {
-    // copy code from main.cc here
-    // create a new textdisplay
-    td = new TextDisplay(&gm);
 
     // potential command line arguments: -deck1 (filename), -deck2 (filename), -init (filename), -testing
     int i;
@@ -66,6 +63,9 @@ void GameController::go(int argc, char *argv[]) {
     // initialize Players, their Decks, and their Hands
     gm.initPlayers(in1, in2);
 
+    // copy code from main.cc here
+    // create a new textdisplay
+    td = new TextDisplay(&gm);
     
 
     string cmd;
@@ -278,8 +278,10 @@ void GameController::go(int argc, char *argv[]) {
             } else if (cmd == "describe") {
                 int i;
                 cin >> i;
-                gm.getActivePlayer().getBoard().getCard(i-1)->TEST_printInspectMinion();
-                td->displayMinion(gm.getActivePlayer().getBoard().getCard(i-1));
+                //gm.getActivePlayer().getBoard().getCard(i-1)->TEST_printInspectMinion();
+                cout << "in gamecontroller" << endl;
+                gm.getActivePlayer().getBoard().TEST_printBoard();
+                td->displayMinion(gm.getActivePlayer().getBoard().getCard(1));
 
             } else if (cmd == "hand") {
                 gm.getActivePlayer().TEST_printPlayerHand();
