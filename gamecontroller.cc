@@ -76,6 +76,8 @@ void GameController::go(int argc, char *argv[]) {
     // initialize Players, their Decks, and their Hands
     gm.initPlayers(in1, in2);
 
+    gd->displaySorceryBoard();
+
     
 
     //TEMP ____________________________________________________________________________________________________________________
