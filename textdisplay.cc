@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include "textdisplay.h"
+#include "minion.h"
 #include "ascii_graphics.h"
 #include "gamemaster.h"
 using namespace std;
@@ -22,10 +23,27 @@ void printCardRow(const vector<card_template_t> &ct) {
   }
 }
 
+// print cards from a vector of templates
+void printCardRowWithBorder(const vector<card_template_t> &ct) {
+  for (int j = 0; j < 11; j++) {
+    for (int i = 0; i < ct.size(); i ++) {
+      if (i == 0) {
+        cout << EXTERNAL_BORDER_CHAR_UP_DOWN  << ct[i][j];
+      } else if (i == ct.size() - 1) {
+        cout << ct[i][j] << EXTERNAL_BORDER_CHAR_UP_DOWN;
+      } else {
+        cout << ct[i][j];
+      }
+    }
+    cout << endl;
+  }
+}
+
+
 // print the top/bottom board edge
 void printTopBorder() {
   cout << EXTERNAL_BORDER_CHAR_TOP_LEFT;
-  for (int i = 0; i < 166; ++i) { 
+  for (int i = 0; i < 165; ++i) { 
     cout << EXTERNAL_BORDER_CHAR_LEFT_RIGHT;
   }
   cout << EXTERNAL_BORDER_CHAR_TOP_RIGHT << endl;
@@ -33,7 +51,7 @@ void printTopBorder() {
 
 void printBottomBorder() {
   cout << EXTERNAL_BORDER_CHAR_BOTTOM_LEFT;
-  for (int i = 0; i < 166; ++i) { 
+  for (int i = 0; i < 165; ++i) { 
     cout << EXTERNAL_BORDER_CHAR_LEFT_RIGHT;
   }
   cout << EXTERNAL_BORDER_CHAR_BOTTOM_RIGHT << endl;
@@ -42,34 +60,35 @@ void printBottomBorder() {
 void TextDisplay::printPlayerBoardRow(int p) {
   // print the top row for player 1
   vector<card_template_t> toPrint;
-  cout << p << endl;
-
+  
   // Print the ritual card
-  string player_ritual_name = gm->getPlayer(p).getRitual()->getName();
-  int player_r_cost = gm->getPlayer(p).getRitual()->getCost();
-  int player_ritual_cost = gm->getPlayer(p).getRitual()->getActivationCost();
-  string player_ritual_desc = gm->getPlayer(p).getRitual()->getDesc();
-  int player_ritual_charges = gm->getPlayer(p).getRitual()->getCharge();
+  // string player1_name = gm->getPlayer(1).getRitual()->getName();
+  // int player1_cost = gm->getPlayer(1).getRitual()->getCost();
+  // int player1_ritual_cost = gm->getPlayer(1).getRitual()->getActivationCost();
+  // string player1_ritual_desc = gm->getPlayer(1).getRitual()->getDesc();
+  // int player1_ritual_charges = gm->getPlayer(1).getRitual()->getCharge();
 
-  toPrint.emplace_back(display_ritual(player_ritual_name, player_r_cost, player_ritual_cost, player_ritual_desc, player_ritual_charges));
-  toPrint.emplace_back(CARD_TEMPLATE_EMPTY);
+  // toPrint.emplace_back(display_ritual(player1_name, player1_cost, player1_ritual_cost, player1_ritual_desc, player1_ritual_charges));
+  // toPrint.emplace_back(CARD_TEMPLATE_EMPTY);
 
   // Print the name card
   string player_name = gm->getPlayer(p).getName();
   int player_life = gm->getPlayer(p).getLife();
   int player_mana = gm->getPlayer(p).getMagic();
+  toPrint.emplace_back(CARD_TEMPLATE_BORDER);
+  toPrint.emplace_back(CARD_TEMPLATE_EMPTY);
   toPrint.emplace_back(display_player_card(p, player_name, player_life, player_mana));
   toPrint.emplace_back(CARD_TEMPLATE_EMPTY);
+  toPrint.emplace_back(CARD_TEMPLATE_BORDER);
 
   // Print the graveyard card
-  gm->getPlayer(1).getGrave().getGrave().top();
+  // string grave_name = gm->getPlayer(p).getGrave().getGrave().top()->getName();
+  // int grave_cost = gm->getPlayer(p).getGrave().getGrave().top()->getCost();
+  // int grave_attack = gm->getPlayer(p).getGrave().getGrave().top()->getAttack();
+  // int grave_defense = gm->getPlayer(p).getGrave().getGrave().top()->getDefense();
+  // toPrint.emplace_back(display_minion_no_ability(grave_name, grave_cost, grave_attack, grave_defense));
 
-  string grave_name = gm->getPlayer(p).getGrave().getGrave().top()->getName();
-  int grave_cost = gm->getPlayer(p).getGrave().getGrave().top()->getCost();
-  int grave_attack = gm->getPlayer(p).getGrave().getGrave().top()->getAttack();
-  int grave_defense = gm->getPlayer(p).getGrave().getGrave().top()->getDefense();
-  toPrint.emplace_back(display_minion_no_ability(grave_name, grave_cost, grave_attack, grave_defense));
-  printCardRow(toPrint);
+  printCardRowWithBorder(toPrint);
   toPrint.clear();
 }
 
@@ -85,10 +104,11 @@ void TextDisplay::displayMsg(string msg) {
 // Print the hand of player number [p] to stdout
 // IF HAND IS EMPTY, PRINT EMPTY CARD
 void TextDisplay::displayHand(int p) {
-  int len = gm->getPlayer(p).getHand().getSize();
 
   // create a vector of all cardtemplates to print 
   vector<card_template_t> toPrint;
+
+  int len = gm->getPlayer(p).getHand().getSize();
 
   // iterate through all items in the hand
   for (int i = 0; i < len; ++i) {
@@ -155,8 +175,28 @@ void TextDisplay::displayHand(int p) {
   printCardRow(toPrint);
 }
 
-void TextDisplay::displayMinion() {
+
+vector<card_template_t> &addEnchantmentPrint(const MinionPtr m, vector<card_template_t> &toPrint) {
+  if (DefaultMinionPtr dm = dynamic_pointer_cast<DefaultMinion>(m)) {
+    return toPrint;
+
+  // if there are enchantments on the minion
+  } else {
+    EnchantmentDecPtr ed = dynamic_pointer_cast<EnchantmentDec>(m);
+    toPrint.emplace_back(display_enchantment(m->getName(), m->getCost(), m->getDesc())); // get modifier
+    addEnchantmentPrint(ed->getNext(), toPrint);
+  }
 }
+
+void TextDisplay::displayMinion(const MinionPtr m) {
+  vector<card_template_t> toPrint;
+  print(display_minion_no_ability(m->getName(), m->getCost(), m->getAttack(), m->getDefense()));
+
+  addEnchantmentPrint(m, toPrint);
+  printCardRow(toPrint);
+  toPrint.clear();
+}
+
 
 void TextDisplay::displaySorceryBoard() {
   printTopBorder();
@@ -165,8 +205,8 @@ void TextDisplay::displaySorceryBoard() {
   // create a vector of all cardtemplates to print 
   vector<card_template_t> toPrint;
 
-  int len1 = gm->getPlayer(1).getBoard().getBoardSize();
-  int len2 = gm->getPlayer(2).getBoard().getBoardSize();
+  int len1 = gm->getPlayer(1).getBoard().size();
+  int len2 = gm->getPlayer(2).getBoard().size();
 
   // PRINT the board for player 1
   for (int i = 0; i < len1; ++i) {
@@ -177,7 +217,10 @@ void TextDisplay::displaySorceryBoard() {
     int defense = gm->getPlayer(1).getBoard().getCard(i)->getDefense();
     toPrint.emplace_back(display_minion_no_ability(name, cost, attack, defense));
   }
-  printCardRow(toPrint);
+  for (int i = len1; i < 5; ++i) {
+    toPrint.emplace_back(CARD_TEMPLATE_BORDER);
+  }
+  printCardRowWithBorder(toPrint);
   toPrint.clear();
 
   // PRINT the center graphic
@@ -192,7 +235,10 @@ void TextDisplay::displaySorceryBoard() {
     int defense = gm->getPlayer(2).getBoard().getCard(i)->getDefense();
     toPrint.emplace_back(display_minion_no_ability(name, cost, attack, defense));
   }
-  printCardRow(toPrint);
+  for (int i = len1; i < 5; ++i) {
+    toPrint.emplace_back(CARD_TEMPLATE_BORDER);
+  }
+  printCardRowWithBorder(toPrint);
   toPrint.clear();
 
   // print the top row for player 2

@@ -1,6 +1,7 @@
 #ifndef __TEXTDISPLAY_H__
 #define __TEXTDISPLAY_H__
 #include "display.h"
+#include "minion.h"
 #include <vector>
 using namespace std;
 
@@ -19,7 +20,7 @@ class TextDisplay : public Display {
     void displayMsg(string msg) override;
     void displaySorceryBoard() override;
     void displayHand(int p) override;
-    void displayMinion() override;
+    void displayMinion(const MinionPtr m) override;
 
     // friend ostream &operator<<(ostream &out, const card_template_t &t);
 

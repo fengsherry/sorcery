@@ -41,6 +41,6 @@ class Minion: public Card {
 };
 typedef std::shared_ptr<Minion> MinionPtr;
 
-std::ostream& operator<<(std::ostream& out, const Minion* m);
+std::ostream& operator<<(std::ostream& out, const MinionPtr m);
 
 #endif

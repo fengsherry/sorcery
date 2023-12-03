@@ -23,5 +23,4 @@ class GameController {
         void go(int argc, char *argv[]);
 };
 
-
 #endif

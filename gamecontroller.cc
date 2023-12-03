@@ -29,8 +29,6 @@ void GameController::testCmdArg(string arg, string filename) {
 
 void GameController::go(int argc, char *argv[]) {
     // copy code from main.cc here
-    // create a new textdisplay
-    td = new TextDisplay(&gm);
 
     // potential command line arguments: -deck1 (filename), -deck2 (filename), -init (filename), -testing
     int i;
@@ -63,15 +61,11 @@ void GameController::go(int argc, char *argv[]) {
     // initialize the game
     GameMaster gm{};
 
-    
-
     // initialize Players, their Decks, and their Hands
     gm.initPlayers(in1, in2);
 
-    
-
-    //TEMP ____________________________________________________________________________________________________________________
-    //TEMP____________________________________________________________________________________________________________________
+    // create a new textdisplay
+    td = new TextDisplay(&gm);
 
     string cmd;
     int arg1, arg2, arg3;
@@ -283,6 +277,7 @@ void GameController::go(int argc, char *argv[]) {
                 int i;
                 cin >> i;
                 gm.getActivePlayer().getBoard().getCard(i-1)->TEST_printInspectMinion();
+                td->displayMinion(gm.getActivePlayer().getBoard().getCard(i-1));
 
             } else if (cmd == "hand") {
                 gm.getActivePlayer().TEST_printPlayerHand();
@@ -294,6 +289,7 @@ void GameController::go(int argc, char *argv[]) {
 
             } else if (cmd == "grave") {
                 gm.getActivePlayer().TEST_printPlayerGrave();
+
             } else if (cmd != "") {
                 td->displayMsg("Not a valid command");
                 // cout << "Not a valid command" << endl;
