@@ -1,12 +1,11 @@
-#include <fstream>
 #include <string>
 #include <iostream>
 #include "gamemaster.h"
 #include "exceptions.h"
 using namespace std;
 
-GameMaster::GameMaster() {} 
-GameMaster::~GameMaster() {} 
+GameMaster::GameMaster() {}; 
+GameMaster::~GameMaster() {}
 
 
 // SET PLAYERS, ask Players for their names
@@ -74,8 +73,8 @@ void GameMaster::endTurn() {
 
 // NOT DONE YET
 void GameMaster::attackMinion(int i, int j) { // i is attacker, j is victim
-    Minion* attackingMinion = activePlayer->getBoard().getCard(i);
-    Minion* victimMinion = nonactivePlayer->getBoard().getCard(j);
+    MinionPtr attackingMinion = activePlayer->getBoard().getCard(i);
+    MinionPtr victimMinion = nonactivePlayer->getBoard().getCard(j);
 
     // check for enough action
     if (attackingMinion->getAction() == 0) throw not_enough_action{*activePlayer}; 
@@ -101,7 +100,7 @@ void GameMaster::attackMinion(int i, int j) { // i is attacker, j is victim
 
 
 void GameMaster::attackPlayer(int i) {
-    Minion* attackingMinion = activePlayer->getBoard().getCard(i);
+    MinionPtr attackingMinion = activePlayer->getBoard().getCard(i);
 
     // check for enough action
     if (attackingMinion->getAction() == 0) throw not_enough_action{*activePlayer}; 
@@ -135,6 +134,21 @@ void GameMaster::play(int i, int j, Player& targetPlayer) {
 
     activePlayer->TEST_printPlayerBoard();
 }
+
+void GameMaster::useAbility(int i) {
+    activePlayer->useAbility(i, *nonactivePlayer);
+
+    activePlayer->TEST_printPlayerHand();
+    activePlayer->TEST_printPlayerBoard();
+}
+
+void GameMaster::useAbility(int i, int j, Player& targetPlayer) {
+    activePlayer->useAbility(i, j, targetPlayer);
+
+    activePlayer->TEST_printPlayerHand();
+    activePlayer->TEST_printPlayerBoard();
+}
+
 
 void GameMaster::notifyStartTurnObservers() {
     for (auto o = gameObservers.begin(); o != gameObservers.end();) {
@@ -186,3 +200,5 @@ Player& GameMaster::getNonactivePlayer() {return *nonactivePlayer;}
 Player& GameMaster::getPlayer(int i) {
     return (i == 1) ? p1 : p2;
 }
+
+

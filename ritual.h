@@ -27,4 +27,6 @@ class Ritual: public Card {
         void trigger(); // decreases charge by activation cost
 };
 
+typedef shared_ptr<Ritual>  RitualPtr;
+
 #endif

@@ -16,4 +16,6 @@ class Spell: public Card {
         void applyAbility(Player& player1, Player& player2, int i);
 };
 
+typedef shared_ptr<Spell> SpellPtr;
+
 #endif

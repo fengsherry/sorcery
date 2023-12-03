@@ -13,6 +13,7 @@ class GameMaster {
     Deck d1, d2;
     int turn = 1; // 1 for player 1's turn, 2 for player 2's turn
     int numPlayers = 2;
+    bool graphicsFlag;
     Player* activePlayer;
     Player* nonactivePlayer;
     vector<TriggeredAbility*> gameObservers;
@@ -44,6 +45,9 @@ class GameMaster {
         void discard();
         void play(int i); // minions, rituals, spells with no targets
         void play(int i, int j, Player& targetPlayer); // enchantments, spells with targets
+
+        void useAbility(int i); // activated ability
+        void useAbility(int i, int j, Player& targetPlayer); // activated ability
 
         // displays some visual
         void describe();

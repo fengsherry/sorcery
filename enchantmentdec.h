@@ -9,19 +9,20 @@ class EnchantmentDec : public Minion {
     bool hidden;
 
     protected:
-        Minion* next;
+        MinionPtr next;
     public:
-        EnchantmentDec(CardName cardName, int cost, string desc, Minion* next, bool hidden);
+        EnchantmentDec(CardName cardName, int cost, string desc, MinionPtr next, bool hidden);
         virtual ~EnchantmentDec();
 
         void setAction(int n);
         bool isHidden();
         
-        string getDefaultMinionName() const override;
-        Minion* getDefaultMinion() override;
-        Minion* getNext();
-        void setNext(Minion* newnext);
+        variant<ActivatedAbility*, TriggeredAbility*, monostate> getAbility();
+        MinionPtr getDefaultMinion() override;
+        MinionPtr getNext();
+        void setNext(MinionPtr newnext);
         // CardName getDefaultMinionName() override;
 };
+typedef std::shared_ptr<EnchantmentDec> EnchantmentDecPtr;
 
 #endif

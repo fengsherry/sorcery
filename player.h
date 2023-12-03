@@ -21,14 +21,19 @@ class Player {
     Hand hand; // players start with 5 cards in their hand
     Board board;
     Graveyard grave;
-    Ritual* ritual = nullptr;
+    RitualPtr ritual; // set to nullptr if something breaks maybe
  
  public:
         Player(); // default ctor to be called when GameMaster is initialized
         // Player(string name, int id);
         ~Player();
 
+<<<<<<< HEAD
         void init(string name, int id); // what is this one for??
+=======
+        // void init(string name, int id);
+        void init(string name, int id, ifstream& deckIn);
+>>>>>>> origin
 
         string getName() const;
         int getId() const;
@@ -37,8 +42,8 @@ class Player {
         Hand& getHand();
         size_t getHandSize();
         Board& getBoard();
-        Ritual* getRitual();
-        bool onBoard(Minion* m);
+        bool onBoard(MinionPtr m);
+        RitualPtr getRitual();
         Graveyard& getGrave();
 
         void setLife(int n);
@@ -46,7 +51,7 @@ class Player {
         void increaseMagic(int n);
         void increaseLife(int n);
         void decreaseLife(int n);
-        Card* drawCard();
+        CardPtr drawCard();
         
         void destroyRitual();
 
@@ -54,7 +59,10 @@ class Player {
         // throws exception if unsucessful 
         TriggeredAbility* play(int i, Player& nonActivePlayer); 
         void play(int i, int j, Player& p); 
-        void init(string name, int id, ifstream& deckIn, vector<TriggeredAbility*>* bo);
+
+        void useAbility(int i, Player& nonActivePlayer);
+        void useAbility(int i, int j, Player &p);
+        
         
         void TEST_printPlayerDeck();
         void TEST_printPlayerHand();

@@ -2,11 +2,13 @@
 
 #ifndef __MINION_H__
 #define __MINION_H__
-#include "card.h"
-// #include "activatedability.h"
-// #include "triggeredability.h"
 #include <string>
 #include <iostream>
+#include <variant>
+#include "card.h"
+#include "activatedability.h"
+#include "triggeredability.h"
+
 using namespace std;
 
 class DefaultMinion;
@@ -33,6 +35,7 @@ class Minion: public Card {
     void increaseAttack(int n);
     void increaseDefence(int n);
     // virtual Ability getAbility() = 0;
+    virtual variant<ActivatedAbility*, TriggeredAbility*, monostate> getAbility() = 0;
 
     virtual void setAction(int n) = 0;
     // void enchant(string minionName);
@@ -44,7 +47,7 @@ class Minion: public Card {
     void TEST_printInspectMinion();
 
 };
-
+typedef std::shared_ptr<Minion> MinionPtr;
 
 std::ostream& operator<<(std::ostream& out, const Minion* m);
 

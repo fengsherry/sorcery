@@ -32,6 +32,9 @@ int DefaultMinion::getAction() const {
     return action;
 }
 
+variant<ActivatedAbility*, TriggeredAbility*, monostate> DefaultMinion::getAbility() {
+    return ability;
+}
 
 void DefaultMinion::setAction(int n) {
     action = n;

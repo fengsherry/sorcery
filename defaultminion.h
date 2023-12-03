@@ -31,10 +31,11 @@ class DefaultMinion : public Minion {
     int getAttack() const override;
     int getDefense() const override;
     int getAction() const override;
-    //Ability getAbility();
+    variant<ActivatedAbility*, TriggeredAbility*, monostate> getAbility();
 
     void setAction(int n);
     void setDefense(int n);
 };
+typedef shared_ptr<DefaultMinion> DefaultMinionPtr;
 
 #endif

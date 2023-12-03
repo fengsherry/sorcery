@@ -17,7 +17,7 @@ using namespace std;
 
 // collection of cards from which players draw cards into their Hand
 class Deck {
-    vector<Card*> theDeck;
+    vector<CardPtr> theDeck;
     //vector<string*> theDeck;
 
  public:
@@ -26,7 +26,7 @@ class Deck {
 
     void init(ifstream& file, Player* p);
     void shuffle();
-    Card* drawCard();
+    CardPtr drawCard();
     size_t getSize();
 
     void TEST_printDeck();
@@ -34,13 +34,14 @@ class Deck {
 
 // cards a player is holding, but has not placed
 class Hand {
-    vector<Card*> theHand;
+    vector<CardPtr> theHand;
 
     public:
         void init(Deck& deck);
-        void addCard(Card* c);
-        Card* getCard(int i) const;
-        size_t getSize();
+        void addCard(CardPtr c);
+        CardPtr getCard(int i) const;
+        size_t getSize(); // fix maybe later
+
         void TEST_printHand();
         void restoreAction(); // sets action of Minions to 1
         void removeCard(int i);
@@ -48,6 +49,7 @@ class Hand {
 
 // Minions the player has played, not yet dead
 class Board {
+<<<<<<< HEAD
     vector<Minion*> theBoard;
     vector<TriggeredAbility*>* boardObservers; // reference to the boardObservers vector in gamemaster
 
@@ -55,6 +57,13 @@ class Board {
         Minion* getCard(int i) const;
         void init(vector<TriggeredAbility*>* bo);
         void addCard(Minion *m);
+=======
+    vector<MinionPtr> theBoard;
+
+    public:
+        MinionPtr getCard(int i) const;
+        void addCard(MinionPtr m);
+>>>>>>> origin
         void removeCard(int i);
         void enchantMinion(int i, string minionName, int modifyval = 0); // enchant ith Minion with specified enchantment name.
         void stripEnchants(int i, Player& p);
@@ -65,25 +74,34 @@ class Board {
         int find(Minion* m); // returns index of m in theBoard, -1 if not found
         bool contains(Minion* m);
         void TEST_printBoard();
+<<<<<<< HEAD
 
         // observer pattern methods
         void attach(TriggeredAbility* o);
         void notifyMinionEnterObservers(Minion* targetMinion);
         void notifyMinionLeaveObservers(Minion* targetMinion);
+=======
+        int getBoardSize();
+
+>>>>>>> origin
 };
 
 // collection of dead Minions
 class Graveyard {
-    stack<Minion*> theGrave;
+    stack<MinionPtr> theGrave;
 
     public:
         Graveyard();
         ~Graveyard();
         bool isEmpty();
-        Minion* getTop();
+        MinionPtr getTop();
         void removeTop();
-        void push(Minion* m);
+        void push(MinionPtr m);
         void TEST_printGrave();
+
+ public:
+    stack<MinionPtr>& getGrave();
+
 };
 
 #endif

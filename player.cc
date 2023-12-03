@@ -1,5 +1,9 @@
+#include <variant>
 #include "player.h"
 #include "exceptions.h"
+#include "activatedability.h"
+#include "triggeredability.h"
+using namespace std;
 
 Player::Player() {}
 
@@ -59,8 +63,8 @@ int Player::getMagic() const {return magic;}
 Hand& Player::getHand() {return hand;}
 size_t Player::getHandSize() {return hand.getSize();}
 Board& Player::getBoard() {return board;}
-Ritual* Player::getRitual() {return ritual;}
-Graveyard& Player::getGrave() { return grave; }
+RitualPtr Player::getRitual() {return ritual;}
+Graveyard& Player::getGrave() {return grave;}
 
 
 void Player::setLife(int n) {life = n;}
@@ -77,19 +81,19 @@ void Player::decreaseLife(int n) {
 void Player::increaseLife(int n) {life += n;}
 
 void Player::destroyRitual() {
-    Ritual* temp = ritual; // will go out of scope after method goes out of scope
+    RitualPtr temp = ritual; // will go out of scope after method goes out of scope
     ritual = nullptr;
 }
 
-Card* Player::drawCard() {
+CardPtr Player::drawCard() {
     if (deck.getSize() == 0) throw deck_empty(this);
-    Card* c = deck.drawCard();
+    CardPtr c = deck.drawCard();
     hand.addCard(c);
     return c;
 }
 
 TriggeredAbility* Player::play(int i, Player& nonActivePlayer) {
-    Card* cardToPlay = hand.getCard(i);
+    CardPtr cardToPlay = hand.getCard(i);
 
     // check if the card can be played without target
     if (cardToPlay->getNeedTarget() == true) throw no_target_provided(*cardToPlay);
@@ -101,12 +105,13 @@ TriggeredAbility* Player::play(int i, Player& nonActivePlayer) {
     magic -= cost;
 
     if (Minion* minionToPlay = dynamic_cast<Minion*>(cardToPlay)) { // false if cardToPlay is not Minion* type
-        minionToPlay->setBoard(&board);
         board.addCard(minionToPlay);
-    } else if (Ritual* ritualToPlay = dynamic_cast<Ritual*>(cardToPlay)) {
+    } else if (cardToPlay->getType() == CardType::Ritual) {
+        RitualPtr ritualToPlay = dynamic_pointer_cast<Ritual>(cardToPlay);
+        // cout << "this is not a minion" << endl;
         ritual = ritualToPlay;
-        return ritual->getAbility();
-    } else if (Spell* spellToPlay = dynamic_cast<Spell*>(cardToPlay)) {
+    } else if (cardToPlay->getType() == CardType::Spell) {
+        SpellPtr spellToPlay = dynamic_pointer_cast<Spell>(cardToPlay);
         spellToPlay->applyAbility(*this, nonActivePlayer);
     }
     return nullptr;
@@ -114,8 +119,8 @@ TriggeredAbility* Player::play(int i, Player& nonActivePlayer) {
 
 // with target
 void Player::play(int i, int j, Player& p) {
-    Card* cardToPlay = hand.getCard(i);
-    Card* targetCard = p.getBoard().getCard(j);
+    CardPtr cardToPlay = hand.getCard(i);
+    CardPtr targetCard = p.getBoard().getCard(j);
 
     // check if the card needs a target to be played
     if (cardToPlay->getNeedTarget() == false) throw no_target_needed(*cardToPlay);
@@ -126,17 +131,14 @@ void Player::play(int i, int j, Player& p) {
 
     magic -= cost;
     
-    if (Enchantment* enchantToPlay = dynamic_cast<Enchantment*>(cardToPlay)) { // enchantment
-        if (Minion* targetMinion = dynamic_cast<Minion*>(targetCard)) {         
+    if (EnchantmentPtr enchantToPlay = dynamic_pointer_cast<Enchantment>(cardToPlay)) { // enchantment
+        if (MinionPtr targetMinion = dynamic_pointer_cast<Minion>(targetCard)) {         
             // enchant the minion. Note the conversion from Enchantment (Card) to EnchantmentDec (Decorator)
             p.getBoard().enchantMinion(j, enchantToPlay->getName());
 
         } else { throw invalid_play{"You cannot play " + cardToPlay->getName() + " on " + targetCard->getName()}; }
-    } else if (Spell* spellToPlay = dynamic_cast<Spell*>(cardToPlay)) { // spell with target
+    } else if (SpellPtr spellToPlay = dynamic_pointer_cast<Spell>(cardToPlay)) { // spell with target
         spellToPlay->applyAbility(p, *this, j); // might be sus - *this is a dummy value - should be nullptr but that means the argument needs to be a pointer, will do later if have time
     }
 }
 
-bool Player::onBoard(Minion*  m) {
-    return board.contains(m);
-}

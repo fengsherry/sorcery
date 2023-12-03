@@ -98,9 +98,9 @@ class outside_range : public std::exception {
 };
 
 class no_enchantments : public std::exception {
-    Minion* m;
+    MinionPtr m;
     public:
-        no_enchantments(Minion* m) : m{m} {}
+        no_enchantments(MinionPtr m) : m{m} {}
         string what () {
             return m->getName() + " has no enchanments.";
         }

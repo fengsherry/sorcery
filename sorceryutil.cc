@@ -59,3 +59,42 @@ string cardNameToString(CardName c) {
             return "Standstill";
     }
 }
+
+CardPtr createCard(string cardName, Player* p) {
+    CardPtr card;
+    /* Minions: */
+    // minions no abilities
+    if (cardName == "Air Elemental") card = std::make_shared<DefaultMinion>(CardName::AirElemental, 0, 1, 1, monostate{});
+    else if (cardName == "Earth Elemental") card = std::make_shared<DefaultMinion>(CardName::EarthElemental, 3, 4, 4, monostate{});
+    // minions with activated abilities: 
+    else if (cardName == "Novice Pyromancer") card = std::make_shared<DefaultMinion>(CardName::NovicePyromancer, 1, 0, 1, new NovicePyromancerAbility{}, "Deal 1 damage to target minion.");
+    else if (cardName == "Apprentice Summoner") card = std::make_shared<DefaultMinion>(CardName::ApprenticeSummoner, 1, 1, 1, new ApprenticeSummonerAbility{}, "Summon a 1/1 air elemental.");
+    else if (cardName == "Master Summoner") card = std::make_shared<DefaultMinion>(CardName::MasterSummoner, 3, 2, 3, new MasterSummonerAbility{}, "Summon up to three 1/1 air elementals.");
+    // minions with triggered abilities: REPLACE MONOSTATE WITH ACTUAL ABILITY LATER
+    else if (cardName == "Bone Golem") card = std::make_shared<DefaultMinion>(CardName::BoneGolem, 2, 1, 3, monostate{}, "Gain +1/+1 whenever a minion leaves play.");
+    else if (cardName == "Fire Elemental") card = std::make_shared<DefaultMinion>(CardName::FireElemental, 2, 2, 2, monostate{}, "Whenever an opponent's minion enters play, deal 1 damage to it.");
+    else if (cardName == "Potion Seller") card = std::make_shared<DefaultMinion>(CardName::PotionSeller, 2, 1, 3, monostate{}, "At the end of your turn, all your minions gain +0/+1.");
+    
+    /* Enchantments: */
+    else if (cardName == "Giant Strength") card = std::make_shared<Enchantment>(CardName::GiantStrength, 1, "", "+2", "+2");
+    else if (cardName == "Enrage") card = std::make_shared<Enchantment>(CardName::Enrage, 2, "", "*2", "*2");
+    else if (cardName == "Haste") card = std::make_shared<Enchantment>(CardName::Haste, 1, "Enchanted minion gains +1 action each turn");
+    else if (cardName == "Magic Fatigue") card = std::make_shared<Enchantment>(CardName::MagicFatigue, 0, "Enchanted minion's activated ability costs 2 more");
+    else if (cardName == "Silence") card = std::make_shared<Enchantment>(CardName::Silence, 1, "Enchanted minion cannot use abilities");
+    
+    /* Spells: */ 
+    else if (cardName == "Banish") card = std::make_shared<Spell>(CardName::Banish, 2, true, "Destroy target minion or ritual", new BanishAbility{});
+    else if (cardName == "Unsummon") card = std::make_shared<Spell>(CardName::Unsummon, 1, true, "Return target minion to its owner's hand", new UnsummonAbility{});
+    else if (cardName == "Disenchant") card = std::make_shared<Spell>(CardName::Disenchant, 1, true, "Destroy the top enchantment on target minion", new DisenchantAbility{});
+    else if (cardName == "Raise Dead") card = std::make_shared<Spell>(CardName::RaiseDead, 1, false, "Ressurect the top minion in your graveyard and set its defense to 1", new RaiseDeadAbility{});
+    else if (cardName == "Recharge") card = std::make_shared<Spell>(CardName::Recharge, 1, false, "Your ritual gains 3 charges", new RechargeAbility{});
+    else if (cardName == "Blizzard") card = std::make_shared<Spell>(CardName::Blizzard, 1, false, "Deals 2 damage to all minions", new BlizzardAbility{});
+    
+
+    /* Rituals: */ 
+    else if (cardName == "Dark Ritual") card = std::make_shared<Ritual>(CardName::DarkRitual, "At the start of your turn, gain 1 magic", 0, 1, 5, new DarkRitualAbility{p});
+    // to do: add decorators (done?) and abilities to minions, add other kinds of cards
+    else return nullptr;
+    return card;
+}
+
