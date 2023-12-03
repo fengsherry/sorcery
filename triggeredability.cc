@@ -4,7 +4,7 @@
 //#include "exceptions.h"
 #include <iostream> //remove later
 
-TriggeredAbility:: TriggeredAbility(TriggerType type, TriggerCardType cardType, Player* owner, Minion* ownerMinion):
+TriggeredAbility:: TriggeredAbility(TriggerType type, TriggerCardType cardType, Player* owner, MinionPtr ownerMinion):
     type {type}, cardType {cardType}, owner {owner}, ownerMinion {ownerMinion} {}
 
 TriggerType TriggeredAbility::getType() {return type;}
@@ -13,14 +13,14 @@ void TriggeredAbility::setTargetPlayer(Player* targetPlayer) {
     targetPlayers.clear();
     targetPlayers.emplace_back(targetPlayer);
 }
-void TriggeredAbility::setTargetMinion(Minion* targetMinion) {
+void TriggeredAbility::setTargetMinion(MinionPtr targetMinion) {
     targetMinions.clear();
     targetMinions.emplace_back(targetMinion);
 }
 
 void TriggeredAbility::setTargetPlayers(vector<Player*> targetPlayers) {targetPlayers = targetPlayers;}
 
-void TriggeredAbility::setTargetMinions(vector<Minion*> targetMinions) {targetMinions = targetMinions;}
+void TriggeredAbility::setTargetMinions(vector<MinionPtr> targetMinions) {targetMinions = targetMinions;}
 
 void TriggeredAbility::applyAbility() {
     if (cardType == TriggerCardType::Ritual) {
@@ -65,7 +65,7 @@ void StandstillAbility::applyAbility() {
 
 
 /* Bone Golem */
-BoneGolemAbility::BoneGolemAbility(Player* owner, Minion* ownerMinion):
+BoneGolemAbility::BoneGolemAbility(Player* owner, MinionPtr ownerMinion):
 TriggeredAbility{TriggerType::MinionLeave, TriggerCardType::Minion, owner, ownerMinion} {}
 
 void BoneGolemAbility::applyAbility() {
@@ -75,7 +75,7 @@ void BoneGolemAbility::applyAbility() {
 
 
 /* Fire Elemental */
-FireElementalAbility::FireElementalAbility(Player* owner,  Minion* ownerMinion):
+FireElementalAbility::FireElementalAbility(Player* owner,  MinionPtr ownerMinion):
 TriggeredAbility{TriggerType::MinionEnter, TriggerCardType::Minion, owner, ownerMinion} {}
 
 void FireElementalAbility::applyAbility() {
@@ -87,7 +87,7 @@ void FireElementalAbility::applyAbility() {
 }
 
 /* Potion Seller */
-PotionSellerAbility::PotionSellerAbility(Player* owner, Minion* ownerMinion):
+PotionSellerAbility::PotionSellerAbility(Player* owner, MinionPtr ownerMinion):
 TriggeredAbility{TriggerType::EndTurn, TriggerCardType::Minion, owner, ownerMinion} {}
 
 void PotionSellerAbility::applyAbility() {

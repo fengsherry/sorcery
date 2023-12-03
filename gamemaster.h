@@ -31,8 +31,8 @@ class GameMaster {
         void attach(TriggeredAbility* o);
         void notifyStartTurnObservers();
         void notifyEndTurnObservers();
-        void notifyMinionEnterObservers(Minion* m);
-        void notifyMinionLeaveObservers(Minion* m);
+        void notifyMinionEnterObservers(MinionPtr m);
+        void notifyMinionLeaveObservers(MinionPtr m);
 
         // methods correlating to commands recieved in main:
         void startTurn();

@@ -49,21 +49,13 @@ class Hand {
 
 // Minions the player has played, not yet dead
 class Board {
-<<<<<<< HEAD
-    vector<Minion*> theBoard;
+    vector<MinionPtr> theBoard;
     vector<TriggeredAbility*>* boardObservers; // reference to the boardObservers vector in gamemaster
 
     public:
-        Minion* getCard(int i) const;
-        void init(vector<TriggeredAbility*>* bo);
-        void addCard(Minion *m);
-=======
-    vector<MinionPtr> theBoard;
-
-    public:
         MinionPtr getCard(int i) const;
+        void init(vector<TriggeredAbility*>* bo);
         void addCard(MinionPtr m);
->>>>>>> origin
         void removeCard(int i);
         void enchantMinion(int i, string minionName, int modifyval = 0); // enchant ith Minion with specified enchantment name.
         void stripEnchants(int i, Player& p);
@@ -71,19 +63,16 @@ class Board {
         void restoreAction(); // sets action of Minions to 1
         void destroyMinion(int i);
         int size();
-        int find(Minion* m); // returns index of m in theBoard, -1 if not found
-        bool contains(Minion* m);
+        int find(MinionPtr m); // returns index of m in theBoard, -1 if not found
+        bool contains(MinionPtr m);
         void TEST_printBoard();
-<<<<<<< HEAD
 
         // observer pattern methods
         void attach(TriggeredAbility* o);
-        void notifyMinionEnterObservers(Minion* targetMinion);
-        void notifyMinionLeaveObservers(Minion* targetMinion);
-=======
+        void notifyMinionEnterObservers(MinionPtr targetMinion);
+        void notifyMinionLeaveObservers(MinionPtr targetMinion);
         int getBoardSize();
 
->>>>>>> origin
 };
 
 // collection of dead Minions

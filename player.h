@@ -28,12 +28,8 @@ class Player {
         // Player(string name, int id);
         ~Player();
 
-<<<<<<< HEAD
-        void init(string name, int id); // what is this one for??
-=======
         // void init(string name, int id);
-        void init(string name, int id, ifstream& deckIn);
->>>>>>> origin
+        void init(string name, int id, ifstream& deckIn, vector<TriggeredAbility*>* boardObservers);
 
         string getName() const;
         int getId() const;

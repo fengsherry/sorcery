@@ -16,7 +16,7 @@ string DefaultMinion::getDefaultMinionName() const {
     return cardNameToString(cardName);
 }
 
-Minion* DefaultMinion::getDefaultMinion() {
+MinionPtr DefaultMinion::getDefaultMinion() {
     return this;
 }
 

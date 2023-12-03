@@ -40,7 +40,7 @@ bool Minion::isDead() {
 }
 
 void Minion::TEST_printInspectMinion() {
-    if (DefaultMinion* dm = dynamic_cast<DefaultMinion*>(this)) {
+    if (DefaultMinionPtr dm = dynamic_cast<DefaultMinionPtr>(this)) {
         cout << dm->getName() << endl;
     } else {
         EnchantmentDec* ed = dynamic_cast<EnchantmentDec*>(this);
@@ -49,8 +49,8 @@ void Minion::TEST_printInspectMinion() {
     }
 }
 
-std::ostream& operator<<(std::ostream& out, const Minion* m) {
-    if (const DefaultMinion* dm = dynamic_cast<const DefaultMinion*>(m)) {
+std::ostream& operator<<(std::ostream& out, const MinionPtr m) {
+    if (const DefaultMinionPtr dm = dynamic_cast<const DefaultMinionPtr>(m)) {
         out << dm->getDefaultMinionName();
     } else if (const EnchantmentDec* ed = dynamic_cast<const EnchantmentDec*>(m)) {
         out << ed->getDefaultMinionName();

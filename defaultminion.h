@@ -27,7 +27,7 @@ class DefaultMinion : public Minion {
                     string desc = ""); // optional parameter is last
 
     string getDefaultMinionName() const override;
-    Minion* getDefaultMinion() override;
+    MinionPtr getDefaultMinion() override;
     int getAttack() const override;
     int getDefense() const override;
     int getAction() const override;

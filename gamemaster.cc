@@ -178,17 +178,6 @@ void GameMaster::notifyEndTurnObservers() {
     }
 }
 
-// void GameMaster::notifyMinionLeaveObservers(Minion* m) {
-//     activePlayer->getBoard().notifyMinionLeaveObservers(Minion* m);
-//     nonactivePlayer->getBoard().notifyMinionLeaveObservers(Minion* m);
-// }
-
-// void GameMaster::notifyMinionEnterObservers(Minion* m) {
-//     activePlayer->getBoard().notifyMinionEnterObservers(Minion* m);
-//     nonactivePlayer->getBoard().notifyMinionEnterObservers(Minion* m);
-// }
-
-
 // displays some visual
 void describe();
 void hand();

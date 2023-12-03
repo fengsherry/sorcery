@@ -7,6 +7,8 @@ using namespace std;
 
 class Player;
 class Minion;
+typedef std::shared_ptr<Minion> MinionPtr;
+
 
 enum class TriggerType { StartTurn, EndTurn, MinionEnter, MinionLeave };
 enum class TriggerCardType {Minion, Ritual};
@@ -16,18 +18,18 @@ class TriggeredAbility {
   TriggerType type;  
   TriggerCardType cardType;
   Player* owner; // some abilities need to know difference between owner and opponent
-  Minion* ownerMinion; // only set if the ta belongs to a minion (not a ritual)
+  MinionPtr ownerMinion; // only set if the ta belongs to a minion (not a ritual)
   vector<Player*> targetPlayers;
-  vector<Minion*> targetMinions;
+  vector<MinionPtr> targetMinions;
 
  public:
-  TriggeredAbility(TriggerType type, TriggerCardType cardType, Player* owner, Minion* ownerMinion = nullptr);
+  TriggeredAbility(TriggerType type, TriggerCardType cardType, Player* owner, MinionPtr ownerMinion = nullptr);
   virtual void applyAbility(); 
   virtual TriggerType getType();
   virtual void setTargetPlayer(Player* targetPlayer);
-  virtual void setTargetMinion(Minion* targetMinion);
+  virtual void setTargetMinion(MinionPtr targetMinion);
   virtual void setTargetPlayers(vector<Player*> targetPlayers);
-  virtual void setTargetMinions(vector<Minion*> targetMinions);
+  virtual void setTargetMinions(vector<MinionPtr> targetMinions);
   virtual ~TriggeredAbility() = default;
 };
 
@@ -54,19 +56,19 @@ class StandstillAbility : public TriggeredAbility {
 
 class BoneGolemAbility : public TriggeredAbility {
   public:
-    BoneGolemAbility(Player* owner, Minion* ownerMinion); 
+    BoneGolemAbility(Player* owner, MinionPtr ownerMinion); 
     void applyAbility();
 };
 
 class FireElementalAbility : public TriggeredAbility {
   public:
-    FireElementalAbility(Player* owner, Minion* ownerMinion); 
+    FireElementalAbility(Player* owner, MinionPtr ownerMinion); 
     void applyAbility();
 };
 
 class PotionSellerAbility : public TriggeredAbility {
   public:
-    PotionSellerAbility(Player* owner, Minion* ownerMinion); 
+    PotionSellerAbility(Player* owner, MinionPtr ownerMinion); 
     void applyAbility();
 };
 
