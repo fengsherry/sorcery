@@ -9,6 +9,7 @@
 
 #include "ascii_graphics.h"
 #include "textdisplay.h"
+using namespace std;
 
 GameController::GameController() {}
 GameController::~GameController() {}
@@ -21,12 +22,15 @@ bool GameController::findIndex(int argc, char* argv[], string s, int& i) {
 }
 
 void GameController::testCmdArg(string arg, string filename) { 
+    // cout << td << endl;
     td->displayMsg("You have activated the " + arg + " command argument, and " + filename + " file ");
     // cout << "You have activated the " << arg << " command argument, and " << filename << " file " << endl; 
 }
 
 void GameController::go(int argc, char *argv[]) {
     // copy code from main.cc here
+    // create a new textdisplay
+    td = new TextDisplay(&gm);
 
     // potential command line arguments: -deck1 (filename), -deck2 (filename), -init (filename), -testing
     int i;
@@ -59,11 +63,12 @@ void GameController::go(int argc, char *argv[]) {
     // initialize the game
     GameMaster gm{};
 
+    
+
     // initialize Players, their Decks, and their Hands
     gm.initPlayers(in1, in2);
 
-    // create a new textdisplay
-    td = new TextDisplay(&gm);
+    
 
     //TEMP ____________________________________________________________________________________________________________________
     //TEMP____________________________________________________________________________________________________________________
@@ -80,6 +85,17 @@ void GameController::go(int argc, char *argv[]) {
 
             if (cin.eof()) return;
             if (cmd == "help") { 
+                // call a method in text display to automatically print the help message
+                // Commands: help -- Display this message.
+                // end -- End the current player’s turn.
+                // quit -- End the game.
+                // attack minion other-minion -- Orders minion to attack other-minion.
+                // attack minion -- Orders minion to attack the opponent.
+                // play card [target-player target-card] -- Play card, optionally targeting target-card owned by target-player.
+                // use minion [target-player target-card] -- Use minion’s special ability, optionally targeting target-card owned by target-player.
+                // inspect minion -- View a minion’s card and all enchantments on that minion.
+                // hand -- Describe all cards in your hand.
+                // board -- Describe all cards on the board.
 
             } else if (cmd == "end") {
                 gm.endTurn();
@@ -89,15 +105,19 @@ void GameController::go(int argc, char *argv[]) {
                 gm.startTurn();
                 cout << "Player " << gm.getTurn() << ": " << activePlayerName << "  It's your turn!" << endl;
             } else if (cmd == "quit") {
-
+                break;
             } else if (cmd == "draw") {
                 try {
                     CardPtr drawnCard = gm.getActivePlayer().drawCard();
-                    cout << "Player " << gm.getTurn() << ": " << activePlayerName << "  drew a " << drawnCard->getName() << endl;
+                    cout << "Player " << gm.getTurn() << ": " << activePlayerName << "  drew a " << drawnCard << endl;
                 } catch (invalid_play e) {cout << e.what() << endl; }
                 
             } else if (cmd == "discard") { // only available in -testing mode; how to handle this?
-
+                int i;
+                if (testingFlag && (cin >> i)) {
+                    gm.getActivePlayer().getHand().removeCard(i-1);
+                } else cout << "Not a valid command" << endl;
+                gm.getActivePlayer().TEST_printPlayerHand();
             } else if (cmd == "attack") {
                 // attacks player or minion
 
@@ -111,15 +131,20 @@ void GameController::go(int argc, char *argv[]) {
                     // "attack i j" - order minion i to attack nonactive player's minion j
                     MinionPtr attackingMinion = gm.getActivePlayer().getBoard().getCard(arg-1);
                     MinionPtr victimMinion = gm.getNonactivePlayer().getBoard().getCard(arg2-1);
-                    cout << activePlayerName << "'s minion, " << *attackingMinion << " is attacking " <<  nonactivePlayerName 
-                    << "'s minion, " << *victimMinion << endl;
+                    cout << activePlayerName << "'s minion, " << attackingMinion << " is attacking " <<  nonactivePlayerName 
+                    << "'s minion, " << victimMinion << endl;
 
                     try {
                         // perform attack
                         gm.attackMinion(arg-1, arg2-1);
                         // output new states of minions
-                        cout <<  attackingMinion->getName() << "'s defense remaining: " << attackingMinion->getDefense() << endl;
-                        cout << victimMinion->getName() << "'s defense remaining: " << victimMinion->getDefense() << endl;
+                        attackingMinion = gm.getActivePlayer().getBoard().getCard(arg-1);
+                        victimMinion = gm.getNonactivePlayer().getBoard().getCard(arg2-1);
+                        
+                        if (attackingMinion->isDead()) cout << attackingMinion << " has died." << endl;
+                        else cout << attackingMinion << "'s defense remaining: " << attackingMinion->getDefense() << endl;
+                        if (victimMinion->isDead()) cout << victimMinion << " has died." << endl;
+                        else cout << victimMinion << "'s defense remaining: " << victimMinion->getDefense() << endl;
                     } catch (not_enough_action e) {
                         cout << e.what() << endl; // error message
                     }
@@ -130,7 +155,7 @@ void GameController::go(int argc, char *argv[]) {
 
                     MinionPtr attackingMinion = gm.getActivePlayer().getBoard().getCard(arg-1);
                     cout << activePlayerName << " is attacking " <<  nonactivePlayerName 
-                    << " with " << *attackingMinion << endl;
+                    << " with " << attackingMinion << endl;
 
                     try {
                         // perform attack
@@ -144,7 +169,6 @@ void GameController::go(int argc, char *argv[]) {
                 }
 
             } else if (cmd == "play") {
-                // version that plays minions and enchantments with no abilities
                 
                 vector<int> args;
                 string line;
@@ -154,7 +178,9 @@ void GameController::go(int argc, char *argv[]) {
                 while (iss >> arg) { args.emplace_back(arg); }
 
                 if (args.size() == 1) { // "play i" - minions, rituals, spells with no targets
-                    cout << activePlayerName << " is playing " << *(gm.getActivePlayer().getHand().getCard(arg-1)) << endl;
+                    // check if i within range
+
+                    cout << activePlayerName << " is playing " << gm.getActivePlayer().getHand().getCard(args[0]-1) << endl;
                     try { 
                         gm.play(args[0]-1); 
                         cout << activePlayerName << "'s magic remaining: " << gm.getActivePlayer().getMagic() << endl;
@@ -164,20 +190,23 @@ void GameController::go(int argc, char *argv[]) {
                     catch (no_target_provided e) { cout << e.what() << endl;}
 
                 } else if (args.size() == 3) { // "play i p j" - enchantments, spells with targets
+                    // check if i and j within range
+
                     // identify target player
                     Player* targetPlayer;
                     if (args[1] != 1 && args[1] != 2) { cout << "Invalid player id." << endl; }
                     else if (args[1] == gm.getActivePlayer().getId()) { targetPlayer = &gm.getActivePlayer(); } 
                     else { targetPlayer = &gm.getNonactivePlayer(); }
 
+                    // identify target card
                     Card* targetCard;
                     if (args[2] == 'r') {
                         cout << "targeting a ritual!" << endl;
                         targetCard = targetPlayer->getRitual().get();
-                    }
+                    }  
                     else targetCard = targetPlayer->getBoard().getCard(args[2] - 1).get();
-                    cout << activePlayerName << " is playing " << *(gm.getActivePlayer().getHand().getCard(args[0]-1)) << 
-                    " on " << targetPlayer->getName() << "'s " << targetCard->getName() <<endl;
+                    cout << activePlayerName << " is playing " << gm.getActivePlayer().getHand().getCard(args[0]-1) << 
+                    " on " << targetPlayer->getName() << "'s " << targetCard <<endl;
 
                     // play the card
                     try { 
@@ -195,8 +224,65 @@ void GameController::go(int argc, char *argv[]) {
 
                 
             } else if (cmd == "use") {
+                vector<int> args;
+                string line;
+                int arg;
+                getline(cin, line);
+                istringstream iss(line);
+                while (iss >> arg) { args.emplace_back(arg); }
+
+                // use i        (activated ability without target)
+                if (args.size() == 1) {
+                    // check if i within range
+                    cout << activePlayerName << " is using " << gm.getActivePlayer().getBoard().getCard(args[0]-1) << "'s activated ability" << endl;
+
+                    // use the ability
+                    try {
+                        gm.useAbility(args[0]-1);
+                    } 
+                    catch (no_target_provided e) { cout << e.what() << endl; }
+                    catch (not_enough_magic e) { cout << e.what() << endl; } 
+                    catch (not_enough_magic e) { cout << e.what() << endl; }
+                    catch (invalid_play e) { cout << e.what() << endl; }
+                }
+                
+                // use i p j    (activated ability with target)
+                else if (args.size() == 3) {
+                    // check if i and j within range
+
+                    // identify target player
+                    Player* targetPlayer;
+                    if (args[1] != 1 && args[1] != 2) { cout << "Invalid player id." << endl; }
+                    else if (args[1] == gm.getActivePlayer().getId()) { targetPlayer = &gm.getActivePlayer(); } 
+                    else { targetPlayer = &gm.getNonactivePlayer(); }
+
+                    // // identify target card
+                    // Card* targetCard = targetPlayer->getBoard().getCard(args[2] - 1);
+
+                    cout << activePlayerName << " is using " << gm.getActivePlayer().getBoard().getCard(args[0]) << 
+                    "'s activated ability on " << targetPlayer->getName() << "'s " << targetPlayer->getBoard().getCard(args[2]-1) << endl;
+
+                    // use the ability
+                    try {
+                        gm.useAbility(args[0]-1, args[2]-1, *targetPlayer);
+                    } 
+                    catch (no_target_needed e) { cout << e.what() << endl; }
+                    catch (not_enough_magic e) { cout << e.what() << endl; } 
+                    catch (not_enough_magic e) { cout << e.what() << endl; }
+                    catch (invalid_play e) { cout << e.what() << endl; }
+
+                }
+
+                else {
+                    cout << "Incorrect input." << endl;
+                }
+
+                
 
             } else if (cmd == "describe") {
+                int i;
+                cin >> i;
+                gm.getActivePlayer().getBoard().getCard(i-1)->TEST_printInspectMinion();
 
             } else if (cmd == "hand") {
                 gm.getActivePlayer().TEST_printPlayerHand();
@@ -206,12 +292,12 @@ void GameController::go(int argc, char *argv[]) {
                 gm.getActivePlayer().TEST_printPlayerBoard();
                 td->displaySorceryBoard();
 
-
+            } else if (cmd == "grave") {
+                gm.getActivePlayer().TEST_printPlayerGrave();
             } else if (cmd != "") {
                 td->displayMsg("Not a valid command");
                 // cout << "Not a valid command" << endl;
             } 
-
 
         } catch(out_of_range e) { cout << e.what() << endl; }
         

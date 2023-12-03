@@ -51,6 +51,7 @@
         "cinttypes": "cpp",
         "typeinfo": "cpp",
         "iostream": "cpp",
-        "cwctype": "cpp"
+        "cwctype": "cpp",
+        "*.inc": "cpp"
     }
 }

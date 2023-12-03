@@ -1,10 +1,20 @@
 #include <string>
 #include <vector>
+#include <string>
 #include "defaultminion.h"
+#include "sorceryutil.h"
 using namespace std;
 
-DefaultMinion::DefaultMinion(CardName cardName, int cost, int attack, int defense, string desc):
-    Minion {cardName, cost, desc}, attack {attack}, defense {defense} {}
+DefaultMinion::DefaultMinion(CardName cardName, int cost, int attack, int defense,
+                                variant<ActivatedAbility*, TriggeredAbility*, monostate> ability, string desc):
+    Minion {cardName, cost, desc}, // Minion fields
+    cardName{cardName}, attack {attack}, defense {defense}, // DefaultMinion fields
+    ability{ability} // either Activated or TriggeredAbility
+    {}
+
+string DefaultMinion::getDefaultMinionName() const {
+    return cardNameToString(cardName);
+}
 
 int DefaultMinion::getAttack() const {
     return attack;
@@ -18,8 +28,16 @@ int DefaultMinion::getAction() const {
     return action;
 }
 
+variant<ActivatedAbility*, TriggeredAbility*, monostate> DefaultMinion::getAbility() {
+    return ability;
+}
+
 void DefaultMinion::setAction(int n) {
     action = n;
+}
+
+void DefaultMinion::setDefense(int n) {
+    defense = n;
 }
 
 //Ability getAbility();

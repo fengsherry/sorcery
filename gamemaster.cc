@@ -33,6 +33,10 @@ void GameMaster::initPlayers(ifstream& deck1In, ifstream& deck2In) {
 
 }
 
+void GameMaster::attach(TriggeredAbility* observer) {
+    observers.emplace_back(observer);
+}
+
 // // SET DECKS, initialize Decks
 // void GameMaster::initDecks(ifstream& deck1In, ifstream& deck2In) {
 //     Deck deck1, deck2;
@@ -47,7 +51,11 @@ void GameMaster::initPlayers(ifstream& deck1In, ifstream& deck2In) {
 
 // starts a turn, switches active and nonactive players, notifies corresponding observers
 void GameMaster::startTurn() {
+    this->notifyStartTurnObservers();
     activePlayer->increaseMagic(1);
+    try {
+        if (activePlayer->getHandSize() < 5) activePlayer->drawCard();
+    } catch (deck_empty e) {cout << e.what() << endl;}
     activePlayer->getBoard().restoreAction();
     activePlayer->getHand().restoreAction(); // can we combine these two
     // notify
@@ -71,12 +79,23 @@ void GameMaster::attackMinion(int i, int j) { // i is attacker, j is victim
     // check for enough action
     if (attackingMinion->getAction() == 0) throw not_enough_action{*activePlayer}; 
 
+    // minions attack each other
     attackingMinion->setAction(0);
     int attackValAttacker = attackingMinion->getAttack();
     int attackValVictim = victimMinion->getAttack();
-    // victimMinion->
-    // activePlayer
+    activePlayer->getBoard().enchantMinion(i, "Modify Defense", -attackValVictim);
+    nonactivePlayer->getBoard().enchantMinion(j, "Modify Defense", -attackValAttacker);
 
+    // check if minions are dead 
+    if (activePlayer->getBoard().getCard(i)->isDead()) {
+        // send to graveyard
+        activePlayer->getGrave().push(activePlayer->getBoard().getCard(i));
+        activePlayer->getBoard().removeCard(i);
+    }
+    if (nonactivePlayer->getBoard().getCard(j)->isDead()) {
+        nonactivePlayer->getGrave().push(nonactivePlayer->getBoard().getCard(j));
+        nonactivePlayer->getBoard().removeCard(j);
+    }
 }
 
 
@@ -95,8 +114,11 @@ void activateAbility();
 
 void discard();
 
+// play without target
 void GameMaster::play(int i) {
-    activePlayer->play(i); // may throw exception
+    TriggeredAbility* ta = activePlayer->play(i, *nonactivePlayer); // may throw exception
+    if (ta) this->attach(ta);
+
     activePlayer->getHand().removeCard(i);
 
     activePlayer->TEST_printPlayerHand();
@@ -104,6 +126,7 @@ void GameMaster::play(int i) {
     activePlayer->TEST_printPlayerRitual();
 }
 
+// play with target
 void GameMaster::play(int i, int j, Player& targetPlayer) {
     activePlayer->play(i, j, targetPlayer);
     activePlayer->getHand().removeCard(i);
@@ -112,7 +135,26 @@ void GameMaster::play(int i, int j, Player& targetPlayer) {
     activePlayer->TEST_printPlayerBoard();
 }
 
-void notifyObservers();
+void GameMaster::useAbility(int i) {
+    activePlayer->useAbility(i, *nonactivePlayer);
+
+    activePlayer->TEST_printPlayerHand();
+    activePlayer->TEST_printPlayerBoard();
+}
+
+void GameMaster::useAbility(int i, int j, Player& targetPlayer) {
+    activePlayer->useAbility(i, j, targetPlayer);
+
+    activePlayer->TEST_printPlayerHand();
+    activePlayer->TEST_printPlayerBoard();
+}
+
+
+void GameMaster::notifyStartTurnObservers() {
+    for (auto o : observers) {
+        if (o->getType() == TriggerType::StartTurn) o->applyAbility(activePlayer);
+    }
+}
 
 // displays some visual
 void describe();

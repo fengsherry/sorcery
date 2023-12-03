@@ -13,28 +13,30 @@
 using namespace std;
 
 class Player {
-    string name;
-    int id; // player 1 or 2
+    string name = "DEFAULT PLAYER";
+    int id = 0; // player 1 or 2
     int life = 20; // health points
     int magic = 3; // way to place cards on the board, etc
     Deck deck;
     Hand hand; // players start with 5 cards in their hand
     Board board;
     Graveyard grave;
-    RitualPtr ritual;
+    RitualPtr ritual; // set to nullptr if something breaks maybe
  
  public:
     Player(); // default ctor to be called when GameMaster is initialized
     // Player(string name, int id);
     ~Player();
 
-        void init(string name, int id);
+        // void init(string name, int id);
+        void init(string name, int id, ifstream& deckIn);
 
         string getName() const;
         int getId() const;
         int getLife() const;
         int getMagic() const;
         Hand& getHand();
+        size_t getHandSize();
         Board& getBoard();
         RitualPtr getRitual();
         Graveyard& getGrave();
@@ -42,19 +44,26 @@ class Player {
         void setLife(int n);
         void setMagic(int n);
         void increaseMagic(int n);
+        void increaseLife(int n);
         void decreaseLife(int n);
         CardPtr drawCard();
+        
+        void destroyRitual();
 
         // plays the ith card int he player's hand with no target (i.e. minions, rituals, spells)
-        // throws exception if unsucessful
-        void play(int i); 
+        // throws exception if unsucessful 
+        TriggeredAbility* play(int i, Player& nonActivePlayer); 
         void play(int i, int j, Player& p); 
-        void init(string name, int id, ifstream& deckIn);
+
+        void useAbility(int i, Player& nonActivePlayer);
+        void useAbility(int i, int j, Player &p);
+        
         
         void TEST_printPlayerDeck();
         void TEST_printPlayerHand();
         void TEST_printPlayerBoard();
         void TEST_printPlayerRitual();
+        void TEST_printPlayerGrave();
 };
 
 // class not_enough_action : public std::exception {

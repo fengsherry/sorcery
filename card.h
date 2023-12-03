@@ -11,9 +11,10 @@ enum class CardType { Spell, Minion, Enchantment, Ritual };
 // contains only minions for now
 enum class CardName { 
     /* Minions: */ AirElemental, EarthElemental, BoneGolem, FireElemental, PotionSeller, NovicePyromancer, ApprenticeSummoner, MasterSummoner,
-    /* Enchantments: */ GiantStrength, Enrage, Haste, MagicFatigue, Silence,
+    /* Enchantments (non-hidden): */ GiantStrength, Enrage, Haste, MagicFatigue, Silence,
+    /* Enchantments (hidden:) */ ModifyAttack, ModifyDefense, ModifyAbility,
     /* Spells */ Banish, Unsummon, Recharge, Disenchant, RaiseDead, Blizzard,
-    /* Rituals */ DarkRitual
+    /* Rituals */ DarkRitual 
 };
 string cardNameToString(CardName c);
 
@@ -29,7 +30,7 @@ class Card {
     // Card();
     Card(CardName cardName, int cost, CardType type, bool needTarget, string desc = "");
     virtual ~Card() = default;
-    string getName() const;
+    virtual string getName() const;
     string getDesc() const;
     int getCost() const;
     CardType getType();
@@ -39,6 +40,6 @@ class Card {
 };
 typedef std::shared_ptr<Card> CardPtr;
 
-ostream &operator<< (ostream &out, const Card &c);
+ostream &operator<< (ostream &out, const Card *c);
 
 #endif

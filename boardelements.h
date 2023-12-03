@@ -9,6 +9,7 @@
 #include "minion.h"
 #include "defaultminion.h"
 #include "spell.h"
+#include "triggeredability.h"
 #include "enchantment.h"
 #include "enchantmentdec.h"
 #include "enchantmentdecsconcrete.h"
@@ -23,7 +24,7 @@ class Deck {
     Deck();
     ~Deck();
 
-    void init(ifstream& file);
+    void init(ifstream& file, Player* p);
     void shuffle();
     CardPtr drawCard();
     size_t getSize();
@@ -39,7 +40,7 @@ class Hand {
         void init(Deck& deck);
         void addCard(CardPtr c);
         CardPtr getCard(int i) const;
-        int getSize();
+        size_t getSize(); // fix maybe later
 
         void TEST_printHand();
         void restoreAction(); // sets action of Minions to 1
@@ -53,8 +54,13 @@ class Board {
     public:
         MinionPtr getCard(int i) const;
         void addCard(MinionPtr m);
-        void enchantMinion(int i, string minionName); // enchant ith Minion with specified enchantment name.
+        void removeCard(int i);
+        void enchantMinion(int i, string minionName, int modifyval = 0); // enchant ith Minion with specified enchantment name.
+        void stripEnchants(int i, Player& p);
+        void stripTopEnchant(int i); 
         void restoreAction(); // sets action of Minions to 1
+        void destroyMinion(int i);
+        int size();
         void TEST_printBoard();
         int getBoardSize();
 
@@ -63,6 +69,15 @@ class Board {
 // collection of dead Minions
 class Graveyard {
     stack<MinionPtr> theGrave;
+
+    public:
+        Graveyard();
+        ~Graveyard();
+        bool isEmpty();
+        MinionPtr getTop();
+        void removeTop();
+        void push(MinionPtr m);
+        void TEST_printGrave();
 
  public:
     stack<MinionPtr>& getGrave();
