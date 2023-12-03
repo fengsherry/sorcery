@@ -18,8 +18,8 @@ int DefaultMinion::getAction() const {
     return action;
 }
 
-
 void DefaultMinion::setAction(int n) {
     action = n;
 }
+
 //Ability getAbility();

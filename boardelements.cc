@@ -140,3 +140,5 @@ void Board::TEST_printBoard() {
 int Board :: getBoardSize() {
     return theBoard.size();
 }
+
+stack<MinionPtr>& Graveyard::getGrave(){ return theGrave; }

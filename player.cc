@@ -49,6 +49,7 @@ int Player::getMagic() const {return magic;}
 Hand& Player::getHand() {return hand;}
 Board& Player::getBoard() {return board;}
 RitualPtr Player::getRitual() {return ritual;}
+Graveyard& Player::getGrave() {return grave;}
 
 
 void Player::setLife(int n) {life = n;}

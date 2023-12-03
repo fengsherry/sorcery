@@ -11,7 +11,7 @@ class Ability {
     vector<MinionPtr> targetMinions;
 
     public:   
-        Ability(vector<Player*> targetPlayers = {}, vector<Minion*> targetMinions = {}); 
+        Ability(vector<Player*> targetPlayers = {}, vector<MinionPtr> targetMinions = {}); 
         virtual bool applyAbility() = 0; 
 
         vector<Player*>& getTargetPlayers();

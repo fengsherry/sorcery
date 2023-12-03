@@ -11,6 +11,7 @@ class TextDisplay : public Display {
    //  std::vector<std::vector<char>> theBoard;
    //  std::vector<std::vector<char>> theHand;
    GameMaster *gm;
+   void printPlayerBoardRow(int p);
 
  public:
     TextDisplay(GameMaster *_gm);

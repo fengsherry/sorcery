@@ -66,7 +66,6 @@ void GameController::go(int argc, char *argv[]) {
     td = new TextDisplay(&gm);
 
     //TEMP ____________________________________________________________________________________________________________________
-    td->displayHand(1);
     //TEMP____________________________________________________________________________________________________________________
 
     string cmd;
@@ -201,9 +200,12 @@ void GameController::go(int argc, char *argv[]) {
 
             } else if (cmd == "hand") {
                 gm.getActivePlayer().TEST_printPlayerHand();
+                td->displayHand(1);
 
             } else if (cmd == "board") {
                 gm.getActivePlayer().TEST_printPlayerBoard();
+                td->displaySorceryBoard();
+
 
             } else if (cmd != "") {
                 td->displayMsg("Not a valid command");

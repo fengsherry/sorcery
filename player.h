@@ -21,7 +21,7 @@ class Player {
     Hand hand; // players start with 5 cards in their hand
     Board board;
     Graveyard grave;
-    Ritual* ritual;
+    RitualPtr ritual;
  
  public:
     Player(); // default ctor to be called when GameMaster is initialized
@@ -36,13 +36,14 @@ class Player {
         int getMagic() const;
         Hand& getHand();
         Board& getBoard();
-        Ritual* getRitual();
+        RitualPtr getRitual();
+        Graveyard& getGrave();
 
         void setLife(int n);
         void setMagic(int n);
         void increaseMagic(int n);
         void decreaseLife(int n);
-        Card* drawCard();
+        CardPtr drawCard();
 
         // plays the ith card int he player's hand with no target (i.e. minions, rituals, spells)
         // throws exception if unsucessful
