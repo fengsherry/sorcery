@@ -2,6 +2,7 @@
 #define __DISPLAY_H__
 
 #include <string>
+#include "minion.h"
 using namespace std;
 
 class Display {

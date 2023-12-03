@@ -29,6 +29,8 @@ void GameController::testCmdArg(string arg, string filename) {
 
 void GameController::go(int argc, char *argv[]) {
     // copy code from main.cc here
+    // create a new textdisplay
+    td = new TextDisplay(&gm);
 
     // potential command line arguments: -deck1 (filename), -deck2 (filename), -init (filename), -testing
     int i;
@@ -64,8 +66,7 @@ void GameController::go(int argc, char *argv[]) {
     // initialize Players, their Decks, and their Hands
     gm.initPlayers(in1, in2);
 
-    // create a new textdisplay
-    td = new TextDisplay(&gm);
+    
 
     string cmd;
     int arg1, arg2, arg3;
@@ -93,6 +94,7 @@ void GameController::go(int argc, char *argv[]) {
 
             } else if (cmd == "end") {
                 gm.endTurn();
+                td->displaySorceryBoard();
                 // reset names with new pointer values
                 activePlayerName = gm.getActivePlayer().getName(); 
                 nonactivePlayerName = gm.getNonactivePlayer().getName();

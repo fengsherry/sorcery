@@ -32,10 +32,10 @@ void Minion::TEST_printInspectMinion() {
     }
 }
 
-std::ostream& operator<<(std::ostream& out, const Minion* m) {
-    if (const DefaultMinion* dm = dynamic_cast<const DefaultMinion*>(m)) {
+std::ostream& operator<<(std::ostream& out, MinionPtr m) {
+    if (DefaultMinionPtr dm = dynamic_pointer_cast<DefaultMinion>(m)) {
         out << dm->getDefaultMinionName();
-    } else if (const EnchantmentDec* ed = dynamic_cast<const EnchantmentDec*>(m)) {
+    } else if (EnchantmentDecPtr ed = dynamic_pointer_cast<EnchantmentDec>(m)) {
         out << ed->getDefaultMinionName();
     }
     
