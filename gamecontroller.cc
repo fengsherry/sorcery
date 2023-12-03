@@ -6,6 +6,7 @@
 #include <stdexcept>
 #include "exceptions.h"
 #include "gamecontroller.h"
+using namespace std;
 
 GameController::GameController() {}
 GameController::~GameController() {}
@@ -71,6 +72,17 @@ void GameController::go(int argc, char *argv[]) {
 
             if (cin.eof()) return;
             if (cmd == "help") { 
+                // call a method in text display to automatically print the help message
+                // Commands: help -- Display this message.
+                // end -- End the current player’s turn.
+                // quit -- End the game.
+                // attack minion other-minion -- Orders minion to attack other-minion.
+                // attack minion -- Orders minion to attack the opponent.
+                // play card [target-player target-card] -- Play card, optionally targeting target-card owned by target-player.
+                // use minion [target-player target-card] -- Use minion’s special ability, optionally targeting target-card owned by target-player.
+                // inspect minion -- View a minion’s card and all enchantments on that minion.
+                // hand -- Describe all cards in your hand.
+                // board -- Describe all cards on the board.
 
             } else if (cmd == "end") {
                 gm.endTurn();
@@ -80,7 +92,7 @@ void GameController::go(int argc, char *argv[]) {
                 gm.startTurn();
                 cout << "Player " << gm.getTurn() << ": " << activePlayerName << "  It's your turn!" << endl;
             } else if (cmd == "quit") {
-
+                break;
             } else if (cmd == "draw") {
                 try {
                     Card* drawnCard = gm.getActivePlayer().drawCard();
@@ -88,7 +100,11 @@ void GameController::go(int argc, char *argv[]) {
                 } catch (invalid_play e) {cout << e.what() << endl; }
                 
             } else if (cmd == "discard") { // only available in -testing mode; how to handle this?
-
+                int i;
+                if (testingFlag && (cin >> i)) {
+                    gm.getActivePlayer().getHand().removeCard(i-1);
+                } else cout << "Not a valid command" << endl;
+                gm.getActivePlayer().TEST_printPlayerHand();
             } else if (cmd == "attack") {
                 // attacks player or minion
 
