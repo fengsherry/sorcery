@@ -12,6 +12,10 @@ bool EnchantmentDec::isHidden() { return hidden; }
 
 string EnchantmentDec::getDefaultMinionName() const { return next->getDefaultMinionName(); }
 
+string EnchantmentDec::getDefaultMinionDesc() const { return next->getDefaultMinionDesc(); }
+
+// const Minion* EnchantmentDec::getDefaultMinion() const { return next->getDefaultMinion(); }
+
 variant<ActivatedAbility*, TriggeredAbility*, monostate> EnchantmentDec::getAbility() {
     return next->getAbility();
 }

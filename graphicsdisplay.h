@@ -1,34 +1,50 @@
 #ifndef __GRAPHICSDISPLAY_H__
 #define __GRAPHICSDISPLAY_H__
+#include <vector>
 #include "sorcerydisplay.h"
 #include "window.h"
 #include "player.h"
-#include <vector>
+#include "sorceryutil.h"
 using namespace std;
 
 class GameMaster;
 
 class GraphicsDisplay : public SorceryDisplay {
  private:
-   GameMaster *gm;
-   Xwindow* w;
+  GameMaster *gm;
+  Xwindow* w;
 
-   vector<vector<vector<int>>> cardpsn =
-   {
-    {{65,171}, {190,171}, {315,171}, {440,171}, {565,171}}, // player 1's board
-    {{65,392}, {190,392}, {315,392}, {440,392}, {565,392}} // player 2's board
-   };
+  int cardwidth = 200; 
+  int cardheight = 123;
 
-   vector<vector<int>> ritualpsn = {{65,43}, {65,521}};
-   vector<vector<int>> playerpsn = {{315,43}, {315,521}};
-   vector<vector<int>> gravepsn = {{565,43}, {565,521}};
+  vector<vector<vector<int>>> cardpsn =
+  {
+  {{65,171}, {65+(205*1),171}, {65+(205*2),171}, {65+(205*3),171}, {65+(205*4),171}}, // player 1's board
+  {{65,392}, {65+(205*1),392}, {65+(205*2),392}, {65+(205*3),392}, {65+(205*4),392}} // player 2's board
+  };
 
-   int cardwidth = 120; 
-   int cardheight = 123;
+  vector<vector<int>> ritualpsn = {{65,43}, {65,521}};
+  vector<vector<int>> playerpsn = {{65+(205*2),43}, {65+(205*2),521}};
+  vector<vector<int>> gravepsn = {{65+(205*4),43}, {65+(205*4),521}};
 
-    void displayCard(int x, int y, int colour);
+  // helpers
+  void displayCardBlank(int x, int y); // blank card 
+  void displayCardBase(int x, int y, CardPtr c);
+  void displayDesc(int x, int y, size_t chars, CardPtr c); // c is space allowance for chars
 
-    void displayCard(int x, int y, int colour, Player* p);
+  // player
+  void displayCard(int x, int y, Player* p); // player information
+
+  // minion
+  void displayCard(int x, int y, MinionPtr m); // minion information, the board
+  void displayCardMinionBase(int x, int y, MinionPtr m);
+
+  // ritual
+  void displayCard(int x, int y, RitualPtr r);
+
+  // graveyard
+  void displayCard(int x, int y, Graveyard* g);
+
 
  public:
     GraphicsDisplay(GameMaster *_gm);

@@ -76,7 +76,7 @@ void GameController::go(int argc, char *argv[]) {
     // initialize Players, their Decks, and their Hands
     gm.initPlayers(in1, in2);
 
-    gd->displaySorceryBoard();
+    if (graphicsFlag) gd->displaySorceryBoard();
 
     
 
@@ -300,7 +300,8 @@ void GameController::go(int argc, char *argv[]) {
 
             } else if (cmd == "board") {
                 gm.getActivePlayer().TEST_printPlayerBoard();
-                td->displaySorceryBoard();
+                // td->displaySorceryBoard();
+                if (graphicsFlag) gd->displaySorceryBoard();
 
             } else if (cmd == "grave") {
                 gm.getActivePlayer().TEST_printPlayerGrave();
@@ -313,6 +314,3 @@ void GameController::go(int argc, char *argv[]) {
         
     }
 }
-
-
-

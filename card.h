@@ -31,10 +31,10 @@ class Card {
     Card(CardName cardName, int cost, CardType type, bool needTarget, string desc = "");
     virtual ~Card() = default;
     virtual string getName() const;
-    string getDesc() const;
+    virtual string getDesc() const;
     int getCost() const;
     CardType getType();
-    CardName getCardName();
+    CardName getCardName() const;
     bool getNeedTarget();
 
 };
