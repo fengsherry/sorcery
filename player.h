@@ -24,11 +24,11 @@ class Player {
     Ritual* ritual = nullptr;
  
  public:
-    Player(); // default ctor to be called when GameMaster is initialized
-    // Player(string name, int id);
-    ~Player();
+        Player(); // default ctor to be called when GameMaster is initialized
+        // Player(string name, int id);
+        ~Player();
 
-        void init(string name, int id);
+        void init(string name, int id); // what is this one for??
 
         string getName() const;
         int getId() const;
@@ -54,7 +54,7 @@ class Player {
         // throws exception if unsucessful 
         TriggeredAbility* play(int i, Player& nonActivePlayer); 
         void play(int i, int j, Player& p); 
-        void init(string name, int id, ifstream& deckIn);
+        void init(string name, int id, ifstream& deckIn, vector<TriggeredAbility*>* bo);
         
         void TEST_printPlayerDeck();
         void TEST_printPlayerHand();

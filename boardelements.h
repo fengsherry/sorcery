@@ -49,10 +49,11 @@ class Hand {
 // Minions the player has played, not yet dead
 class Board {
     vector<Minion*> theBoard;
-    vector<TriggeredAbility*> boardObservers;
+    vector<TriggeredAbility*>* boardObservers; // reference to the boardObservers vector in gamemaster
 
     public:
         Minion* getCard(int i) const;
+        void init(vector<TriggeredAbility*>* bo);
         void addCard(Minion *m);
         void removeCard(int i);
         void enchantMinion(int i, string minionName, int modifyval = 0); // enchant ith Minion with specified enchantment name.

@@ -16,6 +16,10 @@ string DefaultMinion::getDefaultMinionName() const {
     return cardNameToString(cardName);
 }
 
+Minion* DefaultMinion::getDefaultMinion() {
+    return this;
+}
+
 int DefaultMinion::getAttack() const {
     return attack;
 }

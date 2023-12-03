@@ -24,6 +24,7 @@ class Ritual: public Card {
         void decreaseCharge(int n);
         void increaseCharge(int n);
         void printRitual();
+        void trigger(); // decreases charge by activation cost
 };
 
 #endif

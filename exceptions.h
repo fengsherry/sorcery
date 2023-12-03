@@ -20,6 +20,16 @@ class not_enough_magic : public std::exception {
             return p.getName() + " does not have enough magic. Play failed.";
         }
 };
+
+class not_enough_charge : public std::exception {
+    Ritual* r;
+    public:
+        not_enough_charge(Ritual* r): r{r} {}
+        string what() {
+            return r->getName() + "does not have enough charge. Ritual not triggered.";
+        }
+
+};
 class no_target_provided : public std::exception {
     Card c;
     public:
@@ -95,5 +105,6 @@ class no_enchantments : public std::exception {
             return m->getName() + " has no enchanments.";
         }
 };
+
 
 #endif

@@ -17,8 +17,8 @@ void GameMaster::initPlayers(ifstream& deck1In, ifstream& deck2In) {
     getline(cin, p1name); 
     getline(cin, p2name); 
 
-    p1.init(p1name, 1, deck1In);
-    p2.init(p2name, 2, deck2In);
+    p1.init(p1name, 1, deck1In, &boardObservers);
+    p2.init(p2name, 2, deck2In, &boardObservers);
 
     activePlayer = &p1;
     nonactivePlayer = &p2;
@@ -125,9 +125,7 @@ void GameMaster::play(int i) {
 
     activePlayer->getHand().removeCard(i);
 
-    activePlayer->TEST_printPlayerHand();
     activePlayer->TEST_printPlayerBoard();
-    activePlayer->TEST_printPlayerRitual();
 }
 
 // play with target
@@ -135,27 +133,46 @@ void GameMaster::play(int i, int j, Player& targetPlayer) {
     activePlayer->play(i, j, targetPlayer);
     activePlayer->getHand().removeCard(i);
 
-    activePlayer->TEST_printPlayerHand();
     activePlayer->TEST_printPlayerBoard();
 }
 
 void GameMaster::notifyStartTurnObservers() {
-    for (auto o : gameObservers) {
-        if (o->getType() == TriggerType::StartTurn) {
-            o->setTargetPlayer(activePlayer);
-            o->applyAbility();
+    for (auto o = gameObservers.begin(); o != gameObservers.end();) {
+        try {
+            if ((*o)->getType() == TriggerType::StartTurn) {
+                (*o)->setTargetPlayer(activePlayer);
+                (*o)->applyAbility();   
+            }
+            o++;
+        } catch (not_enough_charge& e) {
+            gameObservers.erase(o);
         }
     }
 }
 
 void GameMaster::notifyEndTurnObservers() {
-    for (auto o : gameObservers) {
-        if (o->getType() == TriggerType::EndTurn) {
-            o->setTargetPlayer(activePlayer);
-            o->applyAbility();
+    for (auto o = gameObservers.begin(); o != gameObservers.end();) {
+        try {
+            if ((*o)->getType() == TriggerType::EndTurn) {
+                (*o)->setTargetPlayer(activePlayer);
+                (*o)->applyAbility();   
+            }
+            o++;
+        } catch (not_enough_charge& e) {
+            gameObservers.erase(o);
         }
     }
 }
+
+// void GameMaster::notifyMinionLeaveObservers(Minion* m) {
+//     activePlayer->getBoard().notifyMinionLeaveObservers(Minion* m);
+//     nonactivePlayer->getBoard().notifyMinionLeaveObservers(Minion* m);
+// }
+
+// void GameMaster::notifyMinionEnterObservers(Minion* m) {
+//     activePlayer->getBoard().notifyMinionEnterObservers(Minion* m);
+//     nonactivePlayer->getBoard().notifyMinionEnterObservers(Minion* m);
+// }
 
 
 // displays some visual

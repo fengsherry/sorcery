@@ -114,24 +114,38 @@ void Hand::removeCard(int i) {
 
 
 /* BOARD */
+void Board::init(vector<TriggeredAbility*>* bo) {
+    boardObservers = bo;
+}
+
 void Board::attach(TriggeredAbility* o) {
-    boardObservers.emplace_back(o);
+    boardObservers->emplace_back(o);
 }
 
 void Board::notifyMinionEnterObservers(Minion* targetMinion) {
-    for (auto o : boardObservers) {
-        if (o->getType() == TriggerType::MinionEnter) {
-            o->setTargetMinion(targetMinion);
-            o->applyAbility();
+    for (auto o = boardObservers->begin(); o != boardObservers->end();) {
+        try {
+            if ((*o)->getType() == TriggerType::MinionEnter) {
+                (*o)->setTargetMinion(targetMinion);
+                (*o)->applyAbility();   
+            }
+            o++;
+        } catch (not_enough_charge& e) {
+            boardObservers->erase(o);
         }
     }
 }
 
 void Board::notifyMinionLeaveObservers(Minion* targetMinion) {
-    for (auto o : boardObservers) {
-        if (o->getType() == TriggerType::MinionLeave) {
-            o->setTargetMinion(targetMinion);
-            o->applyAbility();
+    for (auto o = boardObservers->begin(); o != boardObservers->end();) {
+        try {
+            if ((*o)->getType() == TriggerType::MinionLeave) {
+                (*o)->setTargetMinion(targetMinion);
+                (*o)->applyAbility();   
+            }
+            o++;
+        } catch (not_enough_charge& e) {
+            boardObservers->erase(o);
         }
     }
 }
@@ -142,6 +156,7 @@ Minion* Board::getCard(int i) const {
 
 void Board::removeCard(int i) {
     if (static_cast<int>(theBoard.size()) > i) {
+        notifyMinionEnterObservers(*(theBoard.begin() + i));
         theBoard.erase(theBoard.begin() + i);
     } else {throw invalid_play{"Cannot access index " + to_string(i) + " in the board."}; } // should never happen
     
@@ -150,7 +165,7 @@ void Board::removeCard(int i) {
 int Board::find(Minion* m) {
     for (int i = 0; i < theBoard.size(); i++) {
         // need to get default minion here before comparing - not just theBoard[i]
-        if (m == theBoard[i]) return i;
+        if (m == theBoard[i]->getDefaultMinion()) return i;
     }
     return -1;
 }

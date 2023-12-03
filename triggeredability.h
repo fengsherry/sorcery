@@ -9,20 +9,20 @@ class Player;
 class Minion;
 
 enum class TriggerType { StartTurn, EndTurn, MinionEnter, MinionLeave };
+enum class TriggerCardType {Minion, Ritual};
 
 class TriggeredAbility {
  protected:
   TriggerType type;  
-  Player* p1;
-  Player* p2;
+  TriggerCardType cardType;
   Player* owner; // some abilities need to know difference between owner and opponent
   Minion* ownerMinion; // only set if the ta belongs to a minion (not a ritual)
   vector<Player*> targetPlayers;
   vector<Minion*> targetMinions;
 
  public:
-  TriggeredAbility(TriggerType type, Player* owner, Minion* ownerMinion = nullptr);
-  virtual void applyAbility() = 0; 
+  TriggeredAbility(TriggerType type, TriggerCardType cardType, Player* owner, Minion* ownerMinion = nullptr);
+  virtual void applyAbility(); 
   virtual TriggerType getType();
   virtual void setTargetPlayer(Player* targetPlayer);
   virtual void setTargetMinion(Minion* targetMinion);

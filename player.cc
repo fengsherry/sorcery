@@ -7,11 +7,12 @@ Player::Player() {}
 
 Player::~Player() {}
 
-void Player::init(string name, int id, ifstream& deckIn) {
+void Player::init(string name, int id, ifstream& deckIn, vector<TriggeredAbility*>* boardObservers) {
     this->name = name;
     this->id = id;
     deck.init(deckIn, this);
     hand.init(deck);
+    board.init(boardObservers);
 }
 
 void Player::TEST_printPlayerDeck() {
@@ -29,6 +30,12 @@ void Player::TEST_printPlayerHand() {
 void Player::TEST_printPlayerBoard() {
     cout << "Player " << id << " " << name << "'s Board: " << endl;
     board.TEST_printBoard();
+
+    TEST_printPlayerRitual();
+
+    TEST_printPlayerGrave();
+
+    TEST_printPlayerHand();
     cout << endl;
 }
 

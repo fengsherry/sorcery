@@ -25,10 +25,7 @@ void Minion::destroy() {
 
 void Minion::increaseDefence(int n) {
     int i = board->find(this);
-    cout << "old defense" << board->getCard(i)->getDefense();
     board->enchantMinion(i, "Modify Defense", n);
-    cout << "new defense" << board->getCard(i)->getDefense();
-
 }
 
 void Minion::increaseAttack(int n) {

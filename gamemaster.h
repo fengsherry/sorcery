@@ -16,6 +16,7 @@ class GameMaster {
     Player* activePlayer;
     Player* nonactivePlayer;
     vector<TriggeredAbility*> gameObservers;
+    vector<TriggeredAbility*> boardObservers;
     
     public:
         GameMaster(); 
@@ -29,6 +30,8 @@ class GameMaster {
         void attach(TriggeredAbility* o);
         void notifyStartTurnObservers();
         void notifyEndTurnObservers();
+        void notifyMinionEnterObservers(Minion* m);
+        void notifyMinionLeaveObservers(Minion* m);
 
         // methods correlating to commands recieved in main:
         void startTurn();
