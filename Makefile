@@ -8,7 +8,7 @@ EXEC=sorcery
 
 # First target in the makefile is the default target.
 $(EXEC): $(OBJECTS)
-	$(CXX) $(CXXFLAGS) -DSIMPLE_GRAPHICS=0 $(OBJECTS) -o $(EXEC)
+	$(CXX) $(CXXFLAGS) $(OBJECTS) -o $(EXEC) -lX11
 
 %.o: %.cc 
 	$(CXX) -c -o $@ $< $(CXXFLAGS)

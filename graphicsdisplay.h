@@ -1,21 +1,20 @@
-#ifndef __TEXTDISPLAY_H__
-#define __TEXTDISPLAY_H__
+#ifndef __GRAPHICSDISPLAY_H__
+#define __GRAPHICSDISPLAY_H__
 #include "sorcerydisplay.h"
+#include "window.h"
 #include <vector>
 using namespace std;
 
 class GameMaster;
 
-class TextDisplay : public SorceryDisplay {
+class GraphicsDisplay : public SorceryDisplay {
  private:
-   //  std::vector<std::vector<char>> theBoard;
-   //  std::vector<std::vector<char>> theHand;
    GameMaster *gm;
-   void printPlayerBoardRow(int p);
+   Xwindow* w;
 
  public:
-    TextDisplay(GameMaster *_gm);
-    ~TextDisplay();
+    GraphicsDisplay(GameMaster *_gm);
+    ~GraphicsDisplay();
     void displayMsg(string msg) override;
     void displaySorceryBoard() override;
     void displayHand(int p) override;
