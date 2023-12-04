@@ -35,6 +35,7 @@ void GameController::go(int argc, char *argv[]) {
     bool deck2Flag = false;
     bool initFlag = false;
     bool testingFlag = false;
+    bool graphicsFlag = false;
     string deck1File, deck2File, initFile;
     if (findIndex(argc, argv, "-deck1", i)) {
         deck1Flag = true; deck1File = argv[i + 1];
@@ -44,14 +45,19 @@ void GameController::go(int argc, char *argv[]) {
         deck2Flag = true; deck2File = argv[i + 1];
         testCmdArg("deck2", deck2File);
     }
-    if (findIndex(argc, argv, "-init", i)) {
+    if (findIndex(argc, argv, "-init", i)) { // NOT IMPLEMENTED YET
         initFlag = true; initFile = argv[i + 1];
         testCmdArg("init", initFile);
     }
-    if (findIndex(argc, argv, "-testing", i)) {
+    if (findIndex(argc, argv, "-testing", i)) { // NOT IMPLEMENTED YET
         testingFlag = true; 
         testCmdArg("testing");
     }
+    if (findIndex(argc, argv, "-graphics", i)) { 
+        graphicsFlag = true; 
+        testCmdArg("graphics");
+    }
+
 
     // create input file streams for each deck file location
     ifstream in1 = deck1Flag ? ifstream(deck1File.c_str()) : ifstream("default.deck");
@@ -63,10 +69,13 @@ void GameController::go(int argc, char *argv[]) {
     // initialize Players, their Decks, and their Hands
     gm.initPlayers(in1, in2);
 
-    // copy code from main.cc here
     // create a new textdisplay
     td = new TextDisplay(&gm);
+
     
+
+    //TEMP ____________________________________________________________________________________________________________________
+    //TEMP____________________________________________________________________________________________________________________
 
     string cmd;
     int arg1, arg2, arg3;
@@ -277,10 +286,8 @@ void GameController::go(int argc, char *argv[]) {
             } else if (cmd == "describe") {
                 int i;
                 cin >> i;
-                //gm.getActivePlayer().getBoard().getCard(i-1)->TEST_printInspectMinion();
-                cout << "in gamecontroller" << endl;
-                gm.getActivePlayer().getBoard().TEST_printBoard();
-                td->displayMinion(gm.getActivePlayer().getBoard().getCard(1));
+                gm.getActivePlayer().getBoard().getCard(i-1)->TEST_printInspectMinion();
+                td->displayMinion(gm.getActivePlayer().getBoard().getCard(i-1));
 
             } else if (cmd == "hand") {
                 gm.getActivePlayer().TEST_printPlayerHand();
@@ -292,7 +299,6 @@ void GameController::go(int argc, char *argv[]) {
 
             } else if (cmd == "grave") {
                 gm.getActivePlayer().TEST_printPlayerGrave();
-
             } else if (cmd != "") {
                 td->displayMsg("Not a valid command");
                 // cout << "Not a valid command" << endl;
@@ -302,6 +308,3 @@ void GameController::go(int argc, char *argv[]) {
         
     }
 }
-
-
-

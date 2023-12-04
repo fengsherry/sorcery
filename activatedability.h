@@ -21,6 +21,7 @@ class ActivatedAbility {
         virtual void applyAbility(Player& player1, Player& player2, int i = 0);
         bool getNeedTarget();
         int getActivationCost();
+        i
 };
 
 /* Abilities for Spells with targets: */

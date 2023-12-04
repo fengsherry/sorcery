@@ -13,6 +13,19 @@ void print(const card_template_t &t) {
   }
 }
 
+void printCardFiveRow(const vector<card_template_t> &ct) {
+  for (int j = 0; j < 11; j++) {
+    for (int i = 0; i < ct.size(); i ++) {
+      cout << ct[i][j];
+    }
+    cout << endl;
+    // TEST MORE THAN 5 ENCHANTMENTS, PRINT ON NEW LINE
+    if ((j % 5) == 0) {
+      cout << endl;
+    }
+  }
+}
+
 // print cards from a vector of templates
 void printCardRow(const vector<card_template_t> &ct) {
   for (int j = 0; j < 11; j++) {
@@ -23,7 +36,8 @@ void printCardRow(const vector<card_template_t> &ct) {
   }
 }
 
-// print cards from a vector of templates
+
+// print cards with the boarder from a vector of templates
 void printCardRowWithBorder(const vector<card_template_t> &ct) {
   for (int j = 0; j < 11; j++) {
     for (int i = 0; i < ct.size(); i ++) {
@@ -122,7 +136,7 @@ void TextDisplay::displayHand(int p) {
       toPrint.emplace_back(display_enchantment(name, cost, desc));
     
     //if the card is a spell
-    } else if (gm->getPlayer(p).getHand().getCard(i)->getType() == CardType::Spell){
+    } else if (gm->getPlayer(p).getHand().getCard(i)->getType() == CardType::Spell) {
       toPrint.emplace_back(display_spell(name, cost, desc));
 
     // else, check the card one by one
@@ -166,6 +180,43 @@ void TextDisplay::displayHand(int p) {
         //   display_ritual(name, cost, 2, desc, 4); 
         //   cout << "ritual" << endl;
         //   break;
+
+        // if enchantment
+        case(CardName::GiantStrength):
+          toPrint.emplace_back(display_enchantment_attack_defence(name, cost, desc, "+2", "+2"));
+          break;
+        case(CardName::Enrage):
+          toPrint.emplace_back(display_enchantment_attack_defence(name, cost, desc, "*2", "*2"));
+          break;
+        case(CardName::Haste):
+          toPrint.emplace_back(display_enchantment(name, cost, desc));
+          break;
+        case(CardName::MagicFatigue):
+          toPrint.emplace_back(display_enchantment(name, cost, desc));
+          break;
+        case(CardName::Silence):
+          toPrint.emplace_back(display_enchantment(name, cost, desc));
+          break;
+
+        // if spell
+        case(CardName::Banish):
+          toPrint.emplace_back(display_spell(name, cost, desc));
+          break;
+        case(CardName::Unsummon):
+          toPrint.emplace_back(display_spell(name, cost, desc));
+          break;
+        case(CardName::Recharge):
+          toPrint.emplace_back(display_spell(name, cost, desc));
+          break;
+        case(CardName::Disenchant):
+          toPrint.emplace_back(display_spell(name, cost, desc));
+          break;
+        case(CardName::RaiseDead):
+          toPrint.emplace_back(display_spell(name, cost, desc));
+          break;
+        case(CardName::Blizzard):
+          toPrint.emplace_back(display_spell(name, cost, desc));
+          break;
       }
     }
     // go to the left of the current card, change the cursor position
@@ -178,24 +229,48 @@ void TextDisplay::displayHand(int p) {
 
 vector<card_template_t> &addEnchantmentPrint(const MinionPtr m, vector<card_template_t> &toPrint) {
   if (DefaultMinionPtr dm = dynamic_pointer_cast<DefaultMinion>(m)) {
+    toPrint.insert(toPrint.begin(), display_minion_no_ability(m->getName(), m->getCost(), m->getAttack(), m->getDefense()));
     return toPrint;
 
   // if there are enchantments on the minion
   } else {
     EnchantmentDecPtr ed = dynamic_pointer_cast<EnchantmentDec>(m);
-    toPrint.emplace_back(display_enchantment(m->getName(), m->getCost(), m->getDesc())); // get modifier
+
+    switch(m->getCardName()) {
+      case(CardName::GiantStrength):
+        toPrint.emplace_back(display_enchantment_attack_defence(m->getName(), m->getCost(), m->getDesc(), "+2", "+2"));
+        break;
+      case(CardName::Enrage):
+        toPrint.emplace_back(display_enchantment_attack_defence(m->getName(), m->getCost(), m->getDesc(), "*2", "*2"));
+        break;
+      case(CardName::Haste):
+        toPrint.emplace_back(display_enchantment(m->getName(), m->getCost(), m->getDesc()));
+        break;
+      case(CardName::MagicFatigue):
+        toPrint.emplace_back(display_enchantment(m->getName(), m->getCost(), m->getDesc()));
+        break;
+      case(CardName::Silence):
+        toPrint.emplace_back(display_enchantment(m->getName(), m->getCost(), m->getDesc()));
+        break;
+    }
     addEnchantmentPrint(ed->getNext(), toPrint);
   }
 }
 
 void TextDisplay::displayMinion(const MinionPtr m) {
   vector<card_template_t> toPrint;
-  cout << "test1" << endl;
-  //print(display_minion_no_ability(m->getName(), m->getCost(), m->getAttack(), m->getDefense()));
+  addEnchantmentPrint(m, toPrint);
 
-  // addEnchantmentPrint(m, toPrint);
-  // printCardRow(toPrint);
-  // toPrint.clear();
+  //print the minion first
+  print(toPrint.at(0));
+
+  if (!toPrint.empty()) {
+    toPrint.erase(toPrint.begin());
+  }
+
+  // print the rest of the enchantment cards in 5's
+  printCardFiveRow(toPrint);
+  toPrint.clear();
 }
 
 
@@ -216,7 +291,22 @@ void TextDisplay::displaySorceryBoard() {
     int cost = gm->getPlayer(1).getBoard().getCard(i)->getCost();
     int attack = gm->getPlayer(1).getBoard().getCard(i)->getAttack();
     int defense = gm->getPlayer(1).getBoard().getCard(i)->getDefense();
-    toPrint.emplace_back(display_minion_no_ability(name, cost, attack, defense));
+
+    // if activated ability, use the template
+    if (holds_alternative<ActivatedAbility*>(gm->getPlayer(1).getBoard().getCard(i)->getAbility())) {
+
+      auto a = gm->getPlayer(1).getBoard().getCard(i)->getAbility();
+      int ability_cost = get<ActivatedAbility*>(a)->getActivationCost();
+      
+      toPrint.emplace_back(display_minion_activated_ability(name, cost, attack, defense, ability_cost, desc));
+
+    // if triggered ability, use the template
+    } else if (holds_alternative<TriggeredAbility*>(gm->getPlayer(1).getBoard().getCard(i)->getAbility())) {
+      toPrint.emplace_back(display_minion_triggered_ability(name, cost, attack, defense, desc));
+    
+    } else { // print the no ability minion
+      toPrint.emplace_back(display_minion_no_ability(name, cost, attack, defense));
+    }
   }
   for (int i = len1; i < 5; ++i) {
     toPrint.emplace_back(CARD_TEMPLATE_BORDER);
@@ -234,7 +324,20 @@ void TextDisplay::displaySorceryBoard() {
     int cost = gm->getPlayer(2).getBoard().getCard(i)->getCost();
     int attack = gm->getPlayer(2).getBoard().getCard(i)->getAttack();
     int defense = gm->getPlayer(2).getBoard().getCard(i)->getDefense();
-    toPrint.emplace_back(display_minion_no_ability(name, cost, attack, defense));
+
+        // if activated ability, use the template
+    if (holds_alternative<ActivatedAbility*>(gm->getPlayer(2).getBoard().getCard(i)->getAbility())) {
+      auto a = gm->getPlayer(1).getBoard().getCard(i)->getAbility();
+      int ability_cost = get<ActivatedAbility*>(a)->getActivationCost();
+      toPrint.emplace_back(display_minion_activated_ability(name, cost, attack, defense, ability_cost, desc));
+
+    // if triggered ability, use the template
+    } else if (holds_alternative<TriggeredAbility*>(gm->getPlayer(2).getBoard().getCard(i)->getAbility())) {
+      toPrint.emplace_back(display_minion_triggered_ability(name, cost, attack, defense, desc));
+    
+    } else { // print the no ability minion
+      toPrint.emplace_back(display_minion_no_ability(name, cost, attack, defense));
+    }
   }
   for (int i = len1; i < 5; ++i) {
     toPrint.emplace_back(CARD_TEMPLATE_BORDER);
