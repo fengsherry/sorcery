@@ -94,7 +94,6 @@ void GameController::go(int argc, char *argv[]) {
 
             } else if (cmd == "end") {
                 gm.endTurn();
-                td->displaySorceryBoard();
                 // reset names with new pointer values
                 activePlayerName = gm.getActivePlayer().getName(); 
                 nonactivePlayerName = gm.getNonactivePlayer().getName();
