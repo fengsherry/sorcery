@@ -13,6 +13,7 @@ GraphicsDisplay::GraphicsDisplay(GameMaster *_gm) : gm{_gm} {
     w->fillRectangle(60,36,832,263,2); // red - player 1
     w->fillRectangle(60,387,832,263,4); // blue - player 2
     w->fillRectangle(60,303,832,80,0); // white, background behind sorcery
+    w->drawString(400, 350, "S  O   R   C   E   R   Y");
 
     w->fillRectangle(913, 27, 351, 632, 1);
     w->fillRectangle(913+2, 27+2, 351-4, 632-4, 0);
