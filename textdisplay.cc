@@ -97,12 +97,6 @@ void TextDisplay::printPlayerBoardRow(int p) {
   toPrint.emplace_back(CARD_TEMPLATE_BORDER);
 
   // Print the graveyard card
-  // string grave_name = gm->getPlayer(p).getGrave().getGrave().top()->getName();
-  // int grave_cost = gm->getPlayer(p).getGrave().getGrave().top()->getCost();
-  // int grave_attack = gm->getPlayer(p).getGrave().getGrave().top()->getAttack();
-  // int grave_defense = gm->getPlayer(p).getGrave().getGrave().top()->getDefense();
-  // toPrint.emplace_back(display_minion_no_ability(grave_name, grave_cost, grave_attack, grave_defense));
-
   string grave_name = gm->getPlayer(p).getGrave().getGrave().top()->getName();
   int grave_cost = gm->getPlayer(p).getGrave().getGrave().top()->getCost();
   int grave_attack = gm->getPlayer(p).getGrave().getGrave().top()->getAttack();

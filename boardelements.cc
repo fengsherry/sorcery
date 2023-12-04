@@ -156,7 +156,7 @@ void Board::removeCard(int i) {
 }
 
 int Board::find(MinionPtr m) {
-    for (int i = 0; i < theBoard.size(); i++) {
+    for (size_t i = 0; i < theBoard.size(); i++) {
         // need to get default minion here before comparing - not just theBoard[i]
         Minion* dm = theBoard[i]->getDefaultMinion();
         if (m.get() == dm) {
