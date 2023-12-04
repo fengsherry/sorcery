@@ -38,6 +38,11 @@ int DefaultMinion::getAction() const {
     return action;
 }
 
+int DefaultMinion::getActivatedAbilityCost() const { 
+    ActivatedAbility* aa = get<ActivatedAbility*>(ability);
+    return aa->getActivationCost();
+}
+
 void DefaultMinion::setTrigOwnerMinion(MinionPtr m) {
     // maybe add exception check here
     get<TriggeredAbility*>(ability)->setOwnerMinion(m);
@@ -50,6 +55,8 @@ variant<ActivatedAbility*, TriggeredAbility*, monostate> DefaultMinion::getAbili
 void DefaultMinion::setAction(int n) {
     action = n;
 }
+
+
 
 void DefaultMinion::setDefense(int n) {
     defense = n;

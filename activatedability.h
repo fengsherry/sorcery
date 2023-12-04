@@ -21,6 +21,7 @@ class ActivatedAbility {
         virtual void applyAbility(Player& player1, Player& player2, int i = 0);
         bool getNeedTarget();
         int getActivationCost();
+        void incActivationCost(int n);
 };
 
 /* Abilities for Spells with targets: */
@@ -91,6 +92,13 @@ class MasterSummonerAbility : public ActivatedAbility {
     public:
         MasterSummonerAbility();
         ~MasterSummonerAbility();
+};
+
+class SilenceAbility : public ActivatedAbility {
+    void doEffect(Player& player, int i = 0) override;
+    public:
+        SilenceAbility();
+        ~SilenceAbility();
 };
 
 

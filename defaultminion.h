@@ -32,6 +32,7 @@ class DefaultMinion : public Minion {
     int getAttack() const override;
     int getDefense() const override;
     int getAction() const override;
+    int getActivatedAbilityCost() const override;
     void setTrigOwnerMinion(MinionPtr m);
     variant<ActivatedAbility*, TriggeredAbility*, monostate> getAbility();
 

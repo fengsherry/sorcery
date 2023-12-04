@@ -125,7 +125,7 @@ void GraphicsDisplay::displayCard(int x, int y, int width, int height, MinionPtr
     if (holds_alternative<ActivatedAbility*>(m->getAbility())) {
         // cout << "activatedability" << endl;
         ActivatedAbility* aa = get<ActivatedAbility*>(m->getAbility());
-        w->drawString(x+8,y+55,to_string(aa->getActivationCost()));
+        w->drawString(x+8,y+55,to_string(m->getActivatedAbilityCost()));
         wrapString(x+20, y+55, 17, m->getDefaultMinionDesc());
     }
     

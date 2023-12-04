@@ -21,6 +21,8 @@ bool ActivatedAbility::getNeedTarget() { return needTarget; }
 
 int ActivatedAbility::getActivationCost() { return activationCost; }
 
+void ActivatedAbility::incActivationCost(int n) {activationCost += n; }
+
 /* Abilities for Spells with targets: */
 
 BanishAbility::BanishAbility() {}
@@ -111,5 +113,9 @@ void MasterSummonerAbility::doEffect(Player& player, int i) {
             --toadd;
         }
     }
-
 }
+
+SilenceAbility::SilenceAbility(): ActivatedAbility{} {}
+SilenceAbility::~SilenceAbility(){}
+void SilenceAbility::doEffect(Player& player, int i)  { throw ability_silenced{}; } // this is supposed to do nothing
+

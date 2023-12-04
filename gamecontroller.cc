@@ -264,13 +264,13 @@ void GameController::go(int argc, char *argv[]) {
 
                 if (args.size() == 1) { // "play i" - minions, rituals, spells with no targets
                     // check if i within range
-                    
+                    string s = activePlayerName + " has played " + gm.getActivePlayer().getHand().getCard(args[0]-1)->getName();
                     
                     // cout << activePlayerName << " is playing " << gm.getActivePlayer().getHand().getCard(args[0]-1) << endl;
                     try { 
                         gm.play(args[0]-1);
                         vector<string> msg;
-                        msg.emplace_back(activePlayerName + " has played " + gm.getActivePlayer().getHand().getCard(args[0]-1)->getName());
+                        msg.emplace_back(s);
                         msg.emplace_back(activePlayerName + "'s magic remaining: " + to_string(gm.getActivePlayer().getMagic()));
                         notifyDisplays(msg, gm.getActivePlayer().getId()); 
                         // notifyDisplays(activePlayerName + " has played " + gm.getActivePlayer().getHand().getCard(args[0]-1)->getName(), gm.getActivePlayer().getId());
@@ -296,15 +296,20 @@ void GameController::go(int argc, char *argv[]) {
                         targetCard = targetPlayer->getRitual().get();
                     }  
                     else targetCard = targetPlayer->getBoard().getCard(args[2] - 1).get();
-                    notifyDisplays(activePlayerName + " is playing " + gm.getActivePlayer().getHand().getCard(args[0]-1)->getName() + 
-                                    " on " + targetPlayer->getName() + "'s " + targetCard->getName(), gm.getActivePlayer().getId());
+                    string s = activePlayerName + " has played " + gm.getActivePlayer().getHand().getCard(args[0]-1)->getName() + 
+                                    " on " + targetPlayer->getName() + "'s " + targetCard->getName();
+                    // notifyDisplays(activePlayerName + " is playing " + gm.getActivePlayer().getHand().getCard(args[0]-1)->getName() + 
+                    //                 " on " + targetPlayer->getName() + "'s " + targetCard->getName(), gm.getActivePlayer().getId());
                     // cout << activePlayerName << " is playing " << gm.getActivePlayer().getHand().getCard(args[0]-1) << 
                     // " on " << targetPlayer->getName() << "'s " << targetCard <<endl;
 
                     // play the card
                     try { 
                         gm.play(args[0]-1, args[2]-1, *targetPlayer);
-                        notifyDisplays(activePlayerName + "'s magic remaining: " + to_string(gm.getActivePlayer().getMagic()), gm.getActivePlayer().getId());
+                        vector<string> msg;
+                        msg.emplace_back(s);
+                        msg.emplace_back(activePlayerName + "'s magic remaining: " + to_string(gm.getActivePlayer().getMagic()));
+                        // notifyDisplays(activePlayerName + "'s magic remaining: " + to_string(gm.getActivePlayer().getMagic()), gm.getActivePlayer().getId());
                         // cout << activePlayerName << "'s magic remaining: " << gm.getActivePlayer().getMagic() << endl;
                         // cout << endl; 
                     } 
@@ -340,6 +345,7 @@ void GameController::go(int argc, char *argv[]) {
                     catch (not_enough_magic e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); } 
                     catch (not_enough_magic e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); }
                     catch (invalid_play e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); }
+                    catch (ability_silenced e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); }
                 }
                 
                 // use i p j    (activated ability with target)
@@ -369,6 +375,7 @@ void GameController::go(int argc, char *argv[]) {
                     catch (not_enough_magic e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); } 
                     catch (not_enough_magic e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); }
                     catch (invalid_play e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); }
+                    catch (ability_silenced e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); }
 
                 }
 

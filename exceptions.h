@@ -106,5 +106,13 @@ class no_enchantments : public std::exception {
         }
 };
 
+class ability_silenced : public std::exception {
+    public:
+        ability_silenced() {}
+        string what () {
+            return "Cannot apply abilities. Minion has been enchanted with Silence.";
+        }
+};
+
 
 #endif
