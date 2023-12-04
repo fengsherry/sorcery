@@ -91,13 +91,18 @@ void TextDisplay::printPlayerBoardRow(int p) {
   vector<card_template_t> toPrint;
   
   // Print the ritual card
-  string player_r_name = gm->getPlayer(p).getRitual()->getName();
-  int player_r_cost = gm->getPlayer(p).getRitual()->getCost();
-  int player_ritual_cost = gm->getPlayer(p).getRitual()->getActivationCost();
-  string player_ritual_desc = gm->getPlayer(p).getRitual()->getDesc();
-  int player_ritual_charges = gm->getPlayer(p).getRitual()->getCharge();
+  if(gm->getPlayer(p).getRitual()) {
+    string player_r_name = gm->getPlayer(p).getRitual()->getName();
+    int player_r_cost = gm->getPlayer(p).getRitual()->getCost();
+    int player_ritual_cost = gm->getPlayer(p).getRitual()->getActivationCost();
+    string player_ritual_desc = gm->getPlayer(p).getRitual()->getDesc();
+    int player_ritual_charges = gm->getPlayer(p).getRitual()->getCharge();
+    toPrint.emplace_back(display_ritual(player_r_name, player_r_cost, player_ritual_cost, player_ritual_desc, player_ritual_charges));
+    toPrint.emplace_back(CARD_TEMPLATE_EMPTY);
+  } else {
+    toPrint.emplace_back(CARD_TEMPLATE_BORDER);
+  }
 
-  toPrint.emplace_back(display_ritual(player_r_name, player_r_cost, player_ritual_cost, player_ritual_desc, player_ritual_charges));
   toPrint.emplace_back(CARD_TEMPLATE_EMPTY);
 
   // Print the name card
@@ -109,14 +114,15 @@ void TextDisplay::printPlayerBoardRow(int p) {
   toPrint.emplace_back(CARD_TEMPLATE_EMPTY);
 
   // Print the graveyard card
-  string grave_name = gm->getPlayer(p).getGrave().getGrave().top()->getName();
-  int grave_cost = gm->getPlayer(p).getGrave().getGrave().top()->getCost();
-  int grave_attack = gm->getPlayer(p).getGrave().getGrave().top()->getAttack();
-  int grave_defense = gm->getPlayer(p).getGrave().getGrave().top()->getDefense();
-  toPrint.emplace_back(display_minion_no_ability(grave_name, grave_cost, grave_attack, grave_defense));
-  //toPrint.emplace_back(CARD_TEMPLATE_EMPTY);
-  toPrint.emplace_back(CARD_TEMPLATE_BORDER);
-
+  if(!gm->getPlayer(p).getGrave().isEmpty()) {
+    string grave_name = gm->getPlayer(p).getGrave().getGrave().top()->getName();
+    int grave_cost = gm->getPlayer(p).getGrave().getGrave().top()->getCost();
+    int grave_attack = gm->getPlayer(p).getGrave().getGrave().top()->getAttack();
+    int grave_defense = gm->getPlayer(p).getGrave().getGrave().top()->getDefense();
+    toPrint.emplace_back(display_minion_no_ability(grave_name, grave_cost, grave_attack, grave_defense));
+  } else {
+    toPrint.emplace_back(CARD_TEMPLATE_BORDER);
+  }
   printCardRowWithBorder(toPrint);
   toPrint.clear();
 }
@@ -144,17 +150,23 @@ void TextDisplay::displayHand(int p) {
 
   // iterate through all items in the hand
   for (int i = 0; i < len; ++i) {
+    string name;
+    string desc;
+    int cost;
 
-    string name = gm->getPlayer(p).getHand().getCard(i)->getName();
-    string desc = gm->getPlayer(p).getHand().getCard(i)->getDesc();
-    int cost = gm->getPlayer(p).getHand().getCard(i)->getCost();
+    CardPtr c = gm->getPlayer(p).getHand().getCard(i);
+    if (MinionPtr mptr = dynamic_pointer_cast<Minion>(c)) {
+      name = mptr->getDefaultMinionName();
+      desc = mptr->getDefaultMinionDesc();
+      cost = mptr->getCost();
+    } else {
+      name = gm->getPlayer(p).getHand().getCard(i)->getName();
+      desc = gm->getPlayer(p).getHand().getCard(i)->getDesc();
+      cost = gm->getPlayer(p).getHand().getCard(i)->getCost();
+    }
 
-    // if the card is an enchantment
-    if (gm->getPlayer(p).getHand().getCard(i)->getType() == CardType::Enchantment) {
-      toPrint.emplace_back(display_enchantment(name, cost, desc));
-    
     //if the card is a spell
-    } else if (gm->getPlayer(p).getHand().getCard(i)->getType() == CardType::Spell) {
+    if (gm->getPlayer(p).getHand().getCard(i)->getType() == CardType::Spell) {
       toPrint.emplace_back(display_spell(name, cost, desc));
 
     // else, check the card one by one
@@ -162,42 +174,42 @@ void TextDisplay::displayHand(int p) {
       // if minion:
       switch(gm->getPlayer(p).getHand().getCard(i)->getCardName()) {
         case(CardName::AirElemental):
-          toPrint.emplace_back(display_minion_no_ability(name, cost, p, p));
+          toPrint.emplace_back(display_minion_no_ability(name, cost, 1, 1));
           break;
         case(CardName::EarthElemental):
           toPrint.emplace_back(display_minion_no_ability(name, cost, 4, 4));
           break;
         case(CardName::BoneGolem):
-          toPrint.emplace_back(display_minion_no_ability(name, cost, p, 3));
+          toPrint.emplace_back(display_minion_triggered_ability(name, cost, 1, 3, desc));
           break;
         case(CardName::FireElemental):
-          toPrint.emplace_back(display_minion_no_ability(name, cost, 2, 2));
+          toPrint.emplace_back(display_minion_triggered_ability(name, cost, 2, 2, desc));
           break;
         case(CardName::PotionSeller):
-          toPrint.emplace_back(display_minion_no_ability(name, cost, p, 3));
+          toPrint.emplace_back(display_minion_triggered_ability(name, cost, 1, 3, desc));
           break;
         case(CardName::NovicePyromancer):
-          toPrint.emplace_back(display_minion_no_ability(name, cost, i, p));
+          toPrint.emplace_back(display_minion_activated_ability(name, cost, 0, 1, 1, desc));
           break;
         case(CardName::ApprenticeSummoner):
-          toPrint.emplace_back(display_minion_no_ability(name, cost, p, p));
+          toPrint.emplace_back(display_minion_activated_ability(name, cost, 1, 1, 1, desc));
           break;
         case(CardName::MasterSummoner):
-          toPrint.emplace_back(display_minion_no_ability(name, cost, 2, 3));
+          toPrint.emplace_back(display_minion_activated_ability(name, cost, 2, 3, 2, desc));
           break;
 
         // if ritual:
         case(CardName::DarkRitual):
           toPrint.emplace_back(display_ritual(name, cost, 1, desc, 5)); 
           break;
-        // case(CardName::AuraOfPower):
-        //   display_ritual(name, cost, 1, desc, 4); 
-        //   cout << "ritual" << endl;
-        //   break;
-        // case(CardName::Standstill):
-        //   display_ritual(name, cost, 2, desc, 4); 
-        //   cout << "ritual" << endl;
-        //   break;
+        case(CardName::AuraOfPower):
+          display_ritual(name, cost, 1, desc, 4); 
+          cout << "ritual" << endl;
+          break;
+        case(CardName::Standstill):
+          display_ritual(name, cost, 2, desc, 4); 
+          cout << "ritual" << endl;
+          break;
 
         // if enchantment
         case(CardName::GiantStrength):
@@ -214,26 +226,6 @@ void TextDisplay::displayHand(int p) {
           break;
         case(CardName::Silence):
           toPrint.emplace_back(display_enchantment(name, cost, desc));
-          break;
-
-        // if spell
-        case(CardName::Banish):
-          toPrint.emplace_back(display_spell(name, cost, desc));
-          break;
-        case(CardName::Unsummon):
-          toPrint.emplace_back(display_spell(name, cost, desc));
-          break;
-        case(CardName::Recharge):
-          toPrint.emplace_back(display_spell(name, cost, desc));
-          break;
-        case(CardName::Disenchant):
-          toPrint.emplace_back(display_spell(name, cost, desc));
-          break;
-        case(CardName::RaiseDead):
-          toPrint.emplace_back(display_spell(name, cost, desc));
-          break;
-        case(CardName::Blizzard):
-          toPrint.emplace_back(display_spell(name, cost, desc));
           break;
       }
     }
@@ -353,13 +345,13 @@ void TextDisplay::displaySorceryBoard() {
     int attack = gm->getPlayer(2).getBoard().getCard(i)->getAttack();
     int defense = gm->getPlayer(2).getBoard().getCard(i)->getDefense();
 
-        // if activated ability, use the template
+      // if activated ability, use the template
     if (holds_alternative<ActivatedAbility*>(gm->getPlayer(2).getBoard().getCard(i)->getAbility())) {
       auto a = gm->getPlayer(1).getBoard().getCard(i)->getAbility();
       int ability_cost = get<ActivatedAbility*>(a)->getActivationCost();
       toPrint.emplace_back(display_minion_activated_ability(name, cost, attack, defense, ability_cost, desc));
 
-    // if triggered ability, use the template
+      // if triggered ability, use the template
     } else if (holds_alternative<TriggeredAbility*>(gm->getPlayer(2).getBoard().getCard(i)->getAbility())) {
       toPrint.emplace_back(display_minion_triggered_ability(name, cost, attack, defense, desc));
     
