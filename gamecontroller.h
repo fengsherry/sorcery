@@ -11,8 +11,8 @@ class GameController {
     GameMaster gm; 
     std::vector<SorceryDisplay*> displays;
 
-    TextDisplay *td = nullptr;
-    GraphicsDisplay *gd = nullptr;
+    // TextDisplay *td = nullptr;
+    // GraphicsDisplay *gd = nullptr;
 
     /* private helper functions */
     // helper function to find command line variables
@@ -20,12 +20,17 @@ class GameController {
 
     void testCmdArg(string arg, string filename = "n/a");
 
+    void notifyDisplays(); // board
+    void notifyDisplays(MinionPtr m); // describe minion
+    void notifyDisplays(int p); // hand
+    void notifyDisplays(string msg, int p); // message
+    void notifyDisplaysErr(string err, int p);
+
     public:
         GameController();
         ~GameController();
         
         void go(int argc, char *argv[]);
 };
-
 
 #endif
