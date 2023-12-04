@@ -155,7 +155,7 @@ void GameController::go(int argc, char *argv[]) {
 
             } else if (cmd == "end") {
                 gm.endTurn();
-                notifyDisplays();
+                //notifyDisplays();
                 // reset names with new pointer values
                 activePlayerName = gm.getActivePlayer().getName(); 
                 nonactivePlayerName = gm.getNonactivePlayer().getName();

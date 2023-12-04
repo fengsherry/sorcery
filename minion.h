@@ -14,7 +14,7 @@ class DefaultMinion;
 class EnchantmentDec;
 class Board;
 
-class Minion: public Card {
+class Minion : public Card {
     CardType type = CardType::Minion;
     bool needTarget = false;
     Board* board = nullptr;
