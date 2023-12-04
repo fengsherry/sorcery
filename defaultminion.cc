@@ -22,6 +22,10 @@ string DefaultMinion::getDefaultMinionDesc() const {
 
 // const Minion* DefaultMinion::getDefaultMinion() const { return this; }
 
+Minion* DefaultMinion::getDefaultMinion() {
+    return this;
+}
+
 int DefaultMinion::getAttack() const {
     return attack;
 }

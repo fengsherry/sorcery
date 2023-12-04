@@ -13,6 +13,16 @@ void print(const card_template_t &t) {
   }
 }
 
+// print cards from a vector of templates
+void printCardRow(const vector<card_template_t> &ct) {
+  for (int j = 0; j < 11; j++) {
+    for (int i = 0; i < ct.size(); i ++){
+      cout << ct[i][j];
+    }
+    cout << endl;
+  }
+}
+
 // adds the ability to print 5 cards in a row if the vector contains >5 elements
 void printCardFiveRow(const vector<card_template_t> &ct) {
   if (ct.size() <= 5) {
@@ -40,17 +50,6 @@ void printCardFiveRow(const vector<card_template_t> &ct) {
     }
   }
 }
-
-// print cards from a vector of templates
-void printCardRow(const vector<card_template_t> &ct) {
-  for (int j = 0; j < 11; j++) {
-    for (int i = 0; i < ct.size(); i ++){
-      cout << ct[i][j];
-    }
-    cout << endl;
-  }
-}
-
 
 // print cards with the boarder from a vector of templates
 void printCardRowWithBorder(const vector<card_template_t> &ct) {

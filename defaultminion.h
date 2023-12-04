@@ -28,6 +28,7 @@ class DefaultMinion : public Minion {
     string getDefaultMinionDesc() const override;
     // const Minion* getDefaultMinion() const override;
     
+    Minion* getDefaultMinion() override;
     int getAttack() const override;
     int getDefense() const override;
     int getAction() const override;

@@ -17,8 +17,8 @@ class Board;
 class Minion: public Card {
     CardType type = CardType::Minion;
     bool needTarget = false;
-    string desc;
     Board* board = nullptr;
+    string desc;
 
  public:
     Minion(CardName cardName, int cost, string desc = "");
@@ -28,7 +28,7 @@ class Minion: public Card {
     string getDesc() const override;
     virtual string getDefaultMinionName() const = 0;
     virtual string getDefaultMinionDesc() const = 0;
-    //virtual const Minion* getDefaultMinion() const = 0;
+    // virtual const Minion* getDefaultMinion() const = 0;
     virtual Minion* getDefaultMinion() = 0;
     virtual int getAttack() const = 0;
     virtual int getDefense() const = 0;

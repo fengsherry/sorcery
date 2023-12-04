@@ -87,7 +87,7 @@ CardPtr createCard(string cardName, Player* p) {
     else if (cardName == "Master Summoner") card = std::make_shared<DefaultMinion>(CardName::MasterSummoner, 3, 2, 3, new MasterSummonerAbility{}, "Summon up to three 1/1 air elementals.");
     // minions with triggered abilities: 
     else if (cardName == "Bone Golem") card = minionWithTriggerAbilityInit(CardName::BoneGolem, 2, 1, 3, new BoneGolemAbility{p}, "Gain +1/+1 whenever a minion leaves play."); 
-    else if (cardName == "Fire Elemental") card = minionWithTriggerAbilityInit(CardName::FireElemental, 2, 2, 2, new FireElementalAbility{p}, "Whenever an opponent's minion enters play, deal 1 damage to it."); 
+    else if (cardName == "Fire Elemental") card = minionWithTriggerAbilityInit(CardName::FireElemental, 2, 2, 2, new FireElementalAbility{p}, "When an opponent's minion enters play, deal 1 damage to it."); 
     else if (cardName == "Potion Seller") card = minionWithTriggerAbilityInit(CardName::PotionSeller, 2, 1, 3, new PotionSellerAbility{p}, "At the end of your turn, all your minions gain +0/+1.");
     
     /* Enchantments: */

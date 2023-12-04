@@ -124,11 +124,8 @@ void GameController::go(int argc, char *argv[]) {
     notifyDisplays("Please enter player names.", 0);
     gm.initPlayers(in1, in2);
 
-    // create a new textdisplay
-    // displays.emplace_back(new TextDisplay{&gm});
-
-    //notifyDisplays();
-
+    if (graphicsFlag) displays[1]->displaySorceryBoard();
+    
     string cmd;
     int arg1, arg2, arg3;
     gm.startTurn();
@@ -173,9 +170,9 @@ void GameController::go(int argc, char *argv[]) {
                     notifyDisplays("Player " + to_string(gm.getTurn()) + ": " + activePlayerName + "  drew a " + drawnCard->getName(), gm.getActivePlayer().getId());
                     // cout << "Player " << gm.getTurn() << ": " << activePlayerName << "  drew a " << drawnCard << endl;
                 } 
-                catch (invalid_play e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); }
-                catch (full_hand e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); }
-                catch (deck_empty e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); }
+                catch (invalid_play &e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); }
+                catch (full_hand &e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); }
+                catch (deck_empty &e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); }
                 
             } else if (cmd == "discard") { // only available in -testing mode; how to handle this?
                 int i;
@@ -222,7 +219,7 @@ void GameController::go(int argc, char *argv[]) {
                         vector<string> msg = {s, s1, s2};
                         
                         notifyDisplays(msg, gm.getActivePlayer().getId());
-                    } catch (not_enough_action e) {
+                    } catch (not_enough_action &e) {
                         notifyDisplaysErr(e.what(), gm.getActivePlayer().getId());
                         // cout << e.what() << endl; // error message
                     }
@@ -268,16 +265,21 @@ void GameController::go(int argc, char *argv[]) {
                 if (args.size() == 1) { // "play i" - minions, rituals, spells with no targets
                     // check if i within range
                     
-                    notifyDisplays(activePlayerName + " is playing " + gm.getActivePlayer().getHand().getCard(args[0]-1)->getName(), gm.getActivePlayer().getId());
+                    
                     // cout << activePlayerName << " is playing " << gm.getActivePlayer().getHand().getCard(args[0]-1) << endl;
                     try { 
-                        gm.play(args[0]-1); 
-                        notifyDisplays(activePlayerName + "'s magic remaining: " + to_string(gm.getActivePlayer().getMagic()), gm.getActivePlayer().getId());
+                        gm.play(args[0]-1);
+                        vector<string> msg;
+                        msg.emplace_back(activePlayerName + " has played " + gm.getActivePlayer().getHand().getCard(args[0]-1)->getName());
+                        msg.emplace_back(activePlayerName + "'s magic remaining: " + to_string(gm.getActivePlayer().getMagic()));
+                        notifyDisplays(msg, gm.getActivePlayer().getId()); 
+                        // notifyDisplays(activePlayerName + " has played " + gm.getActivePlayer().getHand().getCard(args[0]-1)->getName(), gm.getActivePlayer().getId());
+                        // notifyDisplays(activePlayerName + "'s magic remaining: " + to_string(gm.getActivePlayer().getMagic()), gm.getActivePlayer().getId());
                         // cout << activePlayerName << "'s magic remaining: " << gm.getActivePlayer().getMagic() << endl;
                         // cout << endl;
                     }
-                    catch (not_enough_magic e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId());}
-                    catch (no_target_provided e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId());}
+                    catch (not_enough_magic &e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId());}
+                    catch (no_target_provided &e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId());}
 
                 } else if (args.size() == 3) { // "play i p j" - enchantments, spells with targets
                     // check if i and j within range
@@ -306,9 +308,9 @@ void GameController::go(int argc, char *argv[]) {
                         // cout << activePlayerName << "'s magic remaining: " << gm.getActivePlayer().getMagic() << endl;
                         // cout << endl; 
                     } 
-                    catch(not_enough_magic e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); } 
-                    catch(no_target_needed e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); } 
-                    catch(invalid_play e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); }
+                    catch(not_enough_magic &e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); } 
+                    catch(no_target_needed &e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); } 
+                    catch(invalid_play &e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); }
 
                 } else {
                     notifyDisplaysErr("Incorrect input.", gm.getActivePlayer().getId());
@@ -334,10 +336,10 @@ void GameController::go(int argc, char *argv[]) {
                     try {
                         gm.useAbility(args[0]-1);
                     } 
-                    catch (no_target_provided e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); }
-                    catch (not_enough_magic e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); } 
-                    catch (not_enough_magic e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); }
-                    catch (invalid_play e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); }
+                    catch (no_target_provided &e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); }
+                    catch (not_enough_magic &e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); } 
+                    catch (not_enough_magic &e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); }
+                    catch (invalid_play &e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); }
                 }
                 
                 // use i p j    (activated ability with target)
@@ -363,10 +365,10 @@ void GameController::go(int argc, char *argv[]) {
                     try {
                         gm.useAbility(args[0]-1, args[2]-1, *targetPlayer);
                     } 
-                    catch (no_target_needed e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); }
-                    catch (not_enough_magic e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); } 
-                    catch (not_enough_magic e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); }
-                    catch (invalid_play e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); }
+                    catch (no_target_needed &e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); }
+                    catch (not_enough_magic &e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); } 
+                    catch (not_enough_magic &e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); }
+                    catch (invalid_play &e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); }
 
                 }
 
@@ -397,8 +399,8 @@ void GameController::go(int argc, char *argv[]) {
                 notifyDisplays("Not a valid command", gm.getActivePlayer().getId());
             } 
             // notifyDisplays();
-            if (graphicsFlag) displays[1]->displaySorceryBoard();
-        } catch(out_of_range e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); }
+            // if (graphicsFlag) displays[1]->displaySorceryBoard();
+        } catch(out_of_range &e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); }
         
     }
 }

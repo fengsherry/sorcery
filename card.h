@@ -23,8 +23,8 @@ class Card {
     CardName name;
     int cost;
     CardType type;
-    string desc;
     bool needTarget; // true if the Card requires a target to be played
+    string desc;
 
  public:
     // Card();
