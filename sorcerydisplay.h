@@ -1,12 +1,13 @@
-#ifndef __DISPLAY_H__
-#define __DISPLAY_H__
+#ifndef __SORCERYDISPLAY_H__
+#define __SORCERYDISPLAY_H__
 
 #include <string>
 using namespace std;
 
-class Display {
+class SorceryDisplay {
     public:
-        virtual ~Display() = default;
+        // SorceryDisplay();
+        virtual ~SorceryDisplay() = default;
         //virtual void notify(Hand &hand) = 0;
 
         // virtual SubscriptionType subType() = 0;

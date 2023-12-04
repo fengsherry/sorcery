@@ -3,12 +3,13 @@
 #include <stdexcept>
 #include "gamemaster.h"
 #include "textdisplay.h"
+#include "graphicsdisplay.h"
 
 
 class GameController {
     GameMaster gm; 
     TextDisplay *td = nullptr;
-    // GraphicsDisplay gd;
+    GraphicsDisplay *gd = nullptr;
 
     /* private helper functions */
     // helper function to find command line variables

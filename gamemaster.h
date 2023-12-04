@@ -13,9 +13,11 @@ class GameMaster {
     Deck d1, d2;
     int turn = 1; // 1 for player 1's turn, 2 for player 2's turn
     int numPlayers = 2;
+    bool graphicsFlag;
     Player* activePlayer;
     Player* nonactivePlayer;
-    vector<TriggeredAbility*> observers;
+    vector<TriggeredAbility*> gameObservers;
+    vector<TriggeredAbility*> boardObservers;
     
     public:
         GameMaster(); 
@@ -28,6 +30,9 @@ class GameMaster {
         // observer pattern methods
         void attach(TriggeredAbility* o);
         void notifyStartTurnObservers();
+        void notifyEndTurnObservers();
+        void notifyMinionEnterObservers(MinionPtr m);
+        void notifyMinionLeaveObservers(MinionPtr m);
 
         // methods correlating to commands recieved in main:
         void startTurn();

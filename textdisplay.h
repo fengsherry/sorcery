@@ -1,12 +1,12 @@
 #ifndef __TEXTDISPLAY_H__
 #define __TEXTDISPLAY_H__
-#include "display.h"
+#include "sorcerydisplay.h"
 #include <vector>
 using namespace std;
 
 class GameMaster;
 
-class TextDisplay : public Display {
+class TextDisplay : public SorceryDisplay {
  private:
    //  std::vector<std::vector<char>> theBoard;
    //  std::vector<std::vector<char>> theHand;

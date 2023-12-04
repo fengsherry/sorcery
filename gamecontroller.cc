@@ -9,6 +9,7 @@
 
 #include "ascii_graphics.h"
 #include "textdisplay.h"
+#include "graphicsdisplay.h"
 using namespace std;
 
 GameController::GameController() {}
@@ -28,7 +29,7 @@ void GameController::testCmdArg(string arg, string filename) {
 }
 
 void GameController::go(int argc, char *argv[]) {
-    // copy code from main.cc here
+
     // create a new textdisplay
     td = new TextDisplay(&gm);
 
@@ -38,6 +39,7 @@ void GameController::go(int argc, char *argv[]) {
     bool deck2Flag = false;
     bool initFlag = false;
     bool testingFlag = false;
+    bool graphicsFlag = false;
     string deck1File, deck2File, initFile;
     if (findIndex(argc, argv, "-deck1", i)) {
         deck1Flag = true; deck1File = argv[i + 1];
@@ -47,14 +49,19 @@ void GameController::go(int argc, char *argv[]) {
         deck2Flag = true; deck2File = argv[i + 1];
         testCmdArg("deck2", deck2File);
     }
-    if (findIndex(argc, argv, "-init", i)) {
+    if (findIndex(argc, argv, "-init", i)) { // NOT IMPLEMENTED YET
         initFlag = true; initFile = argv[i + 1];
         testCmdArg("init", initFile);
     }
-    if (findIndex(argc, argv, "-testing", i)) {
+    if (findIndex(argc, argv, "-testing", i)) { // NOT IMPLEMENTED YET
         testingFlag = true; 
         testCmdArg("testing");
     }
+    if (findIndex(argc, argv, "-graphics", i)) { 
+        graphicsFlag = true; 
+        testCmdArg("graphics");
+    }
+
 
     // create input file streams for each deck file location
     ifstream in1 = deck1Flag ? ifstream(deck1File.c_str()) : ifstream("default.deck");
@@ -63,10 +70,13 @@ void GameController::go(int argc, char *argv[]) {
     // initialize the game
     GameMaster gm{};
 
-    
+    // create a new graphics display if required
+    if (graphicsFlag) gd = new GraphicsDisplay{&gm};
 
     // initialize Players, their Decks, and their Hands
     gm.initPlayers(in1, in2);
+
+    // gd->displaySorceryBoard();
 
     
 
@@ -290,7 +300,7 @@ void GameController::go(int argc, char *argv[]) {
 
             } else if (cmd == "board") {
                 gm.getActivePlayer().TEST_printPlayerBoard();
-                td->displaySorceryBoard();
+                // td->displaySorceryBoard();
 
             } else if (cmd == "grave") {
                 gm.getActivePlayer().TEST_printPlayerGrave();
