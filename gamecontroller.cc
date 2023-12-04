@@ -84,6 +84,7 @@ void GameController::go(int argc, char *argv[]) {
     bool testingFlag = false;
     bool graphicsFlag = false;
     string deck1File, deck2File, initFile;
+    ifstream file(initFile);
     if (findIndex(argc, argv, "-deck1", i)) {
         deck1Flag = true; deck1File = argv[i + 1];
         testCmdArg("deck1", deck1File);
@@ -126,7 +127,7 @@ void GameController::go(int argc, char *argv[]) {
 
     if (graphicsFlag) displays[1]->displaySorceryBoard();
     
-    string cmd;
+    string cmds, cmd; // cmds is a line, cmd is the first "word" in that line
     int arg1, arg2, arg3;
     gm.startTurn();
     string activePlayerName = gm.getActivePlayer().getName();
@@ -135,9 +136,14 @@ void GameController::go(int argc, char *argv[]) {
     // cout << "Player " << gm.getTurn() << ": " << activePlayerName << "  It's your turn!" << endl;
     while (true) {
         try { // catches exception
-            cin >> cmd;
-
             if (cin.eof()) return;
+            if (initFlag && getline(file, cmds)) {
+                // we've already read into cmd
+            }  else getline(cin, cmds);
+            istringstream iss(cmds);
+
+            iss >> cmd;
+
             if (cmd == "help") {  // only shows in textdisplay
                 string helpmsg = 
                 "Commands: \n\thelp -- Display this message.\n"
@@ -176,7 +182,7 @@ void GameController::go(int argc, char *argv[]) {
                 
             } else if (cmd == "discard") { // only available in -testing mode; how to handle this?
                 int i;
-                if (testingFlag && (cin >> i)) {
+                if (testingFlag && (iss >> i)) {
                     gm.getActivePlayer().getHand().removeCard(i-1);
                 } else notifyDisplaysErr("Not a valid command", gm.getActivePlayer().getId());
                 gm.getActivePlayer().TEST_printPlayerHand();
@@ -185,8 +191,8 @@ void GameController::go(int argc, char *argv[]) {
 
                 string args;
                 int arg, arg2;
-                getline(cin, args);
-                istringstream iss(args);
+                // getline(cin, args);
+                // istringstream iss(args);
                 iss >> arg;
                 
                 if (iss >> arg2) { 
@@ -227,7 +233,7 @@ void GameController::go(int argc, char *argv[]) {
 
                 } else {
                     // "attack i" - order minion i to attack the nonactive player
-                    cin.clear();
+                    // cin.clear();
 
                     MinionPtr attackingMinion = gm.getActivePlayer().getBoard().getCard(arg-1);
                     
@@ -258,8 +264,8 @@ void GameController::go(int argc, char *argv[]) {
                 vector<int> args;
                 string line;
                 int arg;
-                getline(cin, line);
-                istringstream iss(line);
+                // getline(cin, line);
+                // istringstream iss(line);
                 while (iss >> arg) { args.emplace_back(arg); }
 
                 if (args.size() == 1) { // "play i" - minions, rituals, spells with no targets
@@ -327,8 +333,8 @@ void GameController::go(int argc, char *argv[]) {
                 vector<int> args;
                 string line;
                 int arg;
-                getline(cin, line);
-                istringstream iss(line);
+                // getline(cin, line);
+                // istringstream iss(line);
                 while (iss >> arg) { args.emplace_back(arg); }
 
                 // use i        (activated ability without target)
@@ -386,7 +392,8 @@ void GameController::go(int argc, char *argv[]) {
 
             } else if (cmd == "describe") {
                 int i;
-                cin >> i;
+                // cin >> i;
+                iss >> i;
                 // gm.getActivePlayer().getBoard().getCard(i-1)->TEST_printInspectMinion();
                 notifyDisplays(gm.getActivePlayer().getBoard().getCard(i-1));
                 // td->displayMinion(gm.getActivePlayer().getBoard().getCard(i-1));
