@@ -13,18 +13,33 @@ void print(const card_template_t &t) {
   }
 }
 
-// void printCardFiveRow(const vector<card_template_t> &ct) {
-//   for (int j = 0; j < 11; j++) {
-//     for (int i = 0; i < ct.size(); i ++) {
-//       cout << ct[i][j];
-//     }
-//     cout << endl;
-//     // TEST MORE THAN 5 ENCHANTMENTS, PRINT ON NEW LINE
-//     if ((j % 5) == 0) {
-//       cout << endl;
-//     }
-//   }
-// }
+// adds the ability to print 5 cards in a row if the vector contains >5 elements
+void printCardFiveRow(const vector<card_template_t> &ct) {
+  if (ct.size() <= 5) {
+    printCardRow(ct);
+  } else {
+    vector<card_template_t> ct2(ct);
+
+    while (!ct2.empty()) {
+
+      // print the first 5 cards
+      for (int j = 0; j < 11; ++j) {
+        for (int i = 0; i < 5; ++i) {
+          cout << ct[i][j];
+        }
+        cout << endl;
+      }
+      // Erase the first 5 elements
+      ct2.erase(ct2.begin(), ct2.begin() + 5);
+
+      // if the rest of the elements <= 5, print normally
+      if (ct2.size() <= 5) {
+        printCardRow(ct2);
+        break;
+      }
+    }
+  }
+}
 
 // print cards from a vector of templates
 void printCardRow(const vector<card_template_t> &ct) {
@@ -117,7 +132,6 @@ void TextDisplay::displayMsg(vector<string> msg, int p) {
   for (string s : msg) {
     cout << s << endl;
   }
-  
 }
 
 // Print the hand of player number [p] to stdout
@@ -232,7 +246,9 @@ void TextDisplay::displayHand(int p) {
 }
 
 // returns a vector of card_templates that has the default minion in the first position and the rest of the enchantments after in the vector
-vector<card_template_t> &addEnchantmentPrint(const MinionPtr m, vector<card_template_t> &toPrint) {
+vector<card_template_t> &addEnchantmentPrint(const MinionPtr m, vector<card_template_t> &toPrint, int count) {
+  //card_template_t NULL_TEMPLATE;
+
   if (DefaultMinionPtr dm = dynamic_pointer_cast<DefaultMinion>(m)) {
     toPrint.insert(toPrint.begin(), display_minion_no_ability(m->getDefaultMinionName(), m->getCost(), m->getAttack(), m->getDefense()));
     return toPrint;
@@ -240,6 +256,11 @@ vector<card_template_t> &addEnchantmentPrint(const MinionPtr m, vector<card_temp
   // if there are enchantments on the minion
   } else {
     EnchantmentDecPtr ed = dynamic_pointer_cast<EnchantmentDec>(m);
+
+    // // add a placeholder so the print method can print a newline
+    // if (count != 0 && count % 5 == 0) {
+    //   toPrint.emplace_back(NULL_TEMPLATE);
+    // }
 
     switch(m->getCardName()) {
       case(CardName::GiantStrength):
@@ -258,26 +279,28 @@ vector<card_template_t> &addEnchantmentPrint(const MinionPtr m, vector<card_temp
         toPrint.emplace_back(display_enchantment(m->getName(), m->getCost(), m->getDesc()));
         break;
     }
-    addEnchantmentPrint(ed->getNext(), toPrint);
+    addEnchantmentPrint(ed->getNext(), toPrint, count++);
   }
 }
 
 void TextDisplay::displayMinion(const MinionPtr m) {
   vector<card_template_t> toPrint;
-  addEnchantmentPrint(m, toPrint);
+  addEnchantmentPrint(m, toPrint, 0);
 
-  //print the minion first
+  // print the minion first
   print(toPrint.at(0));
 
+  // delete the minion card from the toPrint vector
   if (!toPrint.empty()) {
     toPrint.erase(toPrint.begin());
   }
   // print the rest of the enchantment cards in rows of 5's
-  printCardRow(toPrint);
+  printCardFiveRow(toPrint);
   toPrint.clear();
 }
 
-
+// displays the entore sorcery board: 
+// player1 row, play1 board, center graphic, player 2 board, player 2 row, (+border)
 void TextDisplay::displaySorceryBoard() {
   printTopBorder();
   printPlayerBoardRow(1);
@@ -312,7 +335,7 @@ void TextDisplay::displaySorceryBoard() {
     }
   }
 
-  //print empty cards placenemtns on the board
+  //print empty cards placements on the board
   for (int i = len1; i < 5; ++i) {
     toPrint.emplace_back(CARD_TEMPLATE_BORDER);
   }
