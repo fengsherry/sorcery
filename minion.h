@@ -26,14 +26,14 @@ class Minion: public Card {
 
     // string getName() const override;
     virtual string getDefaultMinionName() const = 0;
-    virtual MinionPtr getDefaultMinion() = 0;
+    virtual Minion* getDefaultMinion() = 0;
     virtual int getAttack() const = 0;
     virtual int getDefense() const = 0;
     virtual int getAction() const = 0;
     void setBoard(Board* b);
     void destroy();
-    void increaseAttack(int n);
-    void increaseDefence(int n);
+    void modifyAttack(int n);
+    void modifyDefence(int n);
     // virtual Ability getAbility() = 0;
     virtual variant<ActivatedAbility*, TriggeredAbility*, monostate> getAbility() = 0;
 
@@ -50,5 +50,11 @@ class Minion: public Card {
 typedef std::shared_ptr<Minion> MinionPtr;
 
 std::ostream& operator<<(std::ostream& out, const MinionPtr m);
+
+
+// Custom deleter that does nothing (no deletion)
+struct NoDeleter {
+    void operator()(Minion*) const;
+};
 
 #endif

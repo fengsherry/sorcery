@@ -5,6 +5,7 @@
 #include <stack>
 #include <string>
 #include <vector>
+#include <variant>
 #include "card.h"
 #include "minion.h"
 #include "defaultminion.h"
@@ -63,15 +64,18 @@ class Board {
         void restoreAction(); // sets action of Minions to 1
         void destroyMinion(int i);
         int size();
+        int getBoardSize();
         int find(MinionPtr m); // returns index of m in theBoard, -1 if not found
         bool contains(MinionPtr m);
         void TEST_printBoard();
+    
 
         // observer pattern methods
         void attach(TriggeredAbility* o);
+        void detach(TriggeredAbility* o);
         void notifyMinionEnterObservers(MinionPtr targetMinion);
         void notifyMinionLeaveObservers(MinionPtr targetMinion);
-        int getBoardSize();
+        
 
 };
 

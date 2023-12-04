@@ -16,7 +16,7 @@ string DefaultMinion::getDefaultMinionName() const {
     return cardNameToString(cardName);
 }
 
-MinionPtr DefaultMinion::getDefaultMinion() {
+Minion* DefaultMinion::getDefaultMinion() {
     return this;
 }
 
@@ -30,6 +30,11 @@ int DefaultMinion::getDefense() const {
 
 int DefaultMinion::getAction() const {
     return action;
+}
+
+void DefaultMinion::setTrigOwnerMinion(MinionPtr m) {
+    // maybe add exception check here
+    get<TriggeredAbility*>(ability)->setOwnerMinion(m);
 }
 
 variant<ActivatedAbility*, TriggeredAbility*, monostate> DefaultMinion::getAbility() {

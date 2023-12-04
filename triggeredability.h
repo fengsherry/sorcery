@@ -3,6 +3,7 @@
 #ifndef _TRIGGEREDABILITY_H_
 #define _TRIGGEREDABILITY_H_
 #include <vector>
+#include <memory>
 using namespace std;
 
 class Player;
@@ -26,6 +27,7 @@ class TriggeredAbility {
   TriggeredAbility(TriggerType type, TriggerCardType cardType, Player* owner, MinionPtr ownerMinion = nullptr);
   virtual void applyAbility(); 
   virtual TriggerType getType();
+  void setOwnerMinion(MinionPtr m);
   virtual void setTargetPlayer(Player* targetPlayer);
   virtual void setTargetMinion(MinionPtr targetMinion);
   virtual void setTargetPlayers(vector<Player*> targetPlayers);
@@ -56,19 +58,19 @@ class StandstillAbility : public TriggeredAbility {
 
 class BoneGolemAbility : public TriggeredAbility {
   public:
-    BoneGolemAbility(Player* owner, MinionPtr ownerMinion); 
+    BoneGolemAbility(Player* owner); 
     void applyAbility();
 };
 
 class FireElementalAbility : public TriggeredAbility {
   public:
-    FireElementalAbility(Player* owner, MinionPtr ownerMinion); 
+    FireElementalAbility(Player* owner); 
     void applyAbility();
 };
 
 class PotionSellerAbility : public TriggeredAbility {
   public:
-    PotionSellerAbility(Player* owner, MinionPtr ownerMinion); 
+    PotionSellerAbility(Player* owner); 
     void applyAbility();
 };
 

@@ -18,18 +18,21 @@ Minion::Minion(CardName cardName, int cost, string desc):
 // void Minion::setAction(int n) {
 //     action = n;
 // }
+
+void NoDeleter::operator()(Minion*) const {}
+
 void Minion::destroy() {
-    int i = board->find(this);
+    int i = board->find(MinionPtr(this, NoDeleter{})); 
     board->destroyMinion(i);
 }
 
-void Minion::increaseDefence(int n) {
-    int i = board->find(this);
+void Minion::modifyDefence(int n) {
+    int i = board->find(MinionPtr(this, NoDeleter{}));
     board->enchantMinion(i, "Modify Defense", n);
 }
 
-void Minion::increaseAttack(int n) {
-    int i = board->find(this);
+void Minion::modifyAttack(int n) {
+    int i = board->find(MinionPtr(this, NoDeleter{}));
     board->enchantMinion(i, "Modify Attack", n);
 }
 
@@ -40,7 +43,7 @@ bool Minion::isDead() {
 }
 
 void Minion::TEST_printInspectMinion() {
-    if (DefaultMinionPtr dm = dynamic_cast<DefaultMinionPtr>(this)) {
+    if (DefaultMinion* dm = dynamic_cast<DefaultMinion*>(this)) {
         cout << dm->getName() << endl;
     } else {
         EnchantmentDec* ed = dynamic_cast<EnchantmentDec*>(this);
@@ -50,12 +53,11 @@ void Minion::TEST_printInspectMinion() {
 }
 
 std::ostream& operator<<(std::ostream& out, const MinionPtr m) {
-    if (const DefaultMinionPtr dm = dynamic_cast<const DefaultMinionPtr>(m)) {
+    if (const auto dm = dynamic_pointer_cast<const DefaultMinion>(m)) {
         out << dm->getDefaultMinionName();
-    } else if (const EnchantmentDec* ed = dynamic_cast<const EnchantmentDec*>(m)) {
+    } else if (const auto ed = dynamic_pointer_cast<const EnchantmentDec>(m)) {
         out << ed->getDefaultMinionName();
     }
     
     return out;
 }
-

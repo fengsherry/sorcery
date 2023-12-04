@@ -104,12 +104,18 @@ TriggeredAbility* Player::play(int i, Player& nonActivePlayer) {
 
     magic -= cost;
 
-    if (MinionPtr minionToPlay = dynamic_cast<MinionPtr>(cardToPlay)) { // false if cardToPlay is not Minion* type
+    if (MinionPtr minionToPlay = dynamic_pointer_cast<Minion>(cardToPlay)) { // false if cardToPlay is not Minion* type
         board.addCard(minionToPlay);
+        auto a = minionToPlay->getAbility();
+        if (holds_alternative<TriggeredAbility*>(a) && (get<TriggeredAbility*>(a)->getType() == TriggerType::StartTurn || get<TriggeredAbility*>(a)->getType() == TriggerType::EndTurn)) return(get<TriggeredAbility*>(a));
+
     } else if (cardToPlay->getType() == CardType::Ritual) {
         RitualPtr ritualToPlay = dynamic_pointer_cast<Ritual>(cardToPlay);
         // cout << "this is not a minion" << endl;
+
+        // TODO: remove old ritual from observers
         ritual = ritualToPlay;
+        return ritualToPlay->getAbility();
     } else if (cardToPlay->getType() == CardType::Spell) {
         SpellPtr spellToPlay = dynamic_pointer_cast<Spell>(cardToPlay);
         spellToPlay->applyAbility(*this, nonActivePlayer);
@@ -142,3 +148,53 @@ void Player::play(int i, int j, Player& p) {
     }
 }
 
+void Player::useAbility(int i, Player& nonActivePlayer) {
+    MinionPtr minionToUse = dynamic_pointer_cast<Minion>(board.getCard(i));
+    
+    try {
+        // check if minion has an activated ability
+        ActivatedAbility* aaToUse = get<ActivatedAbility*>(minionToUse->getAbility());
+        // check if ability can be used without target
+        if (aaToUse->getNeedTarget()) throw no_target_provided(*minionToUse);
+        // check if player has enough action
+        if (minionToUse->getAction() == 0) throw not_enough_action{*this}; 
+        // check if player has enough magic to play the card
+        int cost = aaToUse->getActivationCost();
+        if (cost > magic) throw not_enough_magic(*this);
+        magic -= cost;
+
+        // use the ability
+        aaToUse->applyAbility(*this, nonActivePlayer);
+    } catch (bad_variant_access&) {
+        throw invalid_play(minionToUse->getName() + " has no activated ability");
+    }
+
+    // check if activated ability can be 
+}
+
+void Player::useAbility(int i, int j, Player &p) {
+    MinionPtr minionToUse = dynamic_pointer_cast<Minion>(board.getCard(i));
+
+    try {
+        // check if minion has an activated ability
+        ActivatedAbility* aaToUse = get<ActivatedAbility*>(minionToUse->getAbility());
+        // check if ability can be played on a target
+        if (!aaToUse->getNeedTarget()) throw no_target_needed(*minionToUse);
+        // check if player has enough action
+        if (minionToUse->getAction() == 0) throw not_enough_action{*this}; 
+        // check if player has enough magic to play the card
+        int cost = aaToUse->getActivationCost();
+        if (cost > magic) throw not_enough_magic(*this);
+        magic -= cost;
+
+        // use the ability
+        aaToUse->applyAbility(p, *this, j);
+    } catch (bad_variant_access&) {
+        throw invalid_play(minionToUse->getName() + " has no activated ability");
+    }
+
+}
+
+bool Player::onBoard(MinionPtr m) {
+    return board.contains(m);
+}

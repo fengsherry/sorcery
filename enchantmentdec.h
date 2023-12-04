@@ -18,7 +18,8 @@ class EnchantmentDec : public Minion {
         bool isHidden();
         
         variant<ActivatedAbility*, TriggeredAbility*, monostate> getAbility();
-        MinionPtr getDefaultMinion() override;
+        string getDefaultMinionName() const ;
+        Minion* getDefaultMinion() override;
         MinionPtr getNext();
         void setNext(MinionPtr newnext);
         // CardName getDefaultMinionName() override;
