@@ -97,6 +97,7 @@ void GameMaster::attackMinion(int i, int j) { // i is attacker, j is victim
     // check if minions are dead 
     if (activePlayer->getBoard().getCard(i)->isDead()) {
         // send to graveyard
+        activePlayer->getBoard().stripEnchants(i);
         activePlayer->getGrave().push(activePlayer->getBoard().getCard(i));
         activePlayer->getBoard().removeCard(i);
     }
