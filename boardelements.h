@@ -5,6 +5,7 @@
 #include <stack>
 #include <string>
 #include <vector>
+#include <variant>
 #include "card.h"
 #include "minion.h"
 #include "defaultminion.h"
@@ -50,9 +51,11 @@ class Hand {
 // Minions the player has played, not yet dead
 class Board {
     vector<MinionPtr> theBoard;
+    vector<TriggeredAbility*>* boardObservers; // reference to the boardObservers vector in gamemaster
 
     public:
         MinionPtr getCard(int i) const;
+        void init(vector<TriggeredAbility*>* bo);
         void addCard(MinionPtr m);
         void removeCard(int i);
         void enchantMinion(int i, string minionName, int modifyval = 0); // enchant ith Minion with specified enchantment name.
@@ -61,8 +64,18 @@ class Board {
         void restoreAction(); // sets action of Minions to 1
         void destroyMinion(int i);
         int size();
-        void TEST_printBoard();
         int getBoardSize();
+        int find(MinionPtr m); // returns index of m in theBoard, -1 if not found
+        bool contains(MinionPtr m);
+        void TEST_printBoard();
+    
+
+        // observer pattern methods
+        void attach(TriggeredAbility* o);
+        void detach(TriggeredAbility* o);
+        void notifyMinionEnterObservers(MinionPtr targetMinion);
+        void notifyMinionLeaveObservers(MinionPtr targetMinion);
+        
 
 };
 

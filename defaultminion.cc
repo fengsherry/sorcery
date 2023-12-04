@@ -22,6 +22,10 @@ string DefaultMinion::getDefaultMinionDesc() const {
 
 // const Minion* DefaultMinion::getDefaultMinion() const { return this; }
 
+Minion* DefaultMinion::getDefaultMinion() {
+    return this;
+}
+
 int DefaultMinion::getAttack() const {
     return attack;
 }
@@ -32,6 +36,11 @@ int DefaultMinion::getDefense() const {
 
 int DefaultMinion::getAction() const {
     return action;
+}
+
+void DefaultMinion::setTrigOwnerMinion(MinionPtr m) {
+    // maybe add exception check here
+    get<TriggeredAbility*>(ability)->setOwnerMinion(m);
 }
 
 variant<ActivatedAbility*, TriggeredAbility*, monostate> DefaultMinion::getAbility() {
