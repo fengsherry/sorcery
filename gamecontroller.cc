@@ -113,12 +113,9 @@ void GameController::go(int argc, char *argv[]) {
     gm.initPlayers(in1, in2);
 
     // create a new textdisplay
-    td = new TextDisplay(&gm);
+    displays.emplace_back(new TextDisplay{&gm});
 
-    notifyDisplays();
-
-    //TEMP ____________________________________________________________________________________________________________________
-    //TEMP____________________________________________________________________________________________________________________
+    //notifyDisplays();
 
     string cmd;
     int arg1, arg2, arg3;
@@ -359,8 +356,7 @@ void GameController::go(int argc, char *argv[]) {
 
             } else if (cmd == "hand") {
                 gm.getActivePlayer().TEST_printPlayerHand();
-                notifyDisplays(1);
-                // td->displayHand(1);
+                notifyDisplays(gm.getActivePlayer().getId());
 
             } else if (cmd == "board") {
                 gm.getActivePlayer().TEST_printPlayerBoard();
@@ -368,6 +364,7 @@ void GameController::go(int argc, char *argv[]) {
 
             } else if (cmd == "grave") {
                 gm.getActivePlayer().TEST_printPlayerGrave();
+
             } else if (cmd != "") {
                 notifyDisplays("Not a valid command", gm.getActivePlayer().getId());
             } 

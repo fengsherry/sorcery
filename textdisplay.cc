@@ -13,18 +13,18 @@ void print(const card_template_t &t) {
   }
 }
 
-void printCardFiveRow(const vector<card_template_t> &ct) {
-  for (int j = 0; j < 11; j++) {
-    for (int i = 0; i < ct.size(); i ++) {
-      cout << ct[i][j];
-    }
-    cout << endl;
-    // TEST MORE THAN 5 ENCHANTMENTS, PRINT ON NEW LINE
-    if ((j % 5) == 0) {
-      cout << endl;
-    }
-  }
-}
+// void printCardFiveRow(const vector<card_template_t> &ct) {
+//   for (int j = 0; j < 11; j++) {
+//     for (int i = 0; i < ct.size(); i ++) {
+//       cout << ct[i][j];
+//     }
+//     cout << endl;
+//     // TEST MORE THAN 5 ENCHANTMENTS, PRINT ON NEW LINE
+//     if ((j % 5) == 0) {
+//       cout << endl;
+//     }
+//   }
+// }
 
 // print cards from a vector of templates
 void printCardRow(const vector<card_template_t> &ct) {
@@ -229,7 +229,7 @@ void TextDisplay::displayHand(int p) {
 // returns a vector of card_templates that has the default minion in the first position and the rest of the enchantments after in the vector
 vector<card_template_t> &addEnchantmentPrint(const MinionPtr m, vector<card_template_t> &toPrint) {
   if (DefaultMinionPtr dm = dynamic_pointer_cast<DefaultMinion>(m)) {
-    toPrint.insert(toPrint.begin(), display_minion_no_ability(m->getName(), m->getCost(), m->getAttack(), m->getDefense()));
+    toPrint.insert(toPrint.begin(), display_minion_no_ability(m->getDefaultMinionName(), m->getCost(), m->getAttack(), m->getDefense()));
     return toPrint;
 
   // if there are enchantments on the minion
@@ -267,9 +267,8 @@ void TextDisplay::displayMinion(const MinionPtr m) {
   if (!toPrint.empty()) {
     toPrint.erase(toPrint.begin());
   }
-
-  // print the rest of the enchantment cards in 5's
-  printCardFiveRow(toPrint);
+  // print the rest of the enchantment cards in rows of 5's
+  printCardRow(toPrint);
   toPrint.clear();
 }
 
@@ -285,9 +284,10 @@ void TextDisplay::displaySorceryBoard() {
   int len2 = gm->getPlayer(2).getBoard().size();
 
   // PRINT the board for player 1
+  // if the card is a minion:
   for (int i = 0; i < len1; ++i) {
-    string name = gm->getPlayer(1).getBoard().getCard(i)->getName();
-    string desc = gm->getPlayer(1).getBoard().getCard(i)->getDesc();
+    string name = gm->getPlayer(1).getBoard().getCard(i)->getDefaultMinionName();
+    string desc = gm->getPlayer(1).getBoard().getCard(i)->getDefaultMinionDesc();
     int cost = gm->getPlayer(1).getBoard().getCard(i)->getCost();
     int attack = gm->getPlayer(1).getBoard().getCard(i)->getAttack();
     int defense = gm->getPlayer(1).getBoard().getCard(i)->getDefense();
@@ -322,8 +322,8 @@ void TextDisplay::displaySorceryBoard() {
 
   // PRINT the board for player 2
   for (int i = 0; i < len2; ++i) {
-    string name = gm->getPlayer(2).getBoard().getCard(i)->getName();
-    string desc = gm->getPlayer(2).getBoard().getCard(i)->getDesc();
+    string name = gm->getPlayer(2).getBoard().getCard(i)->getDefaultMinionName();
+    string desc = gm->getPlayer(2).getBoard().getCard(i)->getDefaultMinionDesc();
     int cost = gm->getPlayer(2).getBoard().getCard(i)->getCost();
     int attack = gm->getPlayer(2).getBoard().getCard(i)->getAttack();
     int defense = gm->getPlayer(2).getBoard().getCard(i)->getDefense();
