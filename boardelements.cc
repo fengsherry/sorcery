@@ -11,7 +11,8 @@ Deck::Deck() {
 
 Deck::~Deck() {}
 
-void Deck::init(ifstream& file, Player* p) {
+void Deck::init(ifstream& file, Player* p, bool random) {
+    this->random = random;
     string cardName;
     while (getline(file, cardName) && cardName != "") {
 
@@ -27,7 +28,13 @@ void Deck::TEST_printDeck() {
 }
 
 CardPtr Deck::drawCard() {
-    CardPtr card = theDeck.back();
+    CardPtr card;
+    if (random) {
+        cout << "random!" << endl;
+        int randomNumber = std::rand() % theDeck.size() + 1;
+        cout << randomNumber << endl;
+        card = theDeck[randomNumber];
+    } else card = theDeck.back();
     theDeck.pop_back();
     return card;
 }

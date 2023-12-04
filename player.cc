@@ -11,10 +11,11 @@ Player::Player() {}
 
 Player::~Player() {}
 
-void Player::init(string name, int id, ifstream& deckIn, vector<TriggeredAbility*>* boardObservers) {
+void Player::init(string name, int id, ifstream& deckIn, vector<TriggeredAbility*>* boardObservers, bool testing) {
     this->name = name;
     this->id = id;
-    deck.init(deckIn, this);
+    this->testing = testing;
+    deck.init(deckIn, this, !testing); // if testing is on, set random field to false
     hand.init(deck);
     board.init(boardObservers);
 }
@@ -108,9 +109,9 @@ TriggeredAbility* Player::play(int i, Player& nonActivePlayer) {
     
     // check if player has enough magic to play the card
     int cost = cardToPlay->getCost();
-    if (cost > magic) throw not_enough_magic(*this); // why *this not this
-
-    magic -= cost;
+    if (!testing && cost > magic) throw not_enough_magic(*this); // why *this not this
+    else if (testing && cost > magic) magic = 0;
+    else magic -= cost;
 
     if (MinionPtr minionToPlay = dynamic_pointer_cast<Minion>(cardToPlay)) { // false if cardToPlay is not Minion* type
         board.addCard(minionToPlay);
@@ -147,9 +148,9 @@ void Player::play(int i, int j, Player& p) {
 
     // check if player has enough magic to play the card
     int cost = cardToPlay->getCost();
-    if (cost > magic) throw not_enough_magic(*this);
-
-    magic -= cost;
+    if (!testing && cost > magic) throw not_enough_magic(*this); // why *this not this
+    else if (testing && cost > magic) magic = 0;
+    else magic -= cost;
     
     if (EnchantmentPtr enchantToPlay = dynamic_pointer_cast<Enchantment>(cardToPlay)) { // enchantment
         if (MinionPtr targetMinion = dynamic_pointer_cast<Minion>(targetCard)) {         
@@ -174,8 +175,9 @@ void Player::useAbility(int i, Player& nonActivePlayer) {
         if (minionToUse->getAction() == 0) throw not_enough_action{*this}; 
         // check if player has enough magic to play the card
         int cost = aaToUse->getActivationCost();
-        if (cost > magic) throw not_enough_magic(*this);
-        magic -= cost;
+        if (!testing && cost > magic) throw not_enough_magic(*this); // why *this not this
+        else if (testing && cost > magic) magic = 0;
+        else magic -= cost;
 
         // use the ability
         aaToUse->applyAbility(*this, nonActivePlayer);
@@ -198,8 +200,9 @@ void Player::useAbility(int i, int j, Player &p) {
         if (minionToUse->getAction() == 0) throw not_enough_action{*this}; 
         // check if player has enough magic to play the card
         int cost = aaToUse->getActivationCost();
-        if (cost > magic) throw not_enough_magic(*this);
-        magic -= cost;
+        if (!testing && cost > magic) throw not_enough_magic(*this); // why *this not this
+        else if (testing && cost > magic) magic = 0;
+        else magic -= cost;
 
         // use the ability
         aaToUse->applyAbility(p, *this, j);

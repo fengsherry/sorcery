@@ -4,6 +4,7 @@
 #include <sstream>
 #include <vector>
 #include <stdexcept>
+#include <cstdlib>
 #include "exceptions.h"
 #include "gamecontroller.h"
 #include "ascii_graphics.h"
@@ -93,7 +94,7 @@ void GameController::go(int argc, char *argv[]) {
         deck2Flag = true; deck2File = argv[i + 1];
         testCmdArg("deck2", deck2File);
     }
-    if (findIndex(argc, argv, "-init", i)) { // NOT IMPLEMENTED YET // NOT IMPLEMENTED YET
+    if (findIndex(argc, argv, "-init", i)) { 
         initFlag = true; initFile = argv[i + 1];
         testCmdArg("init", initFile);
     }
@@ -123,12 +124,13 @@ void GameController::go(int argc, char *argv[]) {
 
     // initialize Players, their Decks, and their Hands
     notifyDisplays("Please enter player names.", 0);
-    gm.initPlayers(in1, in2);
+    gm.initPlayers(in1, in2, testingFlag); 
 
     if (graphicsFlag) displays[1]->displaySorceryBoard();
     
     string cmds, cmd; // cmds is a line, cmd is the first "word" in that line
     int arg1, arg2, arg3;
+    srand(static_cast<unsigned>(time(0)));
     gm.startTurn();
     string activePlayerName = gm.getActivePlayer().getName();
     string nonactivePlayerName = gm.getNonactivePlayer().getName();
@@ -170,7 +172,7 @@ void GameController::go(int argc, char *argv[]) {
                 // cout << "Player " << gm.getTurn() << ": " << activePlayerName << "  It's your turn!" << endl;
             } else if (cmd == "quit") {
                 break;
-            } else if (cmd == "draw") {
+            } else if (testingFlag && cmd == "draw") {
                 try {
                     CardPtr drawnCard = gm.getActivePlayer().drawCard();
                     notifyDisplays("Player " + to_string(gm.getTurn()) + ": " + activePlayerName + "  drew a " + drawnCard->getName(), gm.getActivePlayer().getId());
@@ -180,7 +182,7 @@ void GameController::go(int argc, char *argv[]) {
                 catch (full_hand &e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); }
                 catch (deck_empty &e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); }
                 
-            } else if (cmd == "discard") { // only available in -testing mode; how to handle this?
+            } else if (testingFlag && cmd == "discard") { // only available in -testing mode; how to handle this?
                 int i;
                 if (testingFlag && (iss >> i)) {
                     gm.getActivePlayer().getHand().removeCard(i-1);

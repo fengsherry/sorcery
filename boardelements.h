@@ -19,13 +19,14 @@ using namespace std;
 // collection of cards from which players draw cards into their Hand
 class Deck {
     vector<CardPtr> theDeck;
+    bool random;
     //vector<string*> theDeck;
 
  public:
     Deck();
     ~Deck();
 
-    void init(ifstream& file, Player* p);
+    void init(ifstream& file, Player* p, bool random);
     void shuffle();
     CardPtr drawCard();
     size_t getSize();
