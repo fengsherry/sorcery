@@ -16,8 +16,8 @@ void GameMaster::initPlayers(ifstream& deck1In, ifstream& deck2In) {
     getline(cin, p1name); 
     getline(cin, p2name); 
 
-    p1.init(p1name, 1, deck1In);
-    p2.init(p2name, 2, deck2In);
+    p1.init(p1name, 1, deck1In, &boardObservers);
+    p2.init(p2name, 2, deck2In, &boardObservers);
 
     activePlayer = &p1;
     nonactivePlayer = &p2;
@@ -35,7 +35,7 @@ void GameMaster::initPlayers(ifstream& deck1In, ifstream& deck2In) {
 }
 
 void GameMaster::attach(TriggeredAbility* observer) {
-    observers.emplace_back(observer);
+    gameObservers.emplace_back(observer);
 }
 
 // // SET DECKS, initialize Decks
@@ -68,7 +68,7 @@ void GameMaster::endTurn() {
     if (turn > numPlayers) {
         turn = 1;
     }
-    // notify end of turn observers
+    this->notifyEndTurnObservers();
     swap(activePlayer, nonactivePlayer);
 }
 
@@ -118,13 +118,14 @@ void discard();
 // play without target
 void GameMaster::play(int i) {
     TriggeredAbility* ta = activePlayer->play(i, *nonactivePlayer); // may throw exception
-    if (ta) this->attach(ta);
+    if (ta) { this->attach(ta);
+        if (ta->getType() == TriggerType::StartTurn || ta->getType() == TriggerType::EndTurn) this->attach(ta);
+        else activePlayer->getBoard().attach(ta);
+    } 
 
     activePlayer->getHand().removeCard(i);
 
-    activePlayer->TEST_printPlayerHand();
     activePlayer->TEST_printPlayerBoard();
-    activePlayer->TEST_printPlayerRitual();
 }
 
 // play with target
@@ -132,7 +133,6 @@ void GameMaster::play(int i, int j, Player& targetPlayer) {
     activePlayer->play(i, j, targetPlayer);
     activePlayer->getHand().removeCard(i);
 
-    activePlayer->TEST_printPlayerHand();
     activePlayer->TEST_printPlayerBoard();
 }
 
@@ -152,8 +152,30 @@ void GameMaster::useAbility(int i, int j, Player& targetPlayer) {
 
 
 void GameMaster::notifyStartTurnObservers() {
-    for (auto o : observers) {
-        if (o->getType() == TriggerType::StartTurn) o->applyAbility(activePlayer);
+    for (auto o = gameObservers.begin(); o != gameObservers.end();) {
+        try {
+            if ((*o)->getType() == TriggerType::StartTurn) {
+                (*o)->setTargetPlayer(activePlayer);
+                (*o)->applyAbility();   
+            }
+            o++;
+        } catch (not_enough_charge& e) {
+            gameObservers.erase(o);
+        }
+    }
+}
+
+void GameMaster::notifyEndTurnObservers() {
+    for (auto o = gameObservers.begin(); o != gameObservers.end();) {
+        try {
+            if ((*o)->getType() == TriggerType::EndTurn) {
+                (*o)->setTargetPlayer(activePlayer);
+                (*o)->applyAbility();   
+            }
+            o++;
+        } catch (not_enough_charge& e) {
+            gameObservers.erase(o);
+        }
     }
 }
 

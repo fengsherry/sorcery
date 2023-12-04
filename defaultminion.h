@@ -18,11 +18,8 @@ class DefaultMinion : public Minion {
     int attack, defense;
     int action = 0;
     variant<ActivatedAbility*, TriggeredAbility*, monostate> ability;
-    // ActivatedAbility* aa;
-    // TriggeredAbility* ta;
 
  public:
-    // without ability for now
     DefaultMinion(CardName cardName, int cost, int attack, int defense,
                     variant<ActivatedAbility*, TriggeredAbility*, monostate> ability,
                     string desc = ""); // optional parameter is last
@@ -31,9 +28,11 @@ class DefaultMinion : public Minion {
     string getDefaultMinionDesc() const override;
     // const Minion* getDefaultMinion() const override;
     
+    Minion* getDefaultMinion() override;
     int getAttack() const override;
     int getDefense() const override;
     int getAction() const override;
+    void setTrigOwnerMinion(MinionPtr m);
     variant<ActivatedAbility*, TriggeredAbility*, monostate> getAbility();
 
     void setAction(int n);

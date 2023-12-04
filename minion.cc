@@ -1,6 +1,7 @@
 #include "minion.h"
 #include "defaultminion.h"
 #include "enchantmentdec.h"
+#include "boardelements.h"
 #include <string>
 using namespace std;
 
@@ -20,6 +21,25 @@ string Minion::getDesc() const { return desc; }
 //     action = n;
 // }
 
+void NoDeleter::operator()(Minion*) const {}
+
+void Minion::destroy() {
+    int i = board->find(MinionPtr(this, NoDeleter{})); 
+    board->destroyMinion(i);
+}
+
+void Minion::modifyDefence(int n) {
+    int i = board->find(MinionPtr(this, NoDeleter{}));
+    board->enchantMinion(i, "Modify Defense", n);
+}
+
+void Minion::modifyAttack(int n) {
+    int i = board->find(MinionPtr(this, NoDeleter{}));
+    board->enchantMinion(i, "Modify Attack", n);
+}
+
+void Minion::setBoard(Board* b) {board = b;}
+
 bool Minion::isDead() {
     return getDefense() <= 0;
 }
@@ -34,13 +54,12 @@ void Minion::TEST_printInspectMinion() {
     }
 }
 
-std::ostream& operator<<(std::ostream& out, MinionPtr m) {
-    if (DefaultMinionPtr dm = dynamic_pointer_cast<DefaultMinion>(m)) {
+std::ostream& operator<<(std::ostream& out, const MinionPtr m) {
+    if (const auto dm = dynamic_pointer_cast<const DefaultMinion>(m)) {
         out << dm->getDefaultMinionName();
-    } else if (EnchantmentDecPtr ed = dynamic_pointer_cast<EnchantmentDec>(m)) {
+    } else if (const auto ed = dynamic_pointer_cast<const EnchantmentDec>(m)) {
         out << ed->getDefaultMinionName();
     }
     
     return out;
 }
-

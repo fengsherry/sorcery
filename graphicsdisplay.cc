@@ -120,16 +120,16 @@ void GraphicsDisplay::wrapString(int x, int y, size_t chars, vector<string> msg)
 void GraphicsDisplay::displayCard(int x, int y, int width, int height, MinionPtr m) {
     displayCardBlank(x, y, width, height); 
     displayCardMinionBase(x, y, width, height, m); 
-
+    // cout << m->getAbility().
     // if activated ability: cost, then left align
     if (holds_alternative<ActivatedAbility*>(m->getAbility())) {
-        // cout << "hi" << endl;
+        // cout << "activatedability" << endl;
         ActivatedAbility* aa = get<ActivatedAbility*>(m->getAbility());
         w->drawString(x+8,y+55,to_string(aa->getActivationCost()));
-        wrapString(x+31, y+55, 17, m->getDefaultMinionDesc());
+        wrapString(x+20, y+55, 17, m->getDefaultMinionDesc());
     }
     
-    else wrapString(x+8, y+55, 22, m->getDefaultMinionDesc());
+    else wrapString(x+20, y+55, 22, m->getDefaultMinionDesc());
 
 }
 
@@ -180,8 +180,8 @@ void GraphicsDisplay::displayCard(int x, int y, int width, int height, Enchantme
     if (e->getCardName() == CardName::GiantStrength) {attack = "+2"; defense = "+2";}
     else if (e->getCardName() == CardName::Enrage) {attack = "*2"; defense = "*2";}
 
-    cout << "hi2" << endl;
-    cout << "x: " << x << " y: " << y << endl;
+    // cout << "hi2" << endl;
+    // cout << "x: " << x << " y: " << y << endl;
     displayCardBlank(x, y, width, height);
     displayCardBase(x, y, width, height, e);
     w->drawString(x+8, y+85, attack); // attack modifer 
@@ -237,6 +237,7 @@ void GraphicsDisplay::displayHand(int p) {
             } else if (SpellPtr sptr = dynamic_pointer_cast<Spell>(c)) {
                 displayCard(x, y, hand_cardwidth, hand_cardheight, sptr);
             } else if (MinionPtr mptr = dynamic_pointer_cast<Minion>(c)) {
+                // cout << " isee a minion ptr" << c->getName() << endl;
                 displayCard(x, y, hand_cardwidth, hand_cardheight, mptr);
             } else if (RitualPtr rptr = dynamic_pointer_cast<Ritual>(c)) {
                 displayCard(x, y, hand_cardwidth, hand_cardheight, rptr);

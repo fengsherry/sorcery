@@ -24,12 +24,12 @@ class Player {
     RitualPtr ritual; // set to nullptr if something breaks maybe
  
  public:
-    Player(); // default ctor to be called when GameMaster is initialized
-    // Player(string name, int id);
-    ~Player();
+        Player(); // default ctor to be called when GameMaster is initialized
+        // Player(string name, int id);
+        ~Player();
 
         // void init(string name, int id);
-        void init(string name, int id, ifstream& deckIn);
+        void init(string name, int id, ifstream& deckIn, vector<TriggeredAbility*>* boardObservers);
 
         string getName() const;
         int getId() const;
@@ -38,6 +38,7 @@ class Player {
         Hand& getHand();
         size_t getHandSize();
         Board& getBoard();
+        bool onBoard(MinionPtr m);
         RitualPtr getRitual();
         Graveyard& getGrave();
 

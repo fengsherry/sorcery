@@ -16,11 +16,13 @@ string EnchantmentDec::getDefaultMinionDesc() const { return next->getDefaultMin
 
 // const Minion* EnchantmentDec::getDefaultMinion() const { return next->getDefaultMinion(); }
 
+Minion* EnchantmentDec::getDefaultMinion() { return next->getDefaultMinion(); }
+
+MinionPtr EnchantmentDec::getNext() { return next; }
+
 variant<ActivatedAbility*, TriggeredAbility*, monostate> EnchantmentDec::getAbility() {
     return next->getAbility();
 }
-
-MinionPtr EnchantmentDec::getNext() { return next; }
 
 void EnchantmentDec::setNext(MinionPtr newnext) { next = newnext; }
 
