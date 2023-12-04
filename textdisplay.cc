@@ -226,7 +226,7 @@ void TextDisplay::displayHand(int p) {
   printCardRow(toPrint);
 }
 
-
+// returns a vector of card_templates that has the default minion in the first position and the rest of the enchantments after in the vector
 vector<card_template_t> &addEnchantmentPrint(const MinionPtr m, vector<card_template_t> &toPrint) {
   if (DefaultMinionPtr dm = dynamic_pointer_cast<DefaultMinion>(m)) {
     toPrint.insert(toPrint.begin(), display_minion_no_ability(m->getName(), m->getCost(), m->getAttack(), m->getDefense()));
@@ -297,7 +297,7 @@ void TextDisplay::displaySorceryBoard() {
 
       auto a = gm->getPlayer(1).getBoard().getCard(i)->getAbility();
       int ability_cost = get<ActivatedAbility*>(a)->getActivationCost();
-      
+
       toPrint.emplace_back(display_minion_activated_ability(name, cost, attack, defense, ability_cost, desc));
 
     // if triggered ability, use the template
@@ -308,9 +308,12 @@ void TextDisplay::displaySorceryBoard() {
       toPrint.emplace_back(display_minion_no_ability(name, cost, attack, defense));
     }
   }
+
+  //print empty cards on the board
   for (int i = len1; i < 5; ++i) {
     toPrint.emplace_back(CARD_TEMPLATE_BORDER);
   }
+
   printCardRowWithBorder(toPrint);
   toPrint.clear();
 
@@ -339,9 +342,12 @@ void TextDisplay::displaySorceryBoard() {
       toPrint.emplace_back(display_minion_no_ability(name, cost, attack, defense));
     }
   }
-  for (int i = len1; i < 5; ++i) {
+
+  //print empty cards on the board
+  for (int i = len2; i < 5; ++i) {
     toPrint.emplace_back(CARD_TEMPLATE_BORDER);
   }
+
   printCardRowWithBorder(toPrint);
   toPrint.clear();
 
