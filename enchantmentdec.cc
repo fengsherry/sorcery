@@ -16,7 +16,7 @@ string EnchantmentDec::getDefaultMinionDesc() const { return next->getDefaultMin
 
 // const Minion* EnchantmentDec::getDefaultMinion() const { return next->getDefaultMinion(); }
 
-Minion* EnchantmentDec::getDefaultMinion() { return next->getDefaultMinion(); }
+//MinionPtr EnchantmentDec::getDefaultMinion() { return next->getDefaultMinion(); }
 
 MinionPtr EnchantmentDec::getNext() { return next; }
 

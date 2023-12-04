@@ -28,7 +28,7 @@ class Minion: public Card {
     string getDesc() const override;
     virtual string getDefaultMinionName() const = 0;
     virtual string getDefaultMinionDesc() const = 0;
-    // virtual const Minion* getDefaultMinion() const = 0;
+    //virtual const Minion* getDefaultMinion() const = 0;
     virtual Minion* getDefaultMinion() = 0;
     virtual int getAttack() const = 0;
     virtual int getDefense() const = 0;

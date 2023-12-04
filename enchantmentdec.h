@@ -17,11 +17,11 @@ class EnchantmentDec : public Minion {
         void setAction(int n);
         bool isHidden();
         
-        string getDefaultMinionName() const override;
-        string getDefaultMinionDesc() const override;
+        string getDefaultMinionName() const;
+        //string getDefaultMinionDesc() const override;
         // const Minion* getDefaultMinion() const override;
         variant<ActivatedAbility*, TriggeredAbility*, monostate> getAbility();
-        string getDefaultMinionName() const ;
+        //string getDefaultMinionName() const;
         Minion* getDefaultMinion() override;
         MinionPtr getNext();
         void setNext(MinionPtr newnext);
