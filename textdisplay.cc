@@ -77,22 +77,22 @@ void TextDisplay::printPlayerBoardRow(int p) {
   vector<card_template_t> toPrint;
   
   // Print the ritual card
-  // string player1_name = gm->getPlayer(1).getRitual()->getName();
-  // int player1_cost = gm->getPlayer(1).getRitual()->getCost();
-  // int player1_ritual_cost = gm->getPlayer(1).getRitual()->getActivationCost();
-  // string player1_ritual_desc = gm->getPlayer(1).getRitual()->getDesc();
-  // int player1_ritual_charges = gm->getPlayer(1).getRitual()->getCharge();
+  string player_r_name = gm->getPlayer(p).getRitual()->getName();
+  int player_r_cost = gm->getPlayer(p).getRitual()->getCost();
+  int player_ritual_cost = gm->getPlayer(p).getRitual()->getActivationCost();
+  string player_ritual_desc = gm->getPlayer(p).getRitual()->getDesc();
+  int player_ritual_charges = gm->getPlayer(p).getRitual()->getCharge();
 
-  // toPrint.emplace_back(display_ritual(player1_name, player1_cost, player1_ritual_cost, player1_ritual_desc, player1_ritual_charges));
-  // toPrint.emplace_back(CARD_TEMPLATE_EMPTY);
+  toPrint.emplace_back(display_ritual(player_r_name, player_r_cost, player_ritual_cost, player_ritual_desc, player_ritual_charges));
+  toPrint.emplace_back(CARD_TEMPLATE_EMPTY);
 
   // Print the name card
   string player_name = gm->getPlayer(p).getName();
   int player_life = gm->getPlayer(p).getLife();
   int player_mana = gm->getPlayer(p).getMagic();
-  toPrint.emplace_back(CARD_TEMPLATE_BORDER);
-  toPrint.emplace_back(CARD_TEMPLATE_EMPTY);
+
   toPrint.emplace_back(display_player_card(p, player_name, player_life, player_mana));
+  toPrint.emplace_back(CARD_TEMPLATE_EMPTY);
 
   // Print the graveyard card
   string grave_name = gm->getPlayer(p).getGrave().getGrave().top()->getName();
