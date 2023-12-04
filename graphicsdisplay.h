@@ -31,10 +31,14 @@ class GraphicsDisplay : public SorceryDisplay {
         vector<vector<int>> playerpsn = {{65+(165*2),43}, {65+(165*2),521}};
         vector<vector<int>> gravepsn = {{65+(165*4),43}, {65+(165*4),521}};
         vector<vector<int>> handpsn = {{1009,162}, {1009,162+98*1}, {1009,162+98*2}, {1009,162+98*3}, {1009,162+98*4}};
-        // vector<vector<int>> minionpsn = 
-        // {
-        //     {}, {},
-        // }
+        vector<vector<int>> minionpsn = 
+        {
+            {926, 162},                             // default minion
+            {926, 162+98*1}, {926+168, 162+98*1},    // enchantments
+            {926, 162+98*2}, {926+168, 162+98*2},
+            {926, 162+98*3}, {926+168, 162+98*3},
+            {926, 162+98*4}, {926+168, 162+98*4}
+        };
 
         /* Helpers: */ 
         void displayCardBlank(int x, int y, int width, int height); // blank card 
@@ -57,6 +61,7 @@ class GraphicsDisplay : public SorceryDisplay {
 
         // enchantment
         void displayCard(int x, int y, int width, int height, EnchantmentPtr e);
+        void displayCard(int x, int y, int width, int height, EnchantmentDecPtr e);
 
         // spell
         void displayCard(int x, int y, int width, int height, SpellPtr s);
