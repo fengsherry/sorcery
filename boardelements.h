@@ -69,14 +69,11 @@ class Board {
         bool contains(MinionPtr m);
         void TEST_printBoard();
     
-
         // observer pattern methods
         void attach(TriggeredAbility* o);
         void detach(TriggeredAbility* o);
         void notifyMinionEnterObservers(MinionPtr targetMinion);
-        void notifyMinionLeaveObservers(MinionPtr targetMinion);
-        
-
+        void notifyMinionLeaveObservers(MinionPtr targetMinion);    
 };
 
 // collection of dead Minions
