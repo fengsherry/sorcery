@@ -29,6 +29,7 @@ class GameMaster {
 
         // observer pattern methods
         void attach(TriggeredAbility* o);
+        void detach(TriggeredAbility* o);
         void notifyStartTurnObservers();
         void notifyEndTurnObservers();
         void notifyMinionEnterObservers(MinionPtr m);

@@ -134,10 +134,13 @@ void Board::addCard(MinionPtr m) {
     // attach board* to the minion
     m->setBoard(this);
 
+    // notify observers
+    notifyMinionEnterObservers(m);
+
+    // attach trigger to boardObservers
     auto a = m->getAbility();
     if (holds_alternative<TriggeredAbility*>(a) && (get<TriggeredAbility*>(a)->getType() == TriggerType::MinionEnter || get<TriggeredAbility*>(a)->getType() == TriggerType::MinionLeave)) attach(get<TriggeredAbility*>(a));
 
-    notifyMinionEnterObservers(m);
 }
 
 void Board::removeCard(int i) {
@@ -168,6 +171,7 @@ int Board::find(MinionPtr m) {
 
 
 void Board::enchantMinion(int i, string minionName, int modifyval) {
+    // EXCEPTION: check for i
     if (minionName == "Giant Strength") theBoard[i] = make_shared<GiantStrength>(theBoard[i]); 
     else if (minionName == "Enrage") theBoard[i] = make_shared<Enrage>(theBoard[i]);
     else if (minionName == "Haste") theBoard[i] = make_shared <Haste>(theBoard[i]);

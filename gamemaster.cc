@@ -34,8 +34,15 @@ void GameMaster::initPlayers(ifstream& deck1In, ifstream& deck2In) {
 
 }
 
-void GameMaster::attach(TriggeredAbility* observer) {
-    gameObservers.emplace_back(observer);
+void GameMaster::attach(TriggeredAbility* o) {
+    gameObservers.emplace_back(o);
+}
+
+void GameMaster::detach(TriggeredAbility* o) {
+    for (auto it = gameObservers.begin(); it != gameObservers.end();) {
+        if (*it == o) gameObservers.erase(it);
+        else ++it;
+    }
 }
 
 // // SET DECKS, initialize Decks
@@ -117,15 +124,20 @@ void discard();
 
 // play without target
 void GameMaster::play(int i) {
-    TriggeredAbility* ta = activePlayer->play(i, *nonactivePlayer); // may throw exception
-    if (ta) { this->attach(ta);
-        if (ta->getType() == TriggerType::StartTurn || ta->getType() == TriggerType::EndTurn) this->attach(ta);
-        else activePlayer->getBoard().attach(ta);
-    } 
+    try {
+        TriggeredAbility* ta = activePlayer->play(i, *nonactivePlayer); // may throw exception
+        if (ta) { this->attach(ta);
+            if (ta->getType() == TriggerType::StartTurn || ta->getType() == TriggerType::EndTurn) this->attach(ta);
+            else activePlayer->getBoard().attach(ta);
+        } 
+    } catch (detach_game_observer& e) {
+        play(i);
+    }
 
     activePlayer->getHand().removeCard(i);
 
     activePlayer->TEST_printPlayerBoard();
+
 }
 
 // play with target

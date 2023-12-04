@@ -1,8 +1,9 @@
--deck1 TESTtriggers -deck2 TESTtriggers
-apple 
-bob
-
+a
+b
+play 1
+play 2
 play 3
 end
-
-play 5
+play 1
+end
+play 1

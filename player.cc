@@ -92,6 +92,14 @@ CardPtr Player::drawCard() {
     return c;
 }
 
+void Player::removeTrigger(TriggeredAbility* ta) {
+    TriggerType tt = ta->getType();
+    if (tt == TriggerType::MinionEnter || tt == TriggerType::MinionLeave) board.detach(ta);
+    
+    else throw detach_game_observer(ta);
+}
+
+// without target
 TriggeredAbility* Player::play(int i, Player& nonActivePlayer) {
     CardPtr cardToPlay = hand.getCard(i);
 
@@ -113,7 +121,13 @@ TriggeredAbility* Player::play(int i, Player& nonActivePlayer) {
         RitualPtr ritualToPlay = dynamic_pointer_cast<Ritual>(cardToPlay);
         // cout << "this is not a minion" << endl;
 
-        // TODO: remove old ritual from observers
+        // remove old triggered ability if we are replacing a ritual
+        if (ritual) {
+            TriggeredAbility* ta = ritual->getAbility();
+            ritual = nullptr;
+            removeTrigger(ta);            
+        }
+
         ritual = ritualToPlay;
         return ritualToPlay->getAbility();
     } else if (cardToPlay->getType() == CardType::Spell) {
