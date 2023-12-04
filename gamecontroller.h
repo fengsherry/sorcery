@@ -24,6 +24,7 @@ class GameController {
     void notifyDisplays(MinionPtr m); // describe minion
     void notifyDisplays(int p); // hand
     void notifyDisplays(string msg, int p); // message
+    void notifyDisplays(vector<string> msg, int p); // mutiple messages
     void notifyDisplaysErr(string err, int p);
 
     public:
