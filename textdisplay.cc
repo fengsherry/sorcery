@@ -71,8 +71,9 @@ void printBottomBorder() {
   cout << EXTERNAL_BORDER_CHAR_BOTTOM_RIGHT << endl;
 }
 
+// print the top row for player each player, consists of:
+//  ritual card, blank, name card, blank, graveyard
 void TextDisplay::printPlayerBoardRow(int p) {
-  // print the top row for player 1
   vector<card_template_t> toPrint;
   
   // Print the ritual card
@@ -92,15 +93,15 @@ void TextDisplay::printPlayerBoardRow(int p) {
   toPrint.emplace_back(CARD_TEMPLATE_BORDER);
   toPrint.emplace_back(CARD_TEMPLATE_EMPTY);
   toPrint.emplace_back(display_player_card(p, player_name, player_life, player_mana));
-  toPrint.emplace_back(CARD_TEMPLATE_EMPTY);
-  toPrint.emplace_back(CARD_TEMPLATE_BORDER);
 
   // Print the graveyard card
-  // string grave_name = gm->getPlayer(p).getGrave().getGrave().top()->getName();
-  // int grave_cost = gm->getPlayer(p).getGrave().getGrave().top()->getCost();
-  // int grave_attack = gm->getPlayer(p).getGrave().getGrave().top()->getAttack();
-  // int grave_defense = gm->getPlayer(p).getGrave().getGrave().top()->getDefense();
-  // toPrint.emplace_back(display_minion_no_ability(grave_name, grave_cost, grave_attack, grave_defense));
+  string grave_name = gm->getPlayer(p).getGrave().getGrave().top()->getName();
+  int grave_cost = gm->getPlayer(p).getGrave().getGrave().top()->getCost();
+  int grave_attack = gm->getPlayer(p).getGrave().getGrave().top()->getAttack();
+  int grave_defense = gm->getPlayer(p).getGrave().getGrave().top()->getDefense();
+  toPrint.emplace_back(display_minion_no_ability(grave_name, grave_cost, grave_attack, grave_defense));
+  //toPrint.emplace_back(CARD_TEMPLATE_EMPTY);
+  toPrint.emplace_back(CARD_TEMPLATE_BORDER);
 
   printCardRowWithBorder(toPrint);
   toPrint.clear();
@@ -298,22 +299,20 @@ void TextDisplay::displaySorceryBoard() {
 
     // if activated ability, use the template
     if (holds_alternative<ActivatedAbility*>(gm->getPlayer(1).getBoard().getCard(i)->getAbility())) {
-
       auto a = gm->getPlayer(1).getBoard().getCard(i)->getAbility();
       int ability_cost = get<ActivatedAbility*>(a)->getActivationCost();
-
       toPrint.emplace_back(display_minion_activated_ability(name, cost, attack, defense, ability_cost, desc));
 
     // if triggered ability, use the template
     } else if (holds_alternative<TriggeredAbility*>(gm->getPlayer(1).getBoard().getCard(i)->getAbility())) {
       toPrint.emplace_back(display_minion_triggered_ability(name, cost, attack, defense, desc));
     
-    } else { // print the no ability minion
+    } else { // else, print the no ability minion
       toPrint.emplace_back(display_minion_no_ability(name, cost, attack, defense));
     }
   }
 
-  //print empty cards on the board
+  //print empty cards placenemtns on the board
   for (int i = len1; i < 5; ++i) {
     toPrint.emplace_back(CARD_TEMPLATE_BORDER);
   }
