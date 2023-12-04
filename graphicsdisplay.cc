@@ -22,26 +22,22 @@ GraphicsDisplay::~GraphicsDisplay() {
 
 }
 void GraphicsDisplay::displayMsg(vector<string> msg, int p) {
-    int colour; 
-    if (p == 1) colour = 2; 
-    else if (p == 2) colour = 4;
-    else colour = 1;
-    // int colour = (p == 1) ? 2 : 4;
-    // cout << "p: " << p << endl;
-    // cout << "colour: " << colour << endl;
+    int colour; // background colour matches active player's id
+    if (p == 1) colour = 2;  else if (p == 2) colour = 4; else colour = 1;
+    
     w->fillRectangle(913+2, 27+2, 351-4, 128-4, colour);
     w->fillRectangle(913+2+10, 27+2+10, 351-4-20, 128-4-20, 0);
     wrapString(932, 62, 50, msg);
 }
 
-void GraphicsDisplay::displayCardBlank(int x, int y) {
-    w->fillRectangle(x, y, cardwidth, cardheight, 1); // for border
-    w->fillRectangle(x+2, y+2, cardwidth-4, cardheight-4, 0); // actual 
+void GraphicsDisplay::displayCardBlank(int x, int y, int width, int height) {
+    w->fillRectangle(x, y, width, height, 1); // for border
+    w->fillRectangle(x+2, y+2, width-4, height-4, 0); // actual 
 }
 
 // player
-void GraphicsDisplay::displayCard(int x, int y, Player* p) {
-    displayCardBlank(x, y);
+void GraphicsDisplay::displayCard(int x, int y,  int width, int height, Player* p) {
+    displayCardBlank(x, y, width, height);
     if (p->getName() != "") {
         // cout << "p->getId: " << p->getId() << endl;
         w->drawString(playerpsn[p->getId()-1][0] + 75, playerpsn[p->getId()-1][1] + 42, p->getName());
@@ -50,9 +46,9 @@ void GraphicsDisplay::displayCard(int x, int y, Player* p) {
     } 
 }
 
-void GraphicsDisplay::displayCardBase(int x, int y, CardPtr c) {
-    w->fillRectangle(x, y+20, cardwidth, 2, 1); // first seperator
-    w->fillRectangle(x, y+40, cardwidth, 2, 1); // second seperator
+void GraphicsDisplay::displayCardBase(int x, int y, int width, int height, CardPtr c) {
+    w->fillRectangle(x, y+20, width, 2, 1); // first seperator
+    w->fillRectangle(x, y+40, width, 2, 1); // second seperator
 
     string name;
     if (MinionPtr m = dynamic_pointer_cast<Minion>(c)) name = m->getDefaultMinionName();
@@ -64,7 +60,7 @@ void GraphicsDisplay::displayCardBase(int x, int y, CardPtr c) {
 }
 
 // minion base
-void GraphicsDisplay::displayCardMinionBase(int x, int y, MinionPtr m) {
+void GraphicsDisplay::displayCardMinionBase(int x, int y, int width, int height, MinionPtr m) {
     // w->fillRectangle(x, y+20, 200, 2, 1); // first seperator
     // w->fillRectangle(x, y+40, 200, 2, 1); // second seperator
     // w->drawString(x+8, y+15, m->getName());
@@ -72,7 +68,7 @@ void GraphicsDisplay::displayCardMinionBase(int x, int y, MinionPtr m) {
 
     // w->drawString(x+120, y+35, cardTypeToString(m->getType()));
 
-    displayCardBase(x, y, m);
+    displayCardBase(x, y, width, height, m);
 
     w->drawString(x+8, y+113, to_string(m->getAttack())); // attack 
     w->drawString(x+143,y+113, to_string(m->getDefense())); // defense
@@ -120,9 +116,9 @@ void GraphicsDisplay::wrapString(int x, int y, size_t chars, vector<string> msg)
 }
 
 // minion
-void GraphicsDisplay::displayCard(int x, int y, MinionPtr m) {
-    displayCardBlank(x, y); 
-    displayCardMinionBase(x, y, m); 
+void GraphicsDisplay::displayCard(int x, int y, int width, int height, MinionPtr m) {
+    displayCardBlank(x, y, width, height); 
+    displayCardMinionBase(x, y, width, height, m); 
 
     // if activated ability: cost, then left align
     if (holds_alternative<ActivatedAbility*>(m->getAbility())) {
@@ -138,10 +134,10 @@ void GraphicsDisplay::displayCard(int x, int y, MinionPtr m) {
 }
 
 // ritual
-void GraphicsDisplay::displayCard(int x, int y, RitualPtr r) {
-    displayCardBlank(x, y);
+void GraphicsDisplay::displayCard(int x, int y, int width, int height, RitualPtr r) {
+    // displayCardBlank(x, y, width, height);
     if (!r) return;
-    displayCardBase(x, y, r);
+    displayCardBase(x, y, width, height, r);
 
     w->drawString(x+8,y+55,to_string(r->getCost())); // cost
     w->drawString(x+143,y+113, to_string(r->getCharge())); // charge
@@ -149,9 +145,19 @@ void GraphicsDisplay::displayCard(int x, int y, RitualPtr r) {
 }
 
 // graveyard
-void GraphicsDisplay::displayCard(int x, int y, Graveyard& g) {
-    if (g.isEmpty()) displayCardBlank(x, y);
-    else displayCard(x, y, g.getTop());
+void GraphicsDisplay::displayCard(int x, int y, int width, int height, Graveyard& g) {
+    if (g.isEmpty()) displayCardBlank(x, y, width, height);
+    else displayCard(x, y, width, height, g.getTop());
+}
+
+// enchantment
+void GraphicsDisplay::displayCard(int x, int y, int width, int height, EnchantmentPtr e) {
+
+}
+
+// spell
+void GraphicsDisplay::displayCard(int x, int y, int width, int height, SpellPtr s) {
+
 }
 
 void GraphicsDisplay::displaySorceryBoard(){
@@ -160,25 +166,43 @@ void GraphicsDisplay::displaySorceryBoard(){
         // cout << "p: " << p << endl;
         // board
         for (int i = 0; i < 5; ++i) {
-            if (i < gm->getPlayer(p+1).getBoard().size()) {
-                // print the actual minion, this is temporary
-                displayCard(cardpsn[p][i][0], cardpsn[p][i][1], gm->getPlayer(p+1).getBoard().getCard(i));
-            } else {
-                displayCardBlank(cardpsn[p][i][0], cardpsn[p][i][1]);
+            if (i < gm->getPlayer(p+1).getBoard().size()) { 
+                // print the actual minion
+                displayCard(cardpsn[p][i][0], cardpsn[p][i][1], cardwidth, cardheight, gm->getPlayer(p+1).getBoard().getCard(i));
+            } else { 
+                // print a blank card
+                displayCardBlank(cardpsn[p][i][0], cardpsn[p][i][1], cardwidth, cardheight);
             }
         }
         // ritual
-        displayCard(ritualpsn[p][0], ritualpsn[p][1], gm->getPlayer(p+1).getRitual());
+        if (gm->getPlayer(p+1).getRitual()) displayCard(ritualpsn[p][0], ritualpsn[p][1], cardwidth, cardheight, gm->getPlayer(p+1).getRitual());
+        else displayCardBlank(ritualpsn[p][0], ritualpsn[p][1], cardwidth, cardheight);
+        
         // graveyard
-        displayCard(gravepsn[p][0], gravepsn[p][1], gm->getPlayer(p+1).getGrave());
+        displayCard(gravepsn[p][0], gravepsn[p][1], cardwidth, cardheight, gm->getPlayer(p+1).getGrave());
         // player
-        displayCard(playerpsn[p][0], playerpsn[p][1], &gm->getPlayer(p+1));
+        displayCard(playerpsn[p][0], playerpsn[p][1], cardwidth, cardheight, &gm->getPlayer(p+1));
     }
 }
 
 void GraphicsDisplay::displayHand(int p) {
-    int colour = (p = 0) ? 2 : 4; // red if player 1, blue if player 2
+    int colour; // background colour matches player's id
+    if (p == 1) colour = 2;  else if (p == 2) colour = 4; else colour = 1;
+    // w->fillRectangle(913+2,155, 351-4, 504-2, colour);
 
+    for (int i = 0; i < 5; ++i) {
+        cout << "hi" << endl;
+        w->drawString(handpsn[i][0] - 20, handpsn[i][1] + hand_cardheight/2, to_string(i+1) + ": ");
+        if (i < gm->getPlayer(p+1).getBoard().size()) {
+            // print a real card
+            displayCardBlank(handpsn[i][0], handpsn[i][1], hand_cardwidth, hand_cardheight);
+            
+        } else {
+            // print a blank card
+            displayCardBlank(handpsn[i][0], handpsn[i][1], hand_cardwidth, hand_cardheight);
+
+        }
+    }
 
 
 }
