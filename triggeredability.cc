@@ -9,6 +9,8 @@ TriggeredAbility:: TriggeredAbility(TriggerType type, TriggerCardType cardType, 
 
 TriggerType TriggeredAbility::getType() {return type;}
 
+TriggerCardType TriggeredAbility::getCardType() {return cardType;}
+
 void TriggeredAbility::setOwnerMinion(MinionPtr m) {ownerMinion = m;}
 
 void TriggeredAbility::setTargetPlayer(Player* targetPlayer) {

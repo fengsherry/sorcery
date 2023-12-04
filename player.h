@@ -50,6 +50,7 @@ class Player {
         CardPtr drawCard();
         
         void destroyRitual();
+        void removeTrigger(TriggeredAbility* ta);
 
         // plays the ith card int he player's hand with no target (i.e. minions, rituals, spells)
         // throws exception if unsucessful 
