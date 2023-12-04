@@ -98,7 +98,6 @@ void TextDisplay::printPlayerBoardRow(int p) {
     string player_ritual_desc = gm->getPlayer(p).getRitual()->getDesc();
     int player_ritual_charges = gm->getPlayer(p).getRitual()->getCharge();
     toPrint.emplace_back(display_ritual(player_r_name, player_r_cost, player_ritual_cost, player_ritual_desc, player_ritual_charges));
-    toPrint.emplace_back(CARD_TEMPLATE_EMPTY);
   } else {
     toPrint.emplace_back(CARD_TEMPLATE_BORDER);
   }
@@ -347,8 +346,7 @@ void TextDisplay::displaySorceryBoard() {
 
       // if activated ability, use the template
     if (holds_alternative<ActivatedAbility*>(gm->getPlayer(2).getBoard().getCard(i)->getAbility())) {
-      auto a = gm->getPlayer(1).getBoard().getCard(i)->getAbility();
-      int ability_cost = get<ActivatedAbility*>(a)->getActivationCost();
+      int ability_cost = gm->getPlayer(2).getBoard().getCard(i)->getActivatedAbilityCost();
       toPrint.emplace_back(display_minion_activated_ability(name, cost, attack, defense, ability_cost, desc));
 
       // if triggered ability, use the template
