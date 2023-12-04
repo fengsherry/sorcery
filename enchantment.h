@@ -7,7 +7,18 @@
 using namespace std;
 
 class Enchantment: public Card {
+    CardType type = CardType::Enchantment;
+    bool needTarget = true;
+    string attackModifier;
+    string defenseModifier;
 
+    public:
+        // string getAttackModifier() const override;
+        // string getDefenseModifier() const override;
+        Enchantment(CardName cardName, int cost, string desc, string attackModifier = "", string defenseModifer = "");
+        ~Enchantment();
 };
+
+typedef shared_ptr<Enchantment> EnchantmentPtr;
 
 #endif

@@ -1,0 +1,11 @@
+a
+b
+play 4
+end
+play 5
+attack 1 1 1
+end
+board
+grave
+play 1
+grave

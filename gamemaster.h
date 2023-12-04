@@ -10,7 +10,14 @@ using namespace std;
 
 class GameMaster {
     Player p1, p2;
-    // vector<TriggeredAbility*> observers;
+    Deck d1, d2;
+    int turn = 1; // 1 for player 1's turn, 2 for player 2's turn
+    int numPlayers = 2;
+    bool graphicsFlag;
+    Player* activePlayer;
+    Player* nonactivePlayer;
+    vector<TriggeredAbility*> gameObservers;
+    vector<TriggeredAbility*> boardObservers;
     
     public:
         GameMaster(); 
@@ -20,22 +27,39 @@ class GameMaster {
         void initPlayers(ifstream& deck1In, ifstream& deck2In);
         // void initDecks(ifstream& deck1In, ifstream& deck2In);
 
+        // observer pattern methods
+        void attach(TriggeredAbility* o);
+        void detach(TriggeredAbility* o);
+        void notifyStartTurnObservers();
+        void notifyEndTurnObservers();
+        void notifyMinionEnterObservers(MinionPtr m);
+        void notifyMinionLeaveObservers(MinionPtr m);
+
         // methods correlating to commands recieved in main:
         void startTurn();
         void endTurn();
 
-        void attackMinion();
-        void attackPlayer();
+        void attackMinion(int i, int j); // returns true if successfully attacked, returns false otherwise
+        void attackPlayer(int i); // returns true if successfully attacked, returns false otherwise
         void activateAbility();
 
         void discard();
-        void play();
-        void notifyObservers();
+        void play(int i); // minions, rituals, spells with no targets
+        void play(int i, int j, Player& targetPlayer); // enchantments, spells with targets
+
+        void useAbility(int i); // activated ability
+        void useAbility(int i, int j, Player& targetPlayer); // activated ability
 
         // displays some visual
-        void describe();
-        void hand();
-        void board();
+        // void describe();
+        // void hand();
+        // void board();
+
+        // getters and setters
+        int getTurn();
+        Player& getPlayer(int i);
+        Player& getActivePlayer();
+        Player& getNonactivePlayer();
 };
 
 
