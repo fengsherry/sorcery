@@ -18,7 +18,7 @@ Deck::~Deck() {}
 //     else if (cardName == "Earth Elemental") card = new DefaultMinion(CardName::EarthElemental, 3, 4, 4, monostate{});
 //     // minions with abilities: REPLACE MONOSTATE WITH ACTUAL ABILITY OBJECT ONCE THEY'RE MADE
 //     else if (cardName == "Bone Golem") card = new DefaultMinion(CardName::BoneGolem, 2, 1, 3, monostate{}, "Gain +1/+1 whenever a minion leaves play.");
-//     else if (cardName == "Fire Elemental") card = new DefaultMinion(CardName::FireElemental, 2, 2, 2, monostate{}, "Whenever an opponent's minion enters play, deal 1 damage to it.");
+//     else if (cardName == "Fire Elemental") card = new DefaultMinion(CardName::FireElemental, 2, 2, 2, monostate{}, "When an opponent's minion enters play, deal 1 damage to it.");
 //     else if (cardName == "Potion Seller") card = new DefaultMinion(CardName::PotionSeller, 2, 1, 3, monostate{}, "At the end of your turn, all your minions gain +0/+1.");
 //     else if (cardName == "Novice Pyromancer") card = new DefaultMinion(CardName::NovicePyromancer, 1, 0, 1, monostate{}, "Deal 1 damage to target minion.");
 //     else if (cardName == "Apprentice Summoner") card = new DefaultMinion(CardName::ApprenticeSummoner, 1, 1, 1, monostate{}, "Summon a 1/1 air elemental.");

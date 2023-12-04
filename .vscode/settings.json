@@ -52,6 +52,7 @@
         "typeinfo": "cpp",
         "iostream": "cpp",
         "cwctype": "cpp",
-        "*.inc": "cpp"
+        "*.inc": "cpp",
+        "variant": "cpp"
     }
 }

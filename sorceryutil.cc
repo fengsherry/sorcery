@@ -56,6 +56,15 @@ string cardNameToString(CardName c) {
     }
 }
 
+string cardTypeToString(CardType t) {
+    switch (t) {
+        case CardType::Spell : return "Spell";
+        case CardType::Minion : return "Minion";
+        case CardType::Enchantment : return "Enchantment";
+        case CardType::Ritual : return "Ritual";
+    }
+}
+
 CardPtr createCard(string cardName, Player* p) {
     CardPtr card;
     /* Minions: */
@@ -68,7 +77,7 @@ CardPtr createCard(string cardName, Player* p) {
     else if (cardName == "Master Summoner") card = std::make_shared<DefaultMinion>(CardName::MasterSummoner, 3, 2, 3, new MasterSummonerAbility{}, "Summon up to three 1/1 air elementals.");
     // minions with triggered abilities: REPLACE MONOSTATE WITH ACTUAL ABILITY LATER
     else if (cardName == "Bone Golem") card = std::make_shared<DefaultMinion>(CardName::BoneGolem, 2, 1, 3, monostate{}, "Gain +1/+1 whenever a minion leaves play.");
-    else if (cardName == "Fire Elemental") card = std::make_shared<DefaultMinion>(CardName::FireElemental, 2, 2, 2, monostate{}, "Whenever an opponent's minion enters play, deal 1 damage to it.");
+    else if (cardName == "Fire Elemental") card = std::make_shared<DefaultMinion>(CardName::FireElemental, 2, 2, 2, monostate{}, "When an opponent's minion enters play, deal 1 damage to it.");
     else if (cardName == "Potion Seller") card = std::make_shared<DefaultMinion>(CardName::PotionSeller, 2, 1, 3, monostate{}, "At the end of your turn, all your minions gain +0/+1.");
     
     /* Enchantments: */
@@ -93,4 +102,3 @@ CardPtr createCard(string cardName, Player* p) {
     else return nullptr;
     return card;
 }
-

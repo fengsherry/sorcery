@@ -1,5 +1,4 @@
 // Public interface for Minion
-
 #ifndef __MINION_H__
 #define __MINION_H__
 #include <string>
@@ -17,13 +16,17 @@ class EnchantmentDec;
 class Minion: public Card {
     CardType type = CardType::Minion;
     bool needTarget = false;
+    string desc;
 
  public:
     Minion(CardName cardName, int cost, string desc = "");
     virtual ~Minion() = default;
 
-    // string getName() const override;
+    string getName() const override;
+    string getDesc() const override;
     virtual string getDefaultMinionName() const = 0;
+    virtual string getDefaultMinionDesc() const = 0;
+    // virtual const Minion* getDefaultMinion() const = 0;
     virtual int getAttack() const = 0;
     virtual int getDefense() const = 0;
     virtual int getAction() const = 0;
@@ -41,6 +44,6 @@ class Minion: public Card {
 };
 typedef std::shared_ptr<Minion> MinionPtr;
 
-std::ostream& operator<<(std::ostream& out, const Minion* m);
+std::ostream& operator<<(std::ostream& out, MinionPtr m);
 
 #endif

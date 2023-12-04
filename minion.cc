@@ -5,13 +5,15 @@
 using namespace std;
 
 Minion::Minion(CardName cardName, int cost, string desc): 
-    Card{cardName, cost, CardType::Minion, false, desc} {}
+    Card{cardName, cost, CardType::Minion, false, desc}, desc{desc} {}
 
 // void Minion::decreaseLife(int n) {
 
 // }
 
-// string Minion::getName() const { return getDefaultMinionName(); }
+string Minion::getName() const { return Card::getName(); }
+
+string Minion::getDesc() const { return desc; }
 
 // void Minion::decreaseDefense(int n) {}
 // void Minion::setAction(int n) {
@@ -32,10 +34,10 @@ void Minion::TEST_printInspectMinion() {
     }
 }
 
-std::ostream& operator<<(std::ostream& out, const Minion* m) {
-    if (const DefaultMinion* dm = dynamic_cast<const DefaultMinion*>(m)) {
+std::ostream& operator<<(std::ostream& out, MinionPtr m) {
+    if (DefaultMinionPtr dm = dynamic_pointer_cast<DefaultMinion>(m)) {
         out << dm->getDefaultMinionName();
-    } else if (const EnchantmentDec* ed = dynamic_cast<const EnchantmentDec*>(m)) {
+    } else if (EnchantmentDecPtr ed = dynamic_pointer_cast<EnchantmentDec>(m)) {
         out << ed->getDefaultMinionName();
     }
     

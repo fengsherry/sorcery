@@ -8,13 +8,19 @@ using namespace std;
 DefaultMinion::DefaultMinion(CardName cardName, int cost, int attack, int defense,
                                 variant<ActivatedAbility*, TriggeredAbility*, monostate> ability, string desc):
     Minion {cardName, cost, desc}, // Minion fields
-    cardName{cardName}, attack {attack}, defense {defense}, // DefaultMinion fields
+    cardName{cardName}, attack {attack}, defense {defense}, desc{desc}, // DefaultMinion fields
     ability{ability} // either Activated or TriggeredAbility
     {}
 
 string DefaultMinion::getDefaultMinionName() const {
     return cardNameToString(cardName);
 }
+
+string DefaultMinion::getDefaultMinionDesc() const {
+    return desc;
+}
+
+// const Minion* DefaultMinion::getDefaultMinion() const { return this; }
 
 int DefaultMinion::getAttack() const {
     return attack;
