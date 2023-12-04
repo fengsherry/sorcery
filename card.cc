@@ -66,13 +66,13 @@ Card::Card(CardName cardName, int cost, CardType type, bool needTarget, string d
 name{cardName}, cost{cost}, type{type}, needTarget{needTarget}, desc{desc} {}
 
 string Card::getName() const {
-    return cardNameToString(name);
+    return cardNameToString(getCardName());
 }
 string Card::getDesc() const {return desc;}
 
 CardType Card::getType() {return type;}
 
-CardName Card::getCardName() {return name;}
+CardName Card::getCardName() const {return name;}
 
 bool Card::getNeedTarget() {return needTarget;}
 

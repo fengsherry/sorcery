@@ -12,7 +12,7 @@ GameMaster::~GameMaster() {}
 void GameMaster::initPlayers(ifstream& deck1In, ifstream& deck2In) {
     // players:
     string p1name, p2name;
-    cout << "Please enter player names: " << endl;
+    // cout << "Please enter player names: " << endl;
     getline(cin, p1name); 
     getline(cin, p2name); 
 
@@ -22,6 +22,7 @@ void GameMaster::initPlayers(ifstream& deck1In, ifstream& deck2In) {
     activePlayer = &p1;
     nonactivePlayer = &p2;
 
+    // testing:
     cout << "Player " << p1.getId() << ": " << p1.getName() << "\n" << endl;
     cout << "Player " << p2.getId() << ": " << p2.getName() << "\n" << endl;
 

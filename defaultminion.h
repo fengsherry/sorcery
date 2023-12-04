@@ -14,6 +14,7 @@ using namespace std;
 
 class DefaultMinion : public Minion {
     CardName cardName;
+    string desc;
     int attack, defense;
     int action = 0;
     variant<ActivatedAbility*, TriggeredAbility*, monostate> ability;
@@ -24,6 +25,9 @@ class DefaultMinion : public Minion {
                     string desc = ""); // optional parameter is last
 
     string getDefaultMinionName() const override;
+    string getDefaultMinionDesc() const override;
+    // const Minion* getDefaultMinion() const override;
+    
     Minion* getDefaultMinion() override;
     int getAttack() const override;
     int getDefense() const override;

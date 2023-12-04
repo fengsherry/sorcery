@@ -1,0 +1,10 @@
+a
+b
+play 3
+play 2 1 1
+play 1 1 1
+end
+play 3
+attack 1 1
+end
+describe 1

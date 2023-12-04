@@ -13,7 +13,7 @@
 using namespace std;
 
 class Player {
-    string name = "DEFAULT PLAYER";
+    string name = "";
     int id = 0; // player 1 or 2
     int life = 20; // health points
     int magic = 3; // way to place cards on the board, etc
