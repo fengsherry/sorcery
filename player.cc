@@ -11,11 +11,12 @@ Player::Player() {}
 
 Player::~Player() {}
 
-void Player::init(string name, int id, ifstream& deckIn) {
+void Player::init(string name, int id, ifstream& deckIn, vector<TriggeredAbility*>* boardObservers) {
     this->name = name;
     this->id = id;
     deck.init(deckIn, this);
     hand.init(deck);
+    board.init(boardObservers);
 }
 
 void Player::TEST_printPlayerDeck() {
@@ -33,6 +34,12 @@ void Player::TEST_printPlayerHand() {
 void Player::TEST_printPlayerBoard() {
     cout << "Player " << id << " " << name << "'s Board: " << endl;
     board.TEST_printBoard();
+
+    TEST_printPlayerRitual();
+
+    TEST_printPlayerGrave();
+
+    TEST_printPlayerHand();
     cout << endl;
 }
 
@@ -97,13 +104,18 @@ TriggeredAbility* Player::play(int i, Player& nonActivePlayer) {
 
     magic -= cost;
 
-    if (cardToPlay->getType() == CardType::Minion) {
-        MinionPtr minionToPlay = dynamic_pointer_cast<Minion>(cardToPlay); // fails if cardToPlay is not MinionPtr type
+    if (MinionPtr minionToPlay = dynamic_pointer_cast<Minion>(cardToPlay)) { // false if cardToPlay is not Minion* type
         board.addCard(minionToPlay);
+        auto a = minionToPlay->getAbility();
+        if (holds_alternative<TriggeredAbility*>(a) && (get<TriggeredAbility*>(a)->getType() == TriggerType::StartTurn || get<TriggeredAbility*>(a)->getType() == TriggerType::EndTurn)) return(get<TriggeredAbility*>(a));
+
     } else if (cardToPlay->getType() == CardType::Ritual) {
         RitualPtr ritualToPlay = dynamic_pointer_cast<Ritual>(cardToPlay);
         // cout << "this is not a minion" << endl;
+
+        // TODO: remove old ritual from observers
         ritual = ritualToPlay;
+        return ritualToPlay->getAbility();
     } else if (cardToPlay->getType() == CardType::Spell) {
         SpellPtr spellToPlay = dynamic_pointer_cast<Spell>(cardToPlay);
         spellToPlay->applyAbility(*this, nonActivePlayer);
@@ -181,4 +193,8 @@ void Player::useAbility(int i, int j, Player &p) {
         throw invalid_play(minionToUse->getName() + " has no activated ability");
     }
 
+}
+
+bool Player::onBoard(MinionPtr m) {
+    return board.contains(m);
 }

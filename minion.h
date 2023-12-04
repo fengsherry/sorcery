@@ -13,10 +13,12 @@ using namespace std;
 
 class DefaultMinion;
 class EnchantmentDec;
+class Board;
 
 class Minion: public Card {
     CardType type = CardType::Minion;
     bool needTarget = false;
+    Board* board = nullptr;
 
  public:
     Minion(CardName cardName, int cost, string desc = "");
@@ -24,9 +26,15 @@ class Minion: public Card {
 
     // string getName() const override;
     virtual string getDefaultMinionName() const = 0;
+    virtual Minion* getDefaultMinion() = 0;
     virtual int getAttack() const = 0;
     virtual int getDefense() const = 0;
     virtual int getAction() const = 0;
+    void setBoard(Board* b);
+    void destroy();
+    void modifyAttack(int n);
+    void modifyDefence(int n);
+    // virtual Ability getAbility() = 0;
     virtual variant<ActivatedAbility*, TriggeredAbility*, monostate> getAbility() = 0;
 
     virtual void setAction(int n) = 0;
@@ -41,6 +49,12 @@ class Minion: public Card {
 };
 typedef std::shared_ptr<Minion> MinionPtr;
 
-std::ostream& operator<<(std::ostream& out, const Minion* m);
+std::ostream& operator<<(std::ostream& out, const MinionPtr m);
+
+
+// Custom deleter that does nothing (no deletion)
+struct NoDeleter {
+    void operator()(Minion*) const;
+};
 
 #endif

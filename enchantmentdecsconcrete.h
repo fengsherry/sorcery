@@ -80,7 +80,7 @@ class ModifyDefense : public EnchantmentDec {
 // doesn't work yet
 class ModifyAbility : public EnchantmentDec {
     public:
-        ModifyAbility(Minion* next, int ModifyDefenseVal);
+        ModifyAbility(MinionPtr next, int ModifyDefenseVal);
         int getAttack() const override;
         int getDefense() const override;
         int getAction() const override;
