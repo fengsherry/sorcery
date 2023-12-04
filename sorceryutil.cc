@@ -56,6 +56,15 @@ string cardNameToString(CardName c) {
     }
 }
 
+string cardTypeToString(CardType t) {
+    switch (t) {
+        case CardType::Spell : return "Spell";
+        case CardType::Minion : return "Minion";
+        case CardType::Enchantment : return "Enchantment";
+        case CardType::Ritual : return "Ritual";
+    }
+}
+
 CardPtr createCard(string cardName, Player* p) {
     CardPtr card;
     /* Minions: */
@@ -93,4 +102,3 @@ CardPtr createCard(string cardName, Player* p) {
     else return nullptr;
     return card;
 }
-

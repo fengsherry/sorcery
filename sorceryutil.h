@@ -8,6 +8,8 @@
 
 string cardNameToString(CardName c);
 
+string cardTypeToString(CardType t);
+
 CardPtr createCard(std::string cardName, Player* p);
 
 #endif

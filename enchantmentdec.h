@@ -18,6 +18,8 @@ class EnchantmentDec : public Minion {
         bool isHidden();
         
         string getDefaultMinionName() const override;
+        string getDefaultMinionDesc() const override;
+        // const Minion* getDefaultMinion() const override;
         variant<ActivatedAbility*, TriggeredAbility*, monostate> getAbility();
         MinionPtr getNext();
         void setNext(MinionPtr newnext);

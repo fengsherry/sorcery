@@ -33,10 +33,10 @@ class Card {
     virtual string getName() const;
     // virtual string getAttackModifier() const;
     // virtual string getDefenseModifier() const;
-    string getDesc() const;
+    virtual string getDesc() const;
     int getCost() const;
     CardType getType();
-    CardName getCardName();
+    CardName getCardName() const;
     bool getNeedTarget();
 
 };

@@ -111,7 +111,7 @@ TextDisplay::TextDisplay(GameMaster *_gm) : gm(_gm) {}
 
 TextDisplay::~TextDisplay() = default;
 
-void TextDisplay::displayMsg(string msg) {
+void TextDisplay::displayMsg(string msg, int p) {
     cout << msg << endl;
 }
 
