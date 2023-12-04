@@ -43,7 +43,6 @@ int MagicFatigue::getAttack() const { return next->getAttack(); }
 int MagicFatigue::getDefense() const { return next->getDefense(); }
 int MagicFatigue::getAction() const { return next->getAction(); }
 int MagicFatigue::getActivatedAbilityCost() const {
-    cout << "hi!!!" << endl;
     return 2 + next->getActivatedAbilityCost(); 
 }
 
