@@ -186,7 +186,7 @@ void GraphicsDisplay::displayCard(int x, int y, int width, int height, Enchantme
     displayCardBase(x, y, width, height, e);
     w->drawString(x+8, y+85, attack); // attack modifer 
     w->drawString(x+143,y+85, defense); // defense modifier
-    wrapString(x+8, y+55, 17, e->getDesc());
+    wrapString(x+8, y+55, 25, e->getDesc());
 }
 
 // spell
