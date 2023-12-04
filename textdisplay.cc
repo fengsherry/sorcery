@@ -111,8 +111,12 @@ TextDisplay::TextDisplay(GameMaster *_gm) : gm(_gm) {}
 
 TextDisplay::~TextDisplay() = default;
 
-void TextDisplay::displayMsg(string msg, int p) {
-    cout << msg << endl;
+void TextDisplay::displayMsg(vector<string> msg, int p) {
+  // cout << "hi" << endl;
+  for (string s : msg) {
+    cout << s << endl;
+  }
+  
 }
 
 // Print the hand of player number [p] to stdout

@@ -21,7 +21,7 @@ GraphicsDisplay::GraphicsDisplay(GameMaster *_gm) : gm{_gm} {
 GraphicsDisplay::~GraphicsDisplay() {
 
 }
-void GraphicsDisplay::displayMsg(string msg, int p) {
+void GraphicsDisplay::displayMsg(vector<string> msg, int p) {
     int colour; 
     if (p == 1) colour = 2; 
     else if (p == 2) colour = 4;
@@ -31,7 +31,7 @@ void GraphicsDisplay::displayMsg(string msg, int p) {
     // cout << "colour: " << colour << endl;
     w->fillRectangle(913+2, 27+2, 351-4, 128-4, colour);
     w->fillRectangle(913+2+10, 27+2+10, 351-4-20, 128-4-20, 0);
-    wrapString(932, 62, 40, msg);
+    wrapString(932, 62, 50, msg);
 }
 
 void GraphicsDisplay::displayCardBlank(int x, int y) {
@@ -78,9 +78,14 @@ void GraphicsDisplay::displayCardMinionBase(int x, int y, MinionPtr m) {
     w->drawString(x+143,y+113, to_string(m->getDefense())); // defense
 }
 
-// minion ability description
+// wrapper function
 void GraphicsDisplay::wrapString(int x, int y, size_t chars, string s) {
-    istringstream iss(s);
+    wrapString(x, y, chars, vector<string>{s});
+}
+
+// minion ability description
+void GraphicsDisplay::wrapString(int x, int y, size_t chars, vector<string> msg) {
+    // istringstream iss(s);
     // istringstream iss;
     // if (MinionPtr m = dynamic_pointer_cast<Minion>(c)) iss.str(m->getDefaultMinionDesc());
     // else iss.str(c->getDesc());
@@ -88,23 +93,30 @@ void GraphicsDisplay::wrapString(int x, int y, size_t chars, string s) {
     
     string word;
     int line = 0;
-    ostringstream oss;
-    while (iss >> word) {
-        // go to a new line
-        if ((oss.str() + word).length() >= chars) {
-            // cout << "oss.str(): " << oss.str() << endl;
-            w->drawString(x, y + line*12, oss.str());
-            ++line;
-            oss.str("");
-            oss << word << " "; 
+    
+    for (string s : msg) {
+        // cout << "hi"  << s << endl;
+        istringstream iss(s);
+        ostringstream oss;
+        while (iss >> word) {
+            // go to a new line
+            if ((oss.str() + word).length() >= chars) {
+                // cout << "oss.str(): " << oss.str() << endl;
+                w->drawString(x, y + line*12, oss.str());
+                ++line;
+                oss.str("");
+                oss << word << " "; 
+            }
+            // stay on this line
+            else {
+                // cout << "else" << endl;
+                oss << word << " ";
+            }
         }
-        // stay on this line
-        else {
-            // cout << "else" << endl;
-            oss << word << " ";
-        }
+        w->drawString(x, y + line*12, oss.str());
+        ++line;
     }
-    w->drawString(x, y + line*12, oss.str());
+    
 }
 
 // minion

@@ -31,6 +31,7 @@ class GraphicsDisplay : public SorceryDisplay {
   void displayCardBlank(int x, int y); // blank card 
   void displayCardBase(int x, int y, CardPtr c);
   void wrapString(int x, int y, size_t chars, string s); // c is space allowance for chars
+  void wrapString(int x, int y, size_t chars, vector<string> msg);
 
   // player
   void displayCard(int x, int y, Player* p); // player information
@@ -49,7 +50,8 @@ class GraphicsDisplay : public SorceryDisplay {
  public:
     GraphicsDisplay(GameMaster *_gm);
     ~GraphicsDisplay();
-    void displayMsg(string msg, int p = 0) override;
+    void displayMsg(string msg, int p = 0);
+    void displayMsg(vector<string> msg, int p = 0) override;
     void displaySorceryBoard() override;
     void displayHand(int p) override;
     void displayMinion(const MinionPtr m) override;

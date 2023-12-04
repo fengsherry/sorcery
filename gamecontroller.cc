@@ -48,7 +48,19 @@ void GameController::notifyDisplays(int p) {
 
 // message
 void GameController::notifyDisplays(string msg, int p) {
+    notifyDisplays(vector<string>{msg}, p);
+    // for (auto display : displays) {
+    //     cout << "HELLO" << endl;
+    //     vector<string> messages = {msg};
+    //     notifyDisplays(messages, p);
+    //     // display->displayMsg(msg, p);
+    // }
+}
+
+// multiple messages
+void GameController::notifyDisplays(vector<string> msg, int p) {
     for (auto display : displays) {
+        // cout << "hi2" << endl;
         display->displayMsg(msg, p);
     }
 }
@@ -113,7 +125,7 @@ void GameController::go(int argc, char *argv[]) {
     gm.initPlayers(in1, in2);
 
     // create a new textdisplay
-    displays.emplace_back(new TextDisplay{&gm});
+    // displays.emplace_back(new TextDisplay{&gm});
 
     //notifyDisplays();
 
@@ -129,8 +141,7 @@ void GameController::go(int argc, char *argv[]) {
             cin >> cmd;
 
             if (cin.eof()) return;
-            if (cmd == "help") { 
-                // call a method in text display to automatically print the help message
+            if (cmd == "help") {  // only shows in textdisplay
                 string helpmsg = 
                 "Commands: \n\thelp -- Display this message.\n"
                 "\tend -- End the current player\'s turn.\n"
@@ -143,7 +154,7 @@ void GameController::go(int argc, char *argv[]) {
                 "\thand -- Describe all cards in your hand.\n"
                 "\tboard -- Describe all cards on the board.";
 
-                displays[0]->displayMsg(helpmsg);
+                displays[0]->displayMsg(vector<string>{helpmsg});
 
             } else if (cmd == "end") {
                 gm.endTurn();
@@ -161,7 +172,10 @@ void GameController::go(int argc, char *argv[]) {
                     CardPtr drawnCard = gm.getActivePlayer().drawCard();
                     notifyDisplays("Player " + to_string(gm.getTurn()) + ": " + activePlayerName + "  drew a " + drawnCard->getName(), gm.getActivePlayer().getId());
                     // cout << "Player " << gm.getTurn() << ": " << activePlayerName << "  drew a " << drawnCard << endl;
-                } catch (invalid_play e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); }
+                } 
+                catch (invalid_play e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); }
+                catch (full_hand e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); }
+                catch (deck_empty e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); }
                 
             } else if (cmd == "discard") { // only available in -testing mode; how to handle this?
                 int i;
@@ -192,18 +206,27 @@ void GameController::go(int argc, char *argv[]) {
                         // output new states of minions
                         attackingMinion = gm.getActivePlayer().getBoard().getCard(arg-1);
                         victimMinion = gm.getNonactivePlayer().getBoard().getCard(arg2-1);
+                        string s = activePlayerName + "'s minion, " + attackingMinion->getDefaultMinionName() + " has attacked " +  nonactivePlayerName 
+                                    + "'s minion, " + victimMinion->getDefaultMinionName();
                         string s1, s2;
-                        if (attackingMinion->isDead()) s1 = attackingMinion->getDefaultMinionName() + " has died.";
-                        else s1 = attackingMinion->getDefaultMinionName() + "'s defense remaining: " + to_string(attackingMinion->getDefense());
-                        if (victimMinion->isDead()) s2 = victimMinion->getDefaultMinionName() + " has died.";
-                        else s1 = victimMinion->getDefaultMinionName() + "'s defense remaining: " + to_string(victimMinion->getDefense());
-                        notifyDisplays(s1 + "\n" +s2, gm.getActivePlayer().getId());
+                        if (attackingMinion->isDead()) {
+                            s1 = attackingMinion->getDefaultMinionName() + " has died.";
+                        } else {
+                            s1 = attackingMinion->getDefaultMinionName() + "'s defense remaining: " + to_string(attackingMinion->getDefense());
+                        }
+                        if (victimMinion->isDead()) {
+                            s2 = victimMinion->getDefaultMinionName() + " has died.";
+                        } else {
+                            s2 = victimMinion->getDefaultMinionName() + "'s defense remaining: " + to_string(victimMinion->getDefense());
+                        }
+                        vector<string> msg = {s, s1, s2};
+                        
+                        notifyDisplays(msg, gm.getActivePlayer().getId());
                     } catch (not_enough_action e) {
                         notifyDisplaysErr(e.what(), gm.getActivePlayer().getId());
                         // cout << e.what() << endl; // error message
                     }
-                    notifyDisplays(activePlayerName + "'s minion, " + attackingMinion->getDefaultMinionName() + " has attacked " +  nonactivePlayerName 
-                                    + "'s minion, " + victimMinion->getDefaultMinionName(), gm.getActivePlayer().getId());
+                    
 
                 } else {
                     // "attack i" - order minion i to attack the nonactive player
@@ -218,14 +241,19 @@ void GameController::go(int argc, char *argv[]) {
                         // perform attack
                         gm.attackPlayer(arg-1);
                         // output new states of players
-                        notifyDisplays(nonactivePlayerName + "'s life remaining: " + to_string(gm.getNonactivePlayer().getLife()), gm.getActivePlayer().getId());
+                        vector<string> msg;
+                        msg.emplace_back(activePlayerName + " has attacked " +  nonactivePlayerName + " with " + attackingMinion->getDefaultMinionName(), gm.getActivePlayer().getId());
+                        msg.emplace_back(nonactivePlayerName + "'s life remaining: " + to_string(gm.getNonactivePlayer().getLife()), gm.getActivePlayer().getId());
+                        // notifyDisplays(activePlayerName + " has attacked " +  nonactivePlayerName + " with " + attackingMinion->getDefaultMinionName(), gm.getActivePlayer().getId());
+                        // notifyDisplays(nonactivePlayerName + "'s life remaining: " + to_string(gm.getNonactivePlayer().getLife()), gm.getActivePlayer().getId());
                         // cout << nonactivePlayerName << "'s life remaining: " << gm.getNonactivePlayer().getLife() << endl;
                         // cout << endl;
+                        notifyDisplays(msg, gm.getActivePlayer().getId());
                     } catch (not_enough_action e) {
                         notifyDisplaysErr(e.what(), gm.getActivePlayer().getId());
                         // cout << e.what() << endl; // error message
                     }
-                    notifyDisplays(activePlayerName + " has attacked " +  nonactivePlayerName + " with " + attackingMinion->getDefaultMinionName(), gm.getActivePlayer().getId());
+                    
                 }
 
             } else if (cmd == "play") {
@@ -350,26 +378,26 @@ void GameController::go(int argc, char *argv[]) {
             } else if (cmd == "describe") {
                 int i;
                 cin >> i;
-                gm.getActivePlayer().getBoard().getCard(i-1)->TEST_printInspectMinion();
+                // gm.getActivePlayer().getBoard().getCard(i-1)->TEST_printInspectMinion();
                 notifyDisplays(gm.getActivePlayer().getBoard().getCard(i-1));
                 // td->displayMinion(gm.getActivePlayer().getBoard().getCard(i-1));
 
             } else if (cmd == "hand") {
-                gm.getActivePlayer().TEST_printPlayerHand();
+                // gm.getActivePlayer().TEST_printPlayerHand();
                 notifyDisplays(gm.getActivePlayer().getId());
 
             } else if (cmd == "board") {
-                gm.getActivePlayer().TEST_printPlayerBoard();
+                // gm.getActivePlayer().TEST_printPlayerBoard();
                 notifyDisplays();
 
             } else if (cmd == "grave") {
-                gm.getActivePlayer().TEST_printPlayerGrave();
+                // gm.getActivePlayer().TEST_printPlayerGrave();
 
             } else if (cmd != "") {
                 notifyDisplays("Not a valid command", gm.getActivePlayer().getId());
             } 
             // notifyDisplays();
-            displays[1]->displaySorceryBoard();
+            if (graphicsFlag) displays[1]->displaySorceryBoard();
         } catch(out_of_range e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); }
         
     }

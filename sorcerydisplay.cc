@@ -3,5 +3,5 @@
 using namespace std;
 
 void SorceryDisplay::displayErrMsg(string msg, int p) {
-    displayMsg("Error: " + msg, p);
+    displayMsg(vector<string>{"Error: " + msg}, p);
 }
