@@ -114,5 +114,13 @@ class ability_silenced : public std::exception {
         }
 };
 
+class detach_game_observer : public std::exception {
+    TriggeredAbility* ta;
+    public:
+        detach_game_observer(TriggeredAbility* ta ) : ta{ta} {}
+        string what () {
+            return "Removing a TriggeredAbility from gameObservers";
+        }
+};
 
 #endif

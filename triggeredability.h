@@ -26,7 +26,8 @@ class TriggeredAbility {
  public:
   TriggeredAbility(TriggerType type, TriggerCardType cardType, Player* owner, MinionPtr ownerMinion = nullptr);
   virtual void applyAbility(); 
-  virtual TriggerType getType();
+  TriggerType getType();
+  TriggerCardType getCardType();
   void setOwnerMinion(MinionPtr m);
   virtual void setTargetPlayer(Player* targetPlayer);
   virtual void setTargetMinion(MinionPtr targetMinion);
