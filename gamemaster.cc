@@ -33,7 +33,25 @@ void GameMaster::initPlayers(ifstream& deck1In, ifstream& deck2In) {
 
 }
 
+bool find(vector<TriggeredAbility*> v, TriggeredAbility* target) {
+    for (int i = 0; i < v.size(); i++) {
+        if (v[i] == target) return i;
+    }
+    return -1;
+}
+
+bool contains(vector<TriggeredAbility*> v, TriggeredAbility* target) {
+    return (find(v, target) >= 0);
+}
+
 void GameMaster::attach(TriggeredAbility* o) {
+    // bool isGameObserver = false;
+    // if (o->getType() == TriggerType::StartTurn || o->getType() == TriggerType::EndTurn) isGameObserver = true;
+    
+    // if (isGameObserver && !contains(gameObservers, o)) gameObservers.emplace_back(o);
+    // else if (!isGameObserver && !contains(boardObservers, o)) boardObservers.emplace_back(o);
+    
+    //if (!contains(gameObservers, o)) gameObservers.emplace_back(o);
     gameObservers.emplace_back(o);
 }
 
@@ -58,14 +76,13 @@ void GameMaster::detach(TriggeredAbility* o) {
 
 // starts a turn, switches active and nonactive players, notifies corresponding observers
 void GameMaster::startTurn() {
-    this->notifyStartTurnObservers();
     activePlayer->increaseMagic(1);
     try {
         if (activePlayer->getHandSize() < 5) activePlayer->drawCard();
     } catch (deck_empty e) {cout << e.what() << endl;}
     activePlayer->getBoard().restoreAction();
     activePlayer->getHand().restoreAction(); // can we combine these two
-    // notify
+    this->notifyStartTurnObservers();
 }
 
 // ends a turn, notifies corresponding observers
@@ -141,7 +158,11 @@ void GameMaster::play(int i) {
 
 // play with target
 void GameMaster::play(int i, int j, Player& targetPlayer) {
-    activePlayer->play(i, j, targetPlayer);
+    TriggeredAbility* ta = activePlayer->play(i, j, targetPlayer); // may throw exception
+    if (ta) { 
+        if (ta->getType() == TriggerType::StartTurn || ta->getType() == TriggerType::EndTurn) this->attach(ta);
+        else activePlayer->getBoard().attach(ta);
+    } 
     activePlayer->getHand().removeCard(i);
 
     activePlayer->TEST_printPlayerBoard();

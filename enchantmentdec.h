@@ -14,7 +14,8 @@ class EnchantmentDec : public Minion {
         EnchantmentDec(CardName cardName, int cost, string desc, MinionPtr next, bool hidden);
         virtual ~EnchantmentDec();
 
-        void setAction(int n);
+        void setAction(int n) override;
+        void modifyAction(int n) override;
         bool isHidden();
         
         variant<ActivatedAbility*, TriggeredAbility*, monostate> getAbility();
@@ -22,6 +23,8 @@ class EnchantmentDec : public Minion {
         Minion* getDefaultMinion() override;
         MinionPtr getNext();
         void setNext(MinionPtr newnext);
+        void setAbility(variant<ActivatedAbility*, TriggeredAbility*, monostate> a);
+
         // CardName getDefaultMinionName() override;
 };
 typedef std::shared_ptr<EnchantmentDec> EnchantmentDecPtr;

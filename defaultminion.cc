@@ -32,6 +32,16 @@ int DefaultMinion::getAction() const {
     return action;
 }
 
+
+void DefaultMinion::modifyAction(int n){
+    action += n;
+};
+
+
+void DefaultMinion::setAbility(variant<ActivatedAbility*, TriggeredAbility*, monostate> a) {
+    ability = a;
+}
+
 void DefaultMinion::setTrigOwnerMinion(MinionPtr m) {
     // maybe add exception check here
     get<TriggeredAbility*>(ability)->setOwnerMinion(m);

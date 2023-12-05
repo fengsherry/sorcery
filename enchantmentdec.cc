@@ -8,6 +8,12 @@ EnchantmentDec::~EnchantmentDec() { next.reset(); }
 
 void EnchantmentDec::setAction(int n) { next->setAction(n); }
 
+void EnchantmentDec::setAbility(variant<ActivatedAbility*, TriggeredAbility*, monostate> a) {
+    next->setAbility(a);
+}
+
+void EnchantmentDec::modifyAction(int n) { next->modifyAction(n); }
+
 bool EnchantmentDec::isHidden() { return hidden; }
 
 string EnchantmentDec::getDefaultMinionName() const { return next->getDefaultMinionName(); }

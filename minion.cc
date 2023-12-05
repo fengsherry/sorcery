@@ -19,7 +19,13 @@ Minion::Minion(CardName cardName, int cost, string desc):
 //     action = n;
 // }
 
-void NoDeleter::operator()(Minion*) const {}
+
+
+// Custom deleter that does nothing (no deletion)
+struct NoDeleter {
+    void operator()(Minion*) const {};
+};
+
 
 void Minion::destroy() {
     int i = board->find(MinionPtr(this, NoDeleter{})); 
@@ -35,6 +41,7 @@ void Minion::modifyAttack(int n) {
     int i = board->find(MinionPtr(this, NoDeleter{}));
     board->enchantMinion(i, "Modify Attack", n);
 }
+
 
 void Minion::setBoard(Board* b) {board = b;}
 

@@ -55,6 +55,7 @@ class Silence : public EnchantmentDec {
         //void setAction(int n);
 };
 
+/* Hidden Enchantments */
 class ModifyAttack : public EnchantmentDec {
     int ModifyAttackVal;
     public:

@@ -75,5 +75,11 @@ class PotionSellerAbility : public TriggeredAbility {
     void applyAbility();
 };
 
+class HasteAbility : public TriggeredAbility {
+  public:
+    HasteAbility(MinionPtr ownerMinion); 
+    void applyAbility();
+};
+
 #endif
 
