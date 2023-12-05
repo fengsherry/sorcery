@@ -29,7 +29,7 @@ class Player {
         ~Player();
 
         // void init(string name, int id);
-        void init(string name, int id, ifstream& deckIn, vector<TriggeredAbility*>* boardObservers);
+        void init(string name, int id, ifstream& deckIn, vector<TriggeredAbility*>* observers);
 
         string getName() const;
         int getId() const;

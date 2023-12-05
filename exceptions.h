@@ -106,13 +106,13 @@ class no_enchantments : public std::exception {
         }
 };
 
-class detach_game_observer : public std::exception {
-    TriggeredAbility* ta;
-    public:
-        detach_game_observer(TriggeredAbility* ta ) : ta{ta} {}
-        string what () {
-            return "Removing a TriggeredAbility from gameObservers";
-        }
-};
+// class detach_game_observer : public std::exception {
+//     TriggeredAbility* ta;
+//     public:
+//         detach_game_observer(TriggeredAbility* ta ) : ta{ta} {}
+//         string what () {
+//             return "Removing a TriggeredAbility from observers";
+//         }
+// };
 
 #endif

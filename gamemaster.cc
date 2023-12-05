@@ -16,8 +16,8 @@ void GameMaster::initPlayers(ifstream& deck1In, ifstream& deck2In) {
     getline(cin, p1name); 
     getline(cin, p2name); 
 
-    p1.init(p1name, 1, deck1In, &boardObservers);
-    p2.init(p2name, 2, deck2In, &boardObservers);
+    p1.init(p1name, 1, deck1In, &observers);
+    p2.init(p2name, 2, deck2In, &observers);
 
     activePlayer = &p1;
     nonactivePlayer = &p2;
@@ -48,16 +48,16 @@ void GameMaster::attach(TriggeredAbility* o) {
     // bool isGameObserver = false;
     // if (o->getType() == TriggerType::StartTurn || o->getType() == TriggerType::EndTurn) isGameObserver = true;
     
-    // if (isGameObserver && !contains(gameObservers, o)) gameObservers.emplace_back(o);
-    // else if (!isGameObserver && !contains(boardObservers, o)) boardObservers.emplace_back(o);
+    // if (isGameObserver && !contains(observers, o)) observers.emplace_back(o);
+    // else if (!isGameObserver && !contains(observers, o)) observers.emplace_back(o);
     
-    //if (!contains(gameObservers, o)) gameObservers.emplace_back(o);
-    gameObservers.emplace_back(o);
+    //if (!contains(observers, o)) observers.emplace_back(o);
+    observers.emplace_back(o);
 }
 
 void GameMaster::detach(TriggeredAbility* o) {
-    for (auto it = gameObservers.begin(); it != gameObservers.end();) {
-        if (*it == o) gameObservers.erase(it);
+    for (auto it = observers.begin(); it != observers.end();) {
+        if (*it == o) observers.erase(it);
         else ++it;
     }
 }
@@ -140,15 +140,16 @@ void discard();
 
 // play without target
 void GameMaster::play(int i) {
-    try {
-        TriggeredAbility* ta = activePlayer->play(i, *nonactivePlayer); // may throw exception
-        if (ta) { this->attach(ta);
-            if (ta->getType() == TriggerType::StartTurn || ta->getType() == TriggerType::EndTurn) this->attach(ta);
-            else activePlayer->getBoard().attach(ta);
-        } 
-    } catch (detach_game_observer& e) {
-        play(i);
-    }
+    // try {
+    TriggeredAbility* ta = activePlayer->play(i, *nonactivePlayer); // may throw exception
+    if (ta) this->attach(ta);
+        // if (ta) { 
+        //     if (ta->getType() == TriggerType::StartTurn || ta->getType() == TriggerType::EndTurn) this->attach(ta);
+        //     else activePlayer->getBoard().attach(ta);
+        // } 
+    // } catch (detach_game_observer& e) {
+    //     play(i);
+    // }
 
     activePlayer->getHand().removeCard(i);
 
@@ -159,10 +160,8 @@ void GameMaster::play(int i) {
 // play with target
 void GameMaster::play(int i, int j, Player& targetPlayer) {
     TriggeredAbility* ta = activePlayer->play(i, j, targetPlayer); // may throw exception
-    if (ta) { 
-        if (ta->getType() == TriggerType::StartTurn || ta->getType() == TriggerType::EndTurn) this->attach(ta);
-        else activePlayer->getBoard().attach(ta);
-    } 
+    if (ta) this->attach(ta);
+        
     activePlayer->getHand().removeCard(i);
 
     activePlayer->TEST_printPlayerBoard();
@@ -184,7 +183,7 @@ void GameMaster::useAbility(int i, int j, Player& targetPlayer) {
 
 
 void GameMaster::notifyStartTurnObservers() {
-    for (auto o = gameObservers.begin(); o != gameObservers.end();) {
+    for (auto o = observers.begin(); o != observers.end();) {
         try {
             if ((*o)->getType() == TriggerType::StartTurn) {
                 (*o)->setTargetPlayer(activePlayer);
@@ -192,13 +191,13 @@ void GameMaster::notifyStartTurnObservers() {
             }
             o++;
         } catch (not_enough_charge& e) {
-            gameObservers.erase(o);
+            observers.erase(o);
         }
     }
 }
 
 void GameMaster::notifyEndTurnObservers() {
-    for (auto o = gameObservers.begin(); o != gameObservers.end();) {
+    for (auto o = observers.begin(); o != observers.end();) {
         try {
             if ((*o)->getType() == TriggerType::EndTurn) {
                 (*o)->setTargetPlayer(activePlayer);
@@ -206,7 +205,7 @@ void GameMaster::notifyEndTurnObservers() {
             }
             o++;
         } catch (not_enough_charge& e) {
-            gameObservers.erase(o);
+            observers.erase(o);
         }
     }
 }

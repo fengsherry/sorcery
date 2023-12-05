@@ -16,8 +16,7 @@ class GameMaster {
     bool graphicsFlag;
     Player* activePlayer;
     Player* nonactivePlayer;
-    vector<TriggeredAbility*> gameObservers;
-    vector<TriggeredAbility*> boardObservers;
+    vector<TriggeredAbility*> observers;
     
     public:
         GameMaster(); 

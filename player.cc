@@ -11,12 +11,12 @@ Player::Player() {}
 
 Player::~Player() {}
 
-void Player::init(string name, int id, ifstream& deckIn, vector<TriggeredAbility*>* boardObservers) {
+void Player::init(string name, int id, ifstream& deckIn, vector<TriggeredAbility*>* observers) {
     this->name = name;
     this->id = id;
     deck.init(deckIn, this);
     hand.init(deck);
-    board.init(boardObservers);
+    board.init(observers);
 }
 
 void Player::TEST_printPlayerDeck() {
@@ -93,10 +93,11 @@ CardPtr Player::drawCard() {
 }
 
 void Player::removeTrigger(TriggeredAbility* ta) {
-    TriggerType tt = ta->getType();
-    if (tt == TriggerType::MinionEnter || tt == TriggerType::MinionLeave) board.detach(ta);
+    // TriggerType tt = ta->getType();
+    // if (tt == TriggerType::MinionEnter || tt == TriggerType::MinionLeave) board.detach(ta);
     
-    else throw detach_game_observer(ta);
+    // else throw detach_game_observer(ta);
+    board.detach(ta);
 }
 
 // without target

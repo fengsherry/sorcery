@@ -80,23 +80,23 @@ void Hand::removeCard(int i) {
 }
 
 /* BOARD */
-void Board::init(vector<TriggeredAbility*>* bo) {
-    boardObservers = bo;
+void Board::init(vector<TriggeredAbility*>* o) {
+    observers = o;
 }
 
 void Board::attach(TriggeredAbility* o) {
-    boardObservers->emplace_back(o);
+    observers->emplace_back(o);
 }
 
 void Board::detach(TriggeredAbility* o) {
-    for (auto it = boardObservers->begin(); it != boardObservers->end();) {
-        if (*it == o) boardObservers->erase(it);
+    for (auto it = observers->begin(); it != observers->end();) {
+        if (*it == o) observers->erase(it);
         else ++it;
     }
 }
 
 void Board::notifyMinionEnterObservers(MinionPtr targetMinion) {
-    for (auto o = boardObservers->begin(); o != boardObservers->end();) {
+    for (auto o = observers->begin(); o != observers->end();) {
         try {
             if ((*o)->getType() == TriggerType::MinionEnter) {
                 (*o)->setTargetMinion(targetMinion);
@@ -104,13 +104,13 @@ void Board::notifyMinionEnterObservers(MinionPtr targetMinion) {
             }
             ++o;
         } catch (not_enough_charge& e) {
-            boardObservers->erase(o);
+            observers->erase(o);
         }
     }
 }
 
 void Board::notifyMinionLeaveObservers(MinionPtr targetMinion) {
-    for (auto o = boardObservers->begin(); o != boardObservers->end();) {
+    for (auto o = observers->begin(); o != observers->end();) {
         try {
             if ((*o)->getType() == TriggerType::MinionLeave) {
                 (*o)->setTargetMinion(targetMinion);
@@ -118,7 +118,7 @@ void Board::notifyMinionLeaveObservers(MinionPtr targetMinion) {
             }
             ++o;
         } catch (not_enough_charge& e) {
-            boardObservers->erase(o);
+            observers->erase(o);
         }
     }
 }
@@ -137,9 +137,9 @@ void Board::addCard(MinionPtr m) {
     // notify observers
     notifyMinionEnterObservers(m);
 
-    // attach trigger to boardObservers
+    // attach trigger to observers
     auto a = m->getAbility();
-    if (holds_alternative<TriggeredAbility*>(a) && (get<TriggeredAbility*>(a)->getType() == TriggerType::MinionEnter || get<TriggeredAbility*>(a)->getType() == TriggerType::MinionLeave)) attach(get<TriggeredAbility*>(a));
+    if (holds_alternative<TriggeredAbility*>(a)) attach(get<TriggeredAbility*>(a));
 
 }
 
@@ -148,7 +148,7 @@ void Board::removeCard(int i) {
         MinionPtr m = theBoard[i];
         notifyMinionLeaveObservers(m);
 
-        // remove trigger from boardObservers if minion has a triggerAbility
+        // remove trigger from observers if minion has a triggerAbility
         auto a = m->getAbility();
         if (holds_alternative<TriggeredAbility*>(a)) detach(get<TriggeredAbility*>(a));
 
