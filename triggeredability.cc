@@ -41,8 +41,11 @@ void DarkRitualAbility::applyAbility() {
     cout << "!! triggering DarkRitualAbility for " << targetPlayers[0]->getName() << "!!!!" << endl;
 
     // at this point, the current activePlayer should already be set as targetPlayer
-    TriggeredAbility::applyAbility();
-    if (owner == targetPlayers[0]) targetPlayers[0]->increaseMagic(1);
+    
+    if (owner == targetPlayers[0]) {
+        targetPlayers[0]->increaseMagic(1);
+        TriggeredAbility::applyAbility();
+    }
 }
 
 /* Aura of Power */
@@ -53,10 +56,10 @@ void AuraOfPowerAbility::applyAbility() {
     cout << "!! triggering AuraOfPowerAbility for " << targetMinions[0]->getName() << "!!!!" << endl;
 
     // targetMinion (the minion that just entered) should be added to targetMinions
-    TriggeredAbility::applyAbility();
     if (owner->onBoard(targetMinions[0])) {
         targetMinions[0]->modifyAttack(1);
         targetMinions[0]->modifyDefence(1);
+        TriggeredAbility::applyAbility();
     }
 }
 
