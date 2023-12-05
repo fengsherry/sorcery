@@ -460,7 +460,7 @@ void GameController::go(int argc, char *argv[]) {
             } else if (cmd != "") {
                 notifyDisplays("Not a valid command", gm.getActivePlayer().getId());
             } 
-            // notifyDisplays();
+            notifyDisplays();
             // if (graphicsFlag) displays[1]->displaySorceryBoard();
         } catch(out_of_range &e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); }
         
