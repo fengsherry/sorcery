@@ -124,6 +124,9 @@ void Board::notifyMinionLeaveObservers(MinionPtr targetMinion) {
 }
 
 MinionPtr Board::getCard(int i) const {
+    if( i > theBoard.size()) {
+        throw invalid_card_board();
+    }
     return theBoard[i];
 }
 

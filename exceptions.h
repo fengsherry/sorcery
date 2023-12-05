@@ -12,6 +12,7 @@ class not_enough_action : public std::exception {
             return p.getName() + " has 0 action. Unable to attack.";
         }
 };
+
 class not_enough_magic : public std::exception {
     Player p;
     public:
@@ -119,8 +120,26 @@ class detach_game_observer : public std::exception {
     public:
         detach_game_observer(TriggeredAbility* ta ) : ta{ta} {}
         string what () {
-            return "Removing a TriggeredAbility from gameObservers";
+            return "Removing a TriggeredAbility from gameObservers.";
         }
 };
+
+class invalid_inspect_type : public std::exception {
+    MinionPtr m;
+    public:
+        invalid_inspect_type(MinionPtr _m) : m{_m} {}
+        string what () {
+            return "Unable to inspect: " + m->getName() + " is not a Minion.";
+        }
+};
+
+class invalid_card_board : public std::exception {
+    public:
+        invalid_card_board() = default;
+        string what () {
+            return "Unable to inspect: card is not on the board.";
+        }
+};
+
 
 #endif

@@ -384,11 +384,29 @@ void GameController::go(int argc, char *argv[]) {
                     // cout << "Incorrect input." << endl;
                 }
 
-            } else if (cmd == "describe") {
+            } else if (cmd == "inspect") {
                 int i;
                 cin >> i;
+
+                try {
+                    if (i > gm.getPlayer(gm.getActivePlayer().getId()).getBoard().size()) {
+                        throw invalid_card_board();
+                    }
+                    notifyDisplays(gm.getActivePlayer().getBoard().getCard(i-1));
+                } catch ( invalid_inspect_type &e ) {
+                    notifyDisplaysErr(e.what(), gm.getActivePlayer().getId());
+                } catch ( invalid_card_board &e ) {
+                    notifyDisplaysErr(e.what(), gm.getActivePlayer().getId());
+                }
+                // if (!(gm.getActivePlayer().getBoard().getCard(i-1)->getType() == CardType::Minion)){
+                //     notifyDisplaysErr("Try again, this card is not a Minion.", gm.getActivePlayer().getId());
+                // } else if (i > gm.getPlayer(gm.getActivePlayer().getId()).getBoard().size()) {
+                //     notifyDisplaysErr("Try again, this card is not on the board.", gm.getActivePlayer().getId());
+                // } else {
+                //     notifyDisplays(gm.getActivePlayer().getBoard().getCard(i-1));
+                // }
+
                 // gm.getActivePlayer().getBoard().getCard(i-1)->TEST_printInspectMinion();
-                notifyDisplays(gm.getActivePlayer().getBoard().getCard(i-1));
                 // td->displayMinion(gm.getActivePlayer().getBoard().getCard(i-1));
 
             } else if (cmd == "hand") {

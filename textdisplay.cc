@@ -4,6 +4,7 @@
 #include "minion.h"
 #include "ascii_graphics.h"
 #include "gamemaster.h"
+#include "exceptions.h"
 using namespace std;
 
 // print a card/board element
@@ -132,7 +133,6 @@ TextDisplay::TextDisplay(GameMaster *_gm) : gm(_gm) {}
 TextDisplay::~TextDisplay() = default;
 
 void TextDisplay::displayMsg(vector<string> msg, int p) {
-  // cout << "hi" << endl;
   for (string s : msg) {
     cout << s << endl;
   }
@@ -275,6 +275,11 @@ vector<card_template_t> &addEnchantmentPrint(const MinionPtr m, vector<card_temp
 
 void TextDisplay::displayMinion(const MinionPtr m) {
   vector<card_template_t> toPrint;
+  
+  if (!(m->getType() == CardType::Minion)) {
+    throw invalid_inspect_type(m);
+  }
+
   addEnchantmentPrint(m, toPrint, 0);
 
   // print the minion first
