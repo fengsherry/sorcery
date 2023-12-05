@@ -34,8 +34,11 @@ CardPtr Deck::drawCard() {
         int randomNumber = std::rand() % theDeck.size();
         cout << randomNumber << endl;
         card = theDeck[randomNumber];
-    } else card = theDeck.back();
-    theDeck.pop_back();
+        theDeck.erase(theDeck.begin()+randomNumber);
+    } else {
+        card = theDeck.back();
+        theDeck.pop_back();
+    }
     return card;
 }
 
