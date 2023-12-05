@@ -21,7 +21,14 @@ string Minion::getDesc() const { return desc; }
 //     action = n;
 // }
 
-void NoDeleter::operator()(Minion*) const {}
+void Minion::setAttack(int n) {}
+void Minion::setDefense(int n) {}
+
+// Custom deleter that does nothing (no deletion)
+struct NoDeleter {
+    void operator()(Minion*) const {};
+};
+
 
 void Minion::destroy() {
     int i = board->find(MinionPtr(this, NoDeleter{})); 
@@ -37,6 +44,7 @@ void Minion::modifyAttack(int n) {
     int i = board->find(MinionPtr(this, NoDeleter{}));
     board->enchantMinion(i, "Modify Attack", n);
 }
+
 
 void Minion::setBoard(Board* b) {board = b;}
 

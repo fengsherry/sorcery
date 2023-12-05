@@ -16,7 +16,6 @@ int Enrage::getDefense() const { return 2 * next->getDefense(); }
 int Enrage::getAction() const { return next->getAction(); }
 int Enrage::getActivatedAbilityCost() const {return next->getActivatedAbilityCost();}
 // Ability GiantStrength::getAbility() const; // ADD THIS BACK ONCE IMPLEMENTED ABILITIES
-// void Enrage::setAction(int n) { next->setAction(n); }
 
 // does nothing for now, we need to make this into a triggered ability and add it to the list of observers
 Haste::Haste(MinionPtr next) : EnchantmentDec{
@@ -24,13 +23,14 @@ Haste::Haste(MinionPtr next) : EnchantmentDec{
     1, 
     "Enchanted minion gains +1 action each turn", 
     next,
-    false} {}
+    false,
+    new HasteAbility{next}} // idk if this is suppoed to attack to base minion instead
+    {}
 int Haste::getAttack() const { return next->getAttack(); }
 int Haste::getDefense() const { return next->getDefense(); }
 int Haste::getAction() const { return next->getAction(); }
 int Haste::getActivatedAbilityCost() const {return next->getActivatedAbilityCost();}
 // Ability GiantStrength::getAbility() const; // ADD THIS BACK ONCE IMPLEMENTED ABILITIES
-// void Haste::setAction(int n) { next->setAction(n); }
 
 
 MagicFatigue::MagicFatigue(MinionPtr next) : EnchantmentDec{
@@ -63,9 +63,9 @@ variant<ActivatedAbility*, TriggeredAbility*, monostate> Silence::getAbility(){
     return new SilenceAbility{};
 }
 // Ability GiantStrength::getAbility() const; // ADD THIS BACK ONCE IMPLEMENTED ABILITIES
-// void Silence::setAction(int n) { next->setAction(n); }
 
-/* hidden Enchantments */
+
+/* Hidden Enchantments */
 
 ModifyAttack::ModifyAttack(MinionPtr next, int ModifyAttackVal) : 
     EnchantmentDec{CardName::ModifyAttack, 0, "", next, true}, 
@@ -75,7 +75,6 @@ int ModifyAttack::getDefense() const { return next->getDefense();}
 int ModifyAttack::getAction() const { return next->getAction(); }
 int ModifyAttack::getActivatedAbilityCost() const {return next->getActivatedAbilityCost();}
 // Ability ModifyAttack::getAbility() const override; // ADD THIS BACK ONCE IMPLEMENTED ABILITIES
-// void ModifyAttack::setAction(int n) { next->setAction(n); }
 
 ModifyDefense::ModifyDefense(MinionPtr next, int ModifyDefenseVal) : 
     EnchantmentDec{CardName::ModifyDefense, 0, "", next, true}, 
@@ -85,7 +84,6 @@ int ModifyDefense::getDefense() const { return ModifyDefenseVal + next->getDefen
 int ModifyDefense::getAction() const { return next->getAction(); }
 int ModifyDefense::getActivatedAbilityCost() const {return next->getActivatedAbilityCost();}
 // Ability ModifyDefense::getAbility() const override; // ADD THIS BACK ONCE IMPLEMENTED ABILITIES
-// void ModifyDefense::setAction(int n) { next->setAction(n); }
 
 // need to implement this later
 

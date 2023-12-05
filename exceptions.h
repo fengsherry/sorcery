@@ -123,14 +123,14 @@ class ability_silenced : public std::exception {
         }
 };
 
-class detach_game_observer : public std::exception {
-    TriggeredAbility* ta;
-    public:
-        detach_game_observer(TriggeredAbility* ta ) : ta{ta} {}
-        string what () {
-            return "Removing a TriggeredAbility from gameObservers.";
-        }
-};
+// class detach_game_observer : public std::exception {
+//     TriggeredAbility* ta;
+//     public:
+//         detach_game_observer(TriggeredAbility* ta ) : ta{ta} {}
+//         string what () {
+//             return "Removing a TriggeredAbility from gameObservers.";
+//         }
+// };
 
 class invalid_inspect_type : public std::exception {
     MinionPtr m;

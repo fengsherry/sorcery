@@ -11,13 +11,13 @@ Player::Player() {}
 
 Player::~Player() {}
 
-void Player::init(string name, int id, ifstream& deckIn, vector<TriggeredAbility*>* boardObservers, bool testing) {
+void Player::init(string name, int id, ifstream& deckIn, vector<TriggeredAbility*>* observers, bool testing) {
     this->name = name;
     this->id = id;
     this->testing = testing;
     deck.init(deckIn, this, !testing); // if testing is on, set random field to false
     hand.init(deck);
-    board.init(boardObservers);
+    board.init(observers);
 }
 
 void Player::TEST_printPlayerDeck() {
@@ -94,10 +94,11 @@ CardPtr Player::drawCard() {
 }
 
 void Player::removeTrigger(TriggeredAbility* ta) {
-    TriggerType tt = ta->getType();
-    if (tt == TriggerType::MinionEnter || tt == TriggerType::MinionLeave) board.detach(ta);
+    // TriggerType tt = ta->getType();
+    // if (tt == TriggerType::MinionEnter || tt == TriggerType::MinionLeave) board.detach(ta);
     
-    else throw detach_game_observer(ta);
+    // else throw detach_game_observer(ta);
+    board.detach(ta);
 }
 
 // without target
@@ -115,8 +116,13 @@ TriggeredAbility* Player::play(int i, Player& nonActivePlayer) {
 
     if (MinionPtr minionToPlay = dynamic_pointer_cast<Minion>(cardToPlay)) { // false if cardToPlay is not Minion* type
         board.addCard(minionToPlay);
+
+        // determine if minion has a triggered ability, return the ta if it does
         auto a = minionToPlay->getAbility();
-        if (holds_alternative<TriggeredAbility*>(a) && (get<TriggeredAbility*>(a)->getType() == TriggerType::StartTurn || get<TriggeredAbility*>(a)->getType() == TriggerType::EndTurn)) return(get<TriggeredAbility*>(a));
+        if (holds_alternative<TriggeredAbility*>(a) && 
+        (get<TriggeredAbility*>(a)->getType() == TriggerType::StartTurn || 
+        get<TriggeredAbility*>(a)->getType() == TriggerType::EndTurn)) 
+            return(get<TriggeredAbility*>(a));
 
     } else if (cardToPlay->getType() == CardType::Ritual) {
         RitualPtr ritualToPlay = dynamic_pointer_cast<Ritual>(cardToPlay);
@@ -139,7 +145,7 @@ TriggeredAbility* Player::play(int i, Player& nonActivePlayer) {
 }
 
 // with target
-void Player::play(int i, int j, Player& p) {
+TriggeredAbility* Player::play(int i, int j, Player& p) {
     CardPtr cardToPlay = hand.getCard(i);
     CardPtr targetCard = p.getBoard().getCard(j);
 
@@ -155,12 +161,15 @@ void Player::play(int i, int j, Player& p) {
     if (EnchantmentPtr enchantToPlay = dynamic_pointer_cast<Enchantment>(cardToPlay)) { // enchantment
         if (MinionPtr targetMinion = dynamic_pointer_cast<Minion>(targetCard)) {         
             // enchant the minion. Note the conversion from Enchantment (Card) to EnchantmentDec (Decorator)
-            p.getBoard().enchantMinion(j, enchantToPlay->getName());
-
+            // check if the enchantment contains a trigger
+            TriggeredAbility* a = p.getBoard().enchantMinion(j, enchantToPlay->getName());
+            if (a) return a;
+  
         } else { throw invalid_play{"You cannot play " + cardToPlay->getName() + " on " + targetCard->getName()}; }
     } else if (SpellPtr spellToPlay = dynamic_pointer_cast<Spell>(cardToPlay)) { // spell with target
         spellToPlay->applyAbility(p, *this, j); // might be sus - *this is a dummy value - should be nullptr but that means the argument needs to be a pointer, will do later if have time
     }
+    return nullptr;
 }
 
 void Player::useAbility(int i, Player& nonActivePlayer) {

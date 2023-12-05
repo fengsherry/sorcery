@@ -35,9 +35,11 @@ class DefaultMinion : public Minion {
     int getActivatedAbilityCost() const override;
     void setTrigOwnerMinion(MinionPtr m);
     variant<ActivatedAbility*, TriggeredAbility*, monostate> getAbility();
-
-    void setAction(int n);
-    void setDefense(int n);
+    void modifyAction(int n) override;
+    void setAbility(variant<ActivatedAbility*, TriggeredAbility*, monostate> a);
+    void setAction(int n) override;
+    void setDefense(int n) override;
+    void setAttack(int n) override;
 };
 typedef shared_ptr<DefaultMinion> DefaultMinionPtr;
 
