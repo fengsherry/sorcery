@@ -22,6 +22,8 @@ class Player {
     Board board;
     Graveyard grave;
     RitualPtr ritual; // set to nullptr if something breaks maybe
+
+    bool testing;
  
  public:
         Player(); // default ctor to be called when GameMaster is initialized
@@ -29,7 +31,7 @@ class Player {
         ~Player();
 
         // void init(string name, int id);
-        void init(string name, int id, ifstream& deckIn, vector<TriggeredAbility*>* boardObservers);
+        void init(string name, int id, ifstream& deckIn, vector<TriggeredAbility*>* boardObservers, bool random);
 
         string getName() const;
         int getId() const;

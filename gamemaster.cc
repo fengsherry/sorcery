@@ -9,15 +9,15 @@ GameMaster::~GameMaster() {}
 
 
 // SET PLAYERS, ask Players for their names
-void GameMaster::initPlayers(ifstream& deck1In, ifstream& deck2In) {
+void GameMaster::initPlayers(ifstream& deck1In, ifstream& deck2In, bool testing) {
     // players:
     string p1name, p2name;
     // cout << "Please enter player names: " << endl;
     getline(cin, p1name); 
     getline(cin, p2name); 
 
-    p1.init(p1name, 1, deck1In, &boardObservers);
-    p2.init(p2name, 2, deck2In, &boardObservers);
+    p1.init(p1name, 1, deck1In, &boardObservers, testing);
+    p2.init(p2name, 2, deck2In, &boardObservers, testing);
 
     activePlayer = &p1;
     nonactivePlayer = &p2;
