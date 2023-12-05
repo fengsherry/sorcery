@@ -8,8 +8,6 @@ class GameMaster;
 
 class TextDisplay : public SorceryDisplay {
  private:
-   //  std::vector<std::vector<char>> theBoard;
-   //  std::vector<std::vector<char>> theHand;
    GameMaster *gm;
    void printPlayerBoardRow(int p);
 
