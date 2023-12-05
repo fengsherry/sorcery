@@ -207,6 +207,7 @@ void GameController::go(int argc, char *argv[]) {
                         // output new states of minions
                         attackingMinion = gm.getActivePlayer().getBoard().getCard(arg-1);
                         victimMinion = gm.getNonactivePlayer().getBoard().getCard(arg2-1);
+                        // cout << victimMinion->getDefaultMinionName() << endl;
                         string s = activePlayerName + "'s minion, " + attackingMinion->getDefaultMinionName() + " has attacked " +  nonactivePlayerName 
                                     + "'s minion, " + victimMinion->getDefaultMinionName();
                         string s1, s2;
@@ -218,7 +219,8 @@ void GameController::go(int argc, char *argv[]) {
                         if (victimMinion->isDead()) {
                             s2 = victimMinion->getDefaultMinionName() + " has died.";
                         } else {
-                            s2 = victimMinion->getDefaultMinionName() + "'s defense remaining: " + to_string(victimMinion->getDefense());
+                            s2 = victimMinion->getDefaultMinionName() + "'s defense remaining: " + 
+                            to_string(victimMinion->getDefense());
                         }
                         vector<string> msg = {s, s1, s2};
                         

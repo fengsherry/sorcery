@@ -1,0 +1,8 @@
+-testing -deck1 testExampleMinions.deck -deck2 testExampleMinions.deck
+Bjarne
+Linus
+play 1
+end
+play 2
+attack 1 1
+board
