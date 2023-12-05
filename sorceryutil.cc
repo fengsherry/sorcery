@@ -59,6 +59,7 @@ string cardNameToString(CardName c) {
             return "Aura of Power";
         case CardName::Standstill:
             return "Standstill";
+        default: return "None";
     }
 }
 
@@ -68,6 +69,7 @@ string cardTypeToString(CardType t) {
         case CardType::Minion : return "Minion";
         case CardType::Enchantment : return "Enchantment";
         case CardType::Ritual : return "Ritual";
+        default: return "None";
     }
 }
 

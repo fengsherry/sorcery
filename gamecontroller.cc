@@ -114,39 +114,32 @@ void GameController::go(int argc, char *argv[]) {
     ifstream in1 = deck1Flag ? ifstream(deck1File.c_str()) : ifstream("default.deck");
     ifstream in2 = deck2Flag ? ifstream(deck2File.c_str()) : ifstream("default.deck");
 
-    // initialize the game
-    // GameMaster gm{};
-
-    // create a new textdisplay
-    // td = new TextDisplay(&gm);
-
-    // create a new graphics display if required
-    // if (graphicsFlag) gd = new GraphicsDisplay{&gm};
+    // create a new graphics display as required
     if (graphicsFlag) displays.emplace_back(new GraphicsDisplay{&gm});
+
+    notifyDisplays("Please enter player names.", 0);
 
     // initialize Players, their Decks, and their Hands
     vector<string> names;
     for (int i = 0; i < 2; ++i) {
         string s;
-        if (initFlag && getline(file, s)) {
-            // we've already read into cmd
-        }  else getline(cin, s);
+        if (initFlag && getline(file, s)) {}// already read into s  
+        else getline(cin, s);
         names.emplace_back(s);
     }
     
-    notifyDisplays("Please enter player names.", 0);
+    cout << "hi" << endl;
+    
     gm.initPlayers(names, in1, in2, testingFlag); 
 
     if (graphicsFlag) displays[1]->displaySorceryBoard();
     
     string cmds, cmd; // cmds is a line, cmd is the first "word" in that line
-    int arg1, arg2, arg3;
     srand(static_cast<unsigned>(time(0)));
     gm.startTurn();
     string activePlayerName = gm.getActivePlayer().getName();
     string nonactivePlayerName = gm.getNonactivePlayer().getName();
     notifyDisplays("Player " + to_string(gm.getTurn()) + ": " + activePlayerName + "  It's your turn!", gm.getActivePlayer().getId());
-    // cout << "Player " << gm.getTurn() << ": " << activePlayerName << "  It's your turn!" << endl;
     while (true) {
         try { // catches exception
             if (cin.eof()) return;
@@ -276,7 +269,7 @@ void GameController::go(int argc, char *argv[]) {
                         // cout << nonactivePlayerName << "'s life remaining: " << gm.getNonactivePlayer().getLife() << endl;
                         // cout << endl;
                         notifyDisplays(msg, gm.getActivePlayer().getId());
-                    } catch (not_enough_action e) {
+                    } catch (not_enough_action& e) {
                         notifyDisplaysErr(e.what(), gm.getActivePlayer().getId());
                         // cout << e.what() << endl; // error message
                     }
@@ -379,7 +372,7 @@ void GameController::go(int argc, char *argv[]) {
                     } 
                     catch (no_target_provided &e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); }
                     catch (not_enough_magic &e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); } 
-                    catch (not_enough_magic &e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); }
+                    catch (not_enough_action &e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); }
                     catch (invalid_play &e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); }
                     catch (ability_silenced &e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); }
                 }
@@ -413,7 +406,7 @@ void GameController::go(int argc, char *argv[]) {
                     } 
                     catch (no_target_needed &e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); }
                     catch (not_enough_magic &e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); } 
-                    catch (not_enough_magic &e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); }
+                    catch (not_enough_action &e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); }
                     catch (invalid_play &e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); }
                     catch (ability_silenced &e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); }
 
