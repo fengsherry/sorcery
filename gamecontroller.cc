@@ -212,13 +212,19 @@ void GameController::go(int argc, char *argv[]) {
                     // << "'s minion, " << victimMinion << endl;
 
                     try {
-                        // perform attack
-                        gm.attackMinion(arg-1, arg2-1);
-                        // output new states of minions
+                        
+                        // output new states of minions - not for now
                         attackingMinion = gm.getActivePlayer().getBoard().getCard(arg-1);
                         victimMinion = gm.getNonactivePlayer().getBoard().getCard(arg2-1);
+                    
+                        // perform attack
+                        gm.attackMinion(arg-1, arg2-1); 
+
+                        cout << victimMinion->getDefaultMinionName() << endl;
                         string s = activePlayerName + "'s minion, " + attackingMinion->getDefaultMinionName() + " has attacked " +  nonactivePlayerName 
                                     + "'s minion, " + victimMinion->getDefaultMinionName();
+                        
+                        // if minion is destroyed accessing attackingMinion and victimMinion will not work
                         string s1, s2;
                         if (attackingMinion->isDead()) {
                             s1 = attackingMinion->getDefaultMinionName() + " has died.";

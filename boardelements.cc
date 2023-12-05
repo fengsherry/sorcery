@@ -106,32 +106,75 @@ void Board::detach(TriggeredAbility* o) {
 }
 
 void Board::notifyMinionEnterObservers(MinionPtr targetMinion) {
-    for (auto o = observers->begin(); o != observers->end();) {
-        try {
-            if ((*o)->getType() == TriggerType::MinionEnter) {
+    // for (auto o = observers->begin(); o != observers->end();) {
+    //     try {
+    //         if ((*o)->getType() == TriggerType::MinionEnter) {
+    //             (*o)->setTargetMinion(targetMinion);
+    //             (*o)->applyAbility();   
+    //         }
+    //         ++o;
+    //     } catch (not_enough_charge& e) {
+    //         observers->erase(o);
+    //     }
+    // }
+
+    // with apnap
+    auto o = observers->begin();
+    try {
+        while (o != observers->end()) {
+            if ((*o)->getType() == TriggerType::MinionEnter && (*o)->getOwner() == (*o)->getActivePlayer()) { // TODO
                 (*o)->setTargetMinion(targetMinion);
                 (*o)->applyAbility();   
             }
             ++o;
-        } catch (not_enough_charge& e) {
-            observers->erase(o);
         }
+        o = observers->begin();
+        while (o != observers->end()) {
+            if ((*o)->getType() == TriggerType::MinionEnter && (*o)->getOwner() != (*o)->getActivePlayer()) { // TODO
+                (*o)->setTargetMinion(targetMinion);
+                (*o)->applyAbility();   
+            }
+            ++o;
+        }
+    } catch (not_enough_charge& e) {
+        observers->erase(o);
     }
 }
 
 void Board::notifyMinionLeaveObservers(MinionPtr targetMinion) {
-    for (auto o = observers->begin(); o != observers->end();) {
-        try {
-            if ((*o)->getType() == TriggerType::MinionLeave) {
+    // for (auto o = observers->begin(); o != observers->end();) {
+    //     try {
+    //         if ((*o)->getType() == TriggerType::MinionLeave) {
+    //             (*o)->setTargetMinion(targetMinion);
+    //             (*o)->applyAbility();   
+    //         }
+    //         ++o;
+    //     } catch (not_enough_charge& e) {
+    //         observers->erase(o);
+    //     }
+    // }
+    auto o = observers->begin();
+    try {
+        while (o != observers->end()) {
+            if ((*o)->getType() == TriggerType::MinionLeave && (*o)->getOwner() == (*o)->getActivePlayer()) { // TODO
                 (*o)->setTargetMinion(targetMinion);
                 (*o)->applyAbility();   
             }
             ++o;
-        } catch (not_enough_charge& e) {
-            observers->erase(o);
         }
+        o = observers->begin();
+        while (o != observers->end()) {
+            if ((*o)->getType() == TriggerType::MinionLeave && (*o)->getOwner() != (*o)->getActivePlayer()) { // TODO
+                (*o)->setTargetMinion(targetMinion);
+                (*o)->applyAbility();   
+            }
+            ++o;
+        }
+    } catch (not_enough_charge& e) {
+        observers->erase(o);
     }
 }
+
 
 MinionPtr Board::getCard(int i) const {
     // if (i > theBoard.size()) {

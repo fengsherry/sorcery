@@ -83,7 +83,11 @@ void GameMaster::startTurn() {
     } catch (deck_empty e) {cout << e.what() << endl;}
     activePlayer->getBoard().restoreAction();
     activePlayer->getHand().restoreAction(); // can we combine these two
-    this->notifyStartTurnObservers();
+    
+    // update activePlayer in observers
+    for (auto o : observers) o->setActivePlayer(activePlayer);
+
+    notifyStartTurnObservers();
 }
 
 // ends a turn, notifies corresponding observers
@@ -96,7 +100,6 @@ void GameMaster::endTurn() {
     swap(activePlayer, nonactivePlayer);
 }
 
-// NOT DONE YET
 void GameMaster::attackMinion(int i, int j) { // i is attacker, j is victim
     MinionPtr attackingMinion = activePlayer->getBoard().getCard(i);
     MinionPtr victimMinion = nonactivePlayer->getBoard().getCard(j);
@@ -185,30 +188,73 @@ void GameMaster::useAbility(int i, int j, Player& targetPlayer) {
 
 
 void GameMaster::notifyStartTurnObservers() {
-    for (auto o = observers.begin(); o != observers.end();) {
-        try {
-            if ((*o)->getType() == TriggerType::StartTurn) {
+    // for (auto o = observers.begin(); o != observers.end();) {
+    //     try {
+    //         if ((*o)->getType() == TriggerType::StartTurn) {
+    //             (*o)->setTargetPlayer(activePlayer);
+    //             (*o)->applyAbility();   
+    //         }
+    //         o++;
+    //     } catch (not_enough_charge& e) {
+    //         observers.erase(o);
+    //     }
+    // }
+
+    auto o = observers.begin();
+    try {
+        while (o != observers.end()) {
+            if ((*o)->getType() == TriggerType::StartTurn && (*o)->getOwner() == (*o)->getActivePlayer()) { // TODO
                 (*o)->setTargetPlayer(activePlayer);
                 (*o)->applyAbility();   
             }
-            o++;
-        } catch (not_enough_charge& e) {
-            observers.erase(o);
+            ++o;
         }
+        o = observers.begin();
+        while (o != observers.end()) {
+            if ((*o)->getType() == TriggerType::StartTurn && (*o)->getOwner() != (*o)->getActivePlayer()) { // TODO
+                (*o)->setTargetPlayer(activePlayer);
+                (*o)->applyAbility();   
+            }
+            ++o;
+        }
+    } catch (not_enough_charge& e) {
+        observers.erase(o);
     }
+
 }
 
 void GameMaster::notifyEndTurnObservers() {
-    for (auto o = observers.begin(); o != observers.end();) {
-        try {
-            if ((*o)->getType() == TriggerType::EndTurn) {
+    // for (auto o = observers.begin(); o != observers.end();) {
+    //     try {
+    //         if ((*o)->getType() == TriggerType::EndTurn) {
+    //             (*o)->setTargetPlayer(activePlayer);
+    //             (*o)->applyAbility();   
+    //         }
+    //         o++;
+    //     } catch (not_enough_charge& e) {
+    //         observers.erase(o);
+    //     }
+    // }
+
+    auto o = observers.begin();
+    try {
+        while (o != observers.end()) {
+            if ((*o)->getType() == TriggerType::EndTurn && (*o)->getOwner() == (*o)->getActivePlayer()) { // TODO
                 (*o)->setTargetPlayer(activePlayer);
                 (*o)->applyAbility();   
             }
-            o++;
-        } catch (not_enough_charge& e) {
-            observers.erase(o);
+            ++o;
         }
+        o = observers.begin();
+        while (o != observers.end()) {
+            if ((*o)->getType() == TriggerType::EndTurn && (*o)->getOwner() != (*o)->getActivePlayer()) { // TODO
+                (*o)->setTargetPlayer(activePlayer);
+                (*o)->applyAbility();   
+            }
+            ++o;
+        }
+    } catch (not_enough_charge& e) {
+        observers.erase(o);
     }
 }
 
