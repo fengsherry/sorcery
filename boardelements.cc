@@ -31,7 +31,7 @@ CardPtr Deck::drawCard() {
     CardPtr card;
     if (random) {
         cout << "random!" << endl;
-        int randomNumber = std::rand() % theDeck.size() + 1;
+        int randomNumber = std::rand() % theDeck.size();
         cout << randomNumber << endl;
         card = theDeck[randomNumber];
     } else card = theDeck.back();
