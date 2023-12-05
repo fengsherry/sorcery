@@ -86,7 +86,7 @@ void GameController::go(int argc, char *argv[]) {
     bool testingFlag = false;
     bool graphicsFlag = false;
     string deck1File, deck2File, initFile;
-    ifstream file(initFile);
+    ifstream file;
     if (findIndex(argc, argv, "-deck1", i)) {
         deck1Flag = true; deck1File = argv[i + 1];
         testCmdArg("deck1", deck1File);
@@ -98,8 +98,10 @@ void GameController::go(int argc, char *argv[]) {
     if (findIndex(argc, argv, "-init", i)) { 
         initFlag = true; initFile = argv[i + 1];
         testCmdArg("init", initFile);
+        cout << initFile << endl;
+        file = ifstream(initFile);
     }
-    if (findIndex(argc, argv, "-testing", i)) { // NOT IMPLEMENTED YET // NOT IMPLEMENTED YET
+    if (findIndex(argc, argv, "-testing", i)) { 
         testingFlag = true; 
         testCmdArg("testing");
     }
@@ -108,6 +110,13 @@ void GameController::go(int argc, char *argv[]) {
         testCmdArg("graphics");
     }
 
+    cout << "is open: " << file.is_open() << endl;
+    string s;
+    if (getline(file, s)) {
+        cout << "hi!" << endl;
+    } else {
+        cout << "what??" << endl;
+    }
 
     // create input file streams for each deck file location
     ifstream in1 = deck1Flag ? ifstream(deck1File.c_str()) : ifstream("default.deck");
@@ -124,8 +133,17 @@ void GameController::go(int argc, char *argv[]) {
     if (graphicsFlag) displays.emplace_back(new GraphicsDisplay{&gm});
 
     // initialize Players, their Decks, and their Hands
+    vector<string> names;
+    for (int i = 0; i < 2; ++i) {
+        string s;
+        if (initFlag && getline(file, s)) {
+            // we've already read into cmd
+        }  else getline(cin, s);
+        names.emplace_back(s);
+    }
+    
     notifyDisplays("Please enter player names.", 0);
-    gm.initPlayers(in1, in2, testingFlag); 
+    gm.initPlayers(names, in1, in2, testingFlag); 
 
     if (graphicsFlag) displays[1]->displaySorceryBoard();
     

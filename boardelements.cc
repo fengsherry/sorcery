@@ -30,9 +30,9 @@ void Deck::TEST_printDeck() {
 CardPtr Deck::drawCard() {
     CardPtr card;
     if (random) {
-        cout << "random!" << endl;
+        // cout << "random!" << endl;
         int randomNumber = std::rand() % theDeck.size();
-        cout << randomNumber << endl;
+        // cout << randomNumber << endl;
         card = theDeck[randomNumber];
         theDeck.erase(theDeck.begin()+randomNumber);
     } else {
