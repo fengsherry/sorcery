@@ -79,10 +79,10 @@ bool Card::getNeedTarget() {return needTarget;}
 int Card::getCost() const {return cost;}
 
 // TEMP
-ostream &operator<< (ostream &out, const Card *c) {
-    out << c->getName();
-    return out;
-}
+// ostream &operator<< (ostream &out, const Card *c) {
+//     out << c->getName();
+//     return out;
+// }
 // TEMP
 
 // Card::~Card() {}

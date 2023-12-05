@@ -49,6 +49,7 @@ void Minion::modifyAttack(int n) {
 void Minion::setBoard(Board* b) {board = b;}
 
 bool Minion::isDead() {
+    cout << "in is dead: " << getDefense() << endl;
     return getDefense() <= 0;
 }
 
@@ -62,12 +63,12 @@ void Minion::TEST_printInspectMinion() {
     }
 }
 
-std::ostream& operator<<(std::ostream& out, const MinionPtr m) {
-    if (const auto dm = dynamic_pointer_cast<const DefaultMinion>(m)) {
-        out << dm->getDefaultMinionName();
-    } else if (const auto ed = dynamic_pointer_cast<const EnchantmentDec>(m)) {
-        out << ed->getDefaultMinionName();
-    }
+// std::ostream& operator<<(std::ostream& out, const MinionPtr m) {
+//     if (const auto dm = dynamic_pointer_cast<const DefaultMinion>(m)) {
+//         out << dm->getDefaultMinionName();
+//     } else if (const auto ed = dynamic_pointer_cast<const EnchantmentDec>(m)) {
+//         out << ed->getDefaultMinionName();
+//     }
     
-    return out;
-}
+//     return out;
+// }
