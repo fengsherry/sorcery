@@ -10,6 +10,7 @@
 #include "sorcerydisplay.h"
 #include "textdisplay.h"
 #include "graphicsdisplay.h"
+#include "sorceryutil.h"
 using namespace std;
 
 GameController::GameController() {}
@@ -176,10 +177,11 @@ void GameController::go(int argc, char *argv[]) {
                 
             } else if (cmd == "discard") { // only available in -testing mode; how to handle this?
                 int i;
+                checkRange(i,gm.getActivePlayer().getHand().getSize()); // may throw control to next iteration of while loop, skipping below code
                 if (testingFlag && (cin >> i)) {
                     gm.getActivePlayer().getHand().removeCard(i-1);
                 } else notifyDisplaysErr("Not a valid command", gm.getActivePlayer().getId());
-                gm.getActivePlayer().TEST_printPlayerHand();
+                // gm.getActivePlayer().TEST_printPlayerHand();
             } else if (cmd == "attack") {
                 // attacks player or minion
 
@@ -188,8 +190,10 @@ void GameController::go(int argc, char *argv[]) {
                 getline(cin, args);
                 istringstream iss(args);
                 iss >> arg;
+                checkRange(arg, gm.getActivePlayer().getBoard().getBoardSize());
                 
                 if (iss >> arg2) { 
+                    checkRange(arg2, gm.getNonactivePlayer().getBoard().getBoardSize());
                     // "attack i j" - order minion i to attack nonactive player's minion j
                     MinionPtr attackingMinion = gm.getActivePlayer().getBoard().getCard(arg-1);
                     MinionPtr victimMinion = gm.getNonactivePlayer().getBoard().getCard(arg2-1);
@@ -264,6 +268,7 @@ void GameController::go(int argc, char *argv[]) {
 
                 if (args.size() == 1) { // "play i" - minions, rituals, spells with no targets
                     // check if i within range
+                    checkRange(args[0], gm.getActivePlayer().getHand().getSize());
                     string s = activePlayerName + " has played " + gm.getActivePlayer().getHand().getCard(args[0]-1)->getName();
                     
                     // cout << activePlayerName << " is playing " << gm.getActivePlayer().getHand().getCard(args[0]-1) << endl;
@@ -283,12 +288,16 @@ void GameController::go(int argc, char *argv[]) {
 
                 } else if (args.size() == 3) { // "play i p j" - enchantments, spells with targets
                     // check if i and j within range
+                    checkRange(args[0], gm.getActivePlayer().getHand().getSize());
+                    if (args[1] != 'r' && args[1] != 1 && args[2] != 2) throw out_of_range{"Out of range."};
 
                     // identify target player
                     Player* targetPlayer;
                     if (args[1] != 1 && args[1] != 2) { notifyDisplaysErr("Invalid player id.", gm.getActivePlayer().getId()); }
                     else if (args[1] == gm.getActivePlayer().getId()) { targetPlayer = &gm.getActivePlayer(); } 
                     else { targetPlayer = &gm.getNonactivePlayer(); }
+
+                    checkRange(args[2], targetPlayer->getBoard().getBoardSize());
 
                     // identify target card
                     Card* targetCard;
@@ -334,6 +343,7 @@ void GameController::go(int argc, char *argv[]) {
                 // use i        (activated ability without target)
                 if (args.size() == 1) {
                     // check if i within range
+                    checkRange(args[0], gm.getActivePlayer().getBoard().getBoardSize());
                     notifyDisplays(activePlayerName + " is using " + gm.getActivePlayer().getBoard().getCard(args[0]-1)->getName() + "'s activated ability", gm.getActivePlayer().getId());
                     // cout << activePlayerName << " is using " << gm.getActivePlayer().getBoard().getCard(args[0]-1) << "'s activated ability" << endl;
 
@@ -351,12 +361,16 @@ void GameController::go(int argc, char *argv[]) {
                 // use i p j    (activated ability with target)
                 else if (args.size() == 3) {
                     // check if i and j within range
+                    checkRange(args[0], gm.getActivePlayer().getBoard().getBoardSize());
+                    checkRange(args[1], 2);
 
                     // identify target player
                     Player* targetPlayer;
                     if (args[1] != 1 && args[1] != 2) { notifyDisplaysErr("Invalid player id.", gm.getActivePlayer().getId()); }
                     else if (args[1] == gm.getActivePlayer().getId()) { targetPlayer = &gm.getActivePlayer(); } 
                     else { targetPlayer = &gm.getNonactivePlayer(); }
+
+                    checkRange(args[2], targetPlayer->getBoard().getBoardSize());
 
                     // // identify target card
                     // Card* targetCard = targetPlayer->getBoard().getCard(args[2] - 1);
@@ -387,6 +401,7 @@ void GameController::go(int argc, char *argv[]) {
             } else if (cmd == "inspect") {
                 int i;
                 cin >> i;
+                checkRange(i, gm.getActivePlayer().getBoard().getBoardSize());
 
                 try {
                     if (i > gm.getPlayer(gm.getActivePlayer().getId()).getBoard().size()) {
@@ -416,7 +431,7 @@ void GameController::go(int argc, char *argv[]) {
                 notifyDisplays(gm.getActivePlayer().getId());
 
             } else if (cmd == "board") {
-                // gm.getActivePlayer().TEST_printPlayerBoard();
+                gm.getActivePlayer().TEST_printPlayerBoard();
                 notifyDisplays();
 
             } else if (cmd == "grave") {

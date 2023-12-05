@@ -38,6 +38,10 @@ int DefaultMinion::getAction() const {
     return action;
 }
 
+int DefaultMinion::getCost() const {
+    return cost;
+}
+
 int DefaultMinion::getActivatedAbilityCost() const { 
     ActivatedAbility* aa = get<ActivatedAbility*>(ability);
     return aa->getActivationCost();

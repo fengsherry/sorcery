@@ -20,23 +20,24 @@ enum class CardName {
 string cardNameToString(CardName c);
 
 // every card has a name and a cost
-class Card {   
-    CardName name;
-    int cost;
-    CardType type;
-    bool needTarget; // true if the Card requires a target to be played
-    string desc;
+class Card { 
+    protected:  
+        CardName name;
+        int cost;
+        CardType type;
+        bool needTarget; // true if the Card requires a target to be played
+        string desc;
 
- public:
-    // Card();
-    Card(CardName cardName, int cost, CardType type, bool needTarget, string desc = "");
-    virtual ~Card() = default;
-    virtual string getName() const;
-    virtual string getDesc() const;
-    int getCost() const;
-    CardType getType();
-    CardName getCardName() const;
-    bool getNeedTarget();
+    public:
+        // Card();
+        Card(CardName cardName, int cost, CardType type, bool needTarget, string desc = "");
+        virtual ~Card() = default;
+        virtual string getName() const;
+        virtual string getDesc() const;
+        virtual int getCost() const;
+        CardType getType();
+        CardName getCardName() const;
+        bool getNeedTarget();
 };
 
 typedef std::shared_ptr<Card> CardPtr;

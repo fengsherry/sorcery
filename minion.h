@@ -33,6 +33,7 @@ class Minion : public Card {
     virtual int getAttack() const = 0;
     virtual int getDefense() const = 0;
     virtual int getAction() const = 0;
+    virtual int getCost() const override = 0; 
     virtual int getActivatedAbilityCost() const = 0;
     void setBoard(Board* b);
     void destroy();

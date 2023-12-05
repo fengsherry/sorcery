@@ -14,6 +14,8 @@ string EnchantmentDec::getDefaultMinionName() const { return next->getDefaultMin
 
 string EnchantmentDec::getDefaultMinionDesc() const { return next->getDefaultMinionDesc(); }
 
+int EnchantmentDec::getCost() const { return next->getCost(); }
+
 // int EnchantmentDec::getActivatedAbilityCost() const {return next->getActivatedAbilityCost(); }
 
 // const Minion* EnchantmentDec::getDefaultMinion() const { return next->getDefaultMinion(); }

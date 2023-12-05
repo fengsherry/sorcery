@@ -158,13 +158,13 @@ void GraphicsDisplay::displayCard(int x, int y, int width, int height, Enchantme
 
 // ritual
 void GraphicsDisplay::displayCard(int x, int y, int width, int height, RitualPtr r) {
-    // displayCardBlank(x, y, width, height);
+    displayCardBlank(x, y, width, height);
     if (!r) return;
     displayCardBase(x, y, width, height, r);
 
     w->drawString(x+8,y+55,to_string(r->getCost())); // cost
     w->drawString(x+143,y+(height-10), to_string(r->getCharge())); // charge
-    wrapString(x+31, y+55, 22, r->getDesc());
+    wrapString(x+22, y+55, 22, r->getDesc());
 }
 
 // graveyard
