@@ -13,10 +13,23 @@ TriggeredAbility* Ritual::getAbility() {return trigAbility;}
 
 
 void Ritual::decreaseCharge(int n) {
-    if (n > charge) throw not_enough_charge(this);
-    charge -= n;
+    cout << "n: " << n << "charge: " << charge << endl;
+    if (n > charge) {
+        trigAbility->setEnoughCharge(false);
+        cout << "SETTING ENOUGH CHARGE TO FALSE" << endl;
+        throw not_enough_charge(this);
+    } else if (n == charge) {
+        trigAbility->setEnoughCharge(false); charge -= n;
+    } else charge -= n;
+
+    // if (n == charge) charge -= n;
 }
-void Ritual::increaseCharge(int n) {charge += n;}
+
+void Ritual::increaseCharge(int n) {
+    charge += n;
+    if (charge > 0) trigAbility->setEnoughCharge(true);
+}
+
 void Ritual::trigger() {decreaseCharge(activationCost);}
 
 void Ritual::printRitual() {

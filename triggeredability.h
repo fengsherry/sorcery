@@ -23,6 +23,7 @@ class TriggeredAbility {
   vector<Player*> targetPlayers;
   vector<MinionPtr> targetMinions;
   Player* activePlayer;
+  bool enoughCharge = true;
 
  public:
   TriggeredAbility(TriggerType type, TriggerCardType cardType, Player* owner, MinionPtr ownerMinion = nullptr);
@@ -31,6 +32,8 @@ class TriggeredAbility {
   Player* getActivePlayer();
   TriggerType getType();
   TriggerCardType getCardType();
+  void setEnoughCharge(bool b);
+  bool getEnoughCharge();
   void setOwnerMinion(MinionPtr m);
   void setActivePlayer(Player* ap);
   virtual void setTargetPlayer(Player* targetPlayer);

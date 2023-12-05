@@ -52,7 +52,7 @@ class Hand {
 // Minions the player has played, not yet dead
 class Board {
     vector<MinionPtr> theBoard;
-    vector<TriggeredAbility*>* observers; // reference to the observers vector in gamemaster
+    vector<TriggeredAbility*>* observers; // pointer to the observers vector in gamemaster
 
     public:
         MinionPtr getCard(int i) const;

@@ -119,10 +119,11 @@ void Board::notifyMinionEnterObservers(MinionPtr targetMinion) {
     // }
 
     // with apnap
-    auto o = observers->begin();
     try {
+        auto o = observers->begin();
         while (o != observers->end()) {
-            if ((*o)->getType() == TriggerType::MinionEnter && (*o)->getOwner() == (*o)->getActivePlayer()) { // TODO
+            // cout << " HELLO " << z
+            if ((*o)->getType() == TriggerType::MinionEnter && (*o)->getOwner() == (*o)->getActivePlayer() && (*o)->getEnoughCharge()) { // TODO
                 (*o)->setTargetMinion(targetMinion);
                 (*o)->applyAbility();   
             }
@@ -130,15 +131,13 @@ void Board::notifyMinionEnterObservers(MinionPtr targetMinion) {
         }
         o = observers->begin();
         while (o != observers->end()) {
-            if ((*o)->getType() == TriggerType::MinionEnter && (*o)->getOwner() != (*o)->getActivePlayer()) { // TODO
+            if ((*o)->getType() == TriggerType::MinionEnter && (*o)->getOwner() != (*o)->getActivePlayer() && (*o)->getEnoughCharge()) { // TODO
                 (*o)->setTargetMinion(targetMinion);
                 (*o)->applyAbility();   
             }
             ++o;
         }
-    } catch (not_enough_charge& e) {
-        observers->erase(o);
-    }
+    } catch (not_enough_charge& e) {}
 }
 
 void Board::notifyMinionLeaveObservers(MinionPtr targetMinion) {
@@ -154,9 +153,11 @@ void Board::notifyMinionLeaveObservers(MinionPtr targetMinion) {
     //     }
     // }
     auto o = observers->begin();
+
     try {
         while (o != observers->end()) {
-            if ((*o)->getType() == TriggerType::MinionLeave && (*o)->getOwner() == (*o)->getActivePlayer()) { // TODO
+            // triggers owned by active player
+            if ((*o)->getType() == TriggerType::MinionLeave && (*o)->getOwner() == (*o)->getActivePlayer() && (*o)->getEnoughCharge()) { 
                 (*o)->setTargetMinion(targetMinion);
                 (*o)->applyAbility();   
             }
@@ -164,15 +165,14 @@ void Board::notifyMinionLeaveObservers(MinionPtr targetMinion) {
         }
         o = observers->begin();
         while (o != observers->end()) {
-            if ((*o)->getType() == TriggerType::MinionLeave && (*o)->getOwner() != (*o)->getActivePlayer()) { // TODO
+            // triggers owned by non active player
+            if ((*o)->getType() == TriggerType::MinionLeave && (*o)->getOwner() != (*o)->getActivePlayer() && (*o)->getEnoughCharge()) { 
                 (*o)->setTargetMinion(targetMinion);
                 (*o)->applyAbility();   
             }
             ++o;
         }
-    } catch (not_enough_charge& e) {
-        observers->erase(o);
-    }
+    } catch (not_enough_charge& e) {}
 }
 
 

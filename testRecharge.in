@@ -1,0 +1,16 @@
+-testing -deck1 testRecharge.deck -deck2 testRecharge.deck
+a
+b
+play 2
+play 3
+play 3
+board
+draw
+draw
+play 1
+board
+play 3
+board
+play 3
+board
+

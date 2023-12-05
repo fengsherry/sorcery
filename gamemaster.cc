@@ -208,10 +208,11 @@ void GameMaster::notifyStartTurnObservers() {
     //     }
     // }
 
-    auto o = observers.begin();
+    
     try {
+        auto o = observers.begin();
         while (o != observers.end()) {
-            if ((*o)->getType() == TriggerType::StartTurn && (*o)->getOwner() == (*o)->getActivePlayer()) { // TODO
+            if ((*o)->getType() == TriggerType::StartTurn && (*o)->getOwner() == (*o)->getActivePlayer() && (*o)->getEnoughCharge()) { // TODO
                 (*o)->setTargetPlayer(activePlayer);
                 (*o)->applyAbility();   
             }
@@ -219,14 +220,14 @@ void GameMaster::notifyStartTurnObservers() {
         }
         o = observers.begin();
         while (o != observers.end()) {
-            if ((*o)->getType() == TriggerType::StartTurn && (*o)->getOwner() != (*o)->getActivePlayer()) { // TODO
+            if ((*o)->getType() == TriggerType::StartTurn && (*o)->getOwner() != (*o)->getActivePlayer() && (*o)->getEnoughCharge()) { // TODO
                 (*o)->setTargetPlayer(activePlayer);
                 (*o)->applyAbility();   
             }
             ++o;
         }
     } catch (not_enough_charge& e) {
-        observers.erase(o);
+        // observers.erase(o);
     }
 
 }
@@ -244,10 +245,11 @@ void GameMaster::notifyEndTurnObservers() {
     //     }
     // }
 
-    auto o = observers.begin();
+    
     try {
+        auto o = observers.begin();
         while (o != observers.end()) {
-            if ((*o)->getType() == TriggerType::EndTurn && (*o)->getOwner() == (*o)->getActivePlayer()) { // TODO
+            if ((*o)->getType() == TriggerType::EndTurn && (*o)->getOwner() == (*o)->getActivePlayer() && (*o)->getEnoughCharge()) { // TODO
                 (*o)->setTargetPlayer(activePlayer);
                 (*o)->applyAbility();   
             }
@@ -255,14 +257,14 @@ void GameMaster::notifyEndTurnObservers() {
         }
         o = observers.begin();
         while (o != observers.end()) {
-            if ((*o)->getType() == TriggerType::EndTurn && (*o)->getOwner() != (*o)->getActivePlayer()) { // TODO
+            if ((*o)->getType() == TriggerType::EndTurn && (*o)->getOwner() != (*o)->getActivePlayer() && (*o)->getEnoughCharge()) { // TODO
                 (*o)->setTargetPlayer(activePlayer);
                 (*o)->applyAbility();   
             }
             ++o;
         }
     } catch (not_enough_charge& e) {
-        observers.erase(o);
+        // observers.erase(o);
     }
 }
 
