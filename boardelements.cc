@@ -223,6 +223,10 @@ void Board::removeCard(int i) {
         theBoard[i]->setDefense(defense);
         theBoard[i]->setAction(action); // implement in Minion
 
+        // cout << "attack: " << theBoard[i]->getAttack() << endl;
+        // cout << "defense: " << theBoard[i]->getDefense()<< endl;
+        // cout << "action: " << theBoard[i]->getAction() << endl;
+
         // m->setBoard(nullptr);
         theBoard.erase(theBoard.begin() + i);
     } else {throw invalid_play{"Cannot access index " + to_string(i) + " in the board."}; } // should never happen
@@ -261,6 +265,7 @@ void Board::stripEnchants(int i) {
     CardPtr noenchantMinionCard = createCard(theBoard[i]->getDefaultMinionName(), nullptr);
     MinionPtr noenchantMinion = dynamic_pointer_cast<Minion>(noenchantMinionCard);
     theBoard[i] = noenchantMinion;
+    // cout << "noenchant defense: " << noenchantMinion->getDefense() << endl;
 }
 
 void Board::stripTopEnchant(int i) {

@@ -100,12 +100,12 @@ void GameMaster::endTurn() {
     swap(activePlayer, nonactivePlayer);
 }
 
-void GameMaster::attackMinion(int i, int j) { // i is attacker, j is victim
+void GameMaster::attackMinion(int i, int j, MinionPtr* attacker, MinionPtr*victim) { // i is attacker, j is victim
     MinionPtr attackingMinion = activePlayer->getBoard().getCard(i);
     MinionPtr victimMinion = nonactivePlayer->getBoard().getCard(j);
 
     // check for enough action
-    if (attackingMinion->getAction() == 0) throw not_enough_action{*activePlayer}; 
+    if (attackingMinion->getAction() == 0) throw not_enough_action{*activePlayer, attackingMinion}; 
 
     // minions attack each other
     attackingMinion->setAction(0);
@@ -114,10 +114,16 @@ void GameMaster::attackMinion(int i, int j) { // i is attacker, j is victim
     activePlayer->getBoard().enchantMinion(i, "Modify Defense", -attackValVictim);
     nonactivePlayer->getBoard().enchantMinion(j, "Modify Defense", -attackValAttacker);
 
+    // cout << "ap defense: " << activePlayer->getBoard().getCard(i)->getDefense() << endl;
+    // cout << "nap defense: " << nonactivePlayer->getBoard().getCard(j)->getDefense() << endl;
+    *attacker = activePlayer->getBoard().getCard(i);
+    *victim = nonactivePlayer->getBoard().getCard(j);
+    // cout << attacker->get() << endl;
+
     // check if minions are dead 
     if (activePlayer->getBoard().getCard(i)->isDead()) {
         // send to graveyard
-        activePlayer->getBoard().stripEnchants(i);
+        // activePlayer->getBoard().stripEnchants(i);
         activePlayer->getGrave().push(activePlayer->getBoard().getCard(i));
         activePlayer->getBoard().removeCard(i);
     }
@@ -125,6 +131,8 @@ void GameMaster::attackMinion(int i, int j) { // i is attacker, j is victim
         nonactivePlayer->getGrave().push(nonactivePlayer->getBoard().getCard(j));
         nonactivePlayer->getBoard().removeCard(j);
     }
+    // cout << "in game master: " << activePlayer->getGrave().getTop().get() << endl;
+    // cout << "in grave, defense: " << activePlayer->getGrave().getTop()->getDefense() << endl;
 }
 
 
@@ -132,7 +140,7 @@ void GameMaster::attackPlayer(int i) {
     MinionPtr attackingMinion = activePlayer->getBoard().getCard(i);
 
     // check for enough action
-    if (attackingMinion->getAction() == 0) throw not_enough_action{*activePlayer}; 
+    if (attackingMinion->getAction() == 0) throw not_enough_action{*activePlayer, attackingMinion}; 
 
     attackingMinion->setAction(0);
     int attackVal = attackingMinion->getAttack();
