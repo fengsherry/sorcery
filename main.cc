@@ -10,5 +10,5 @@ using namespace std;
 int main(int argc, char *argv[]) {
     GameController controller;
     controller.go(argc, argv);
-
+    
 }
