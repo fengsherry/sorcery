@@ -22,6 +22,7 @@ class TriggeredAbility {
   MinionPtr ownerMinion; // only set if the ta belongs to a minion (not a ritual)
   vector<Player*> targetPlayers;
   vector<MinionPtr> targetMinions;
+  bool enoughCharge = true;
 
  public:
   TriggeredAbility(TriggerType type, TriggerCardType cardType, Player* owner, MinionPtr ownerMinion = nullptr);
@@ -29,6 +30,8 @@ class TriggeredAbility {
   Player* getOwner();
   TriggerType getType();
   TriggerCardType getCardType();
+  void setEnoughCharge(bool b);
+  bool getEnoughCharge();
   void setOwnerMinion(MinionPtr m);
   virtual void setTargetPlayer(Player* targetPlayer);
   virtual void setTargetMinion(MinionPtr targetMinion);

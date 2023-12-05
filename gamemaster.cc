@@ -214,7 +214,7 @@ void GameMaster::notifyStartTurnObservers() {
     auto o = ol.observers.begin();
     try {
         while (o != ol.observers.end()) {
-            if ((*o)->getType() == TriggerType::StartTurn && (*o)->getOwner() == ol.activePlayer) { // TODO
+            if ((*o)->getType() == TriggerType::StartTurn && (*o)->getOwner() == ol.activePlayer && (*o)->getEnoughCharge()) { // TODO
                 (*o)->setTargetPlayer(activePlayer);
                 (*o)->applyAbility();   
             }
@@ -222,14 +222,14 @@ void GameMaster::notifyStartTurnObservers() {
         }
         o = ol.observers.begin();
         while (o != ol.observers.end()) {
-            if ((*o)->getType() == TriggerType::StartTurn && (*o)->getOwner() != ol.activePlayer) { // TODO
+            if ((*o)->getType() == TriggerType::StartTurn && (*o)->getOwner() != ol.activePlayer && (*o)->getEnoughCharge()) { // TODO
                 (*o)->setTargetPlayer(activePlayer);
                 (*o)->applyAbility();   
             }
             ++o;
         }
     } catch (not_enough_charge& e) {
-        ol.observers.erase(o);
+        // observers.erase(o);
     }
 
 }
@@ -250,7 +250,7 @@ void GameMaster::notifyEndTurnObservers() {
     auto o = ol.observers.begin();
     try {
         while (o != ol.observers.end()) {
-            if ((*o)->getType() == TriggerType::EndTurn && (*o)->getOwner() == ol.activePlayer) { // TODO
+            if ((*o)->getType() == TriggerType::EndTurn && (*o)->getOwner() == ol.activePlayer && (*o)->getEnoughCharge()) { // TODO
                 (*o)->setTargetPlayer(activePlayer);
                 (*o)->applyAbility();   
             }
@@ -258,7 +258,7 @@ void GameMaster::notifyEndTurnObservers() {
         }
         o = ol.observers.begin();
         while (o != ol.observers.end()) {
-            if ((*o)->getType() == TriggerType::EndTurn && (*o)->getOwner() != ol.activePlayer) { 
+            if ((*o)->getType() == TriggerType::EndTurn && (*o)->getOwner() != ol.activePlayer && (*o)->getEnoughCharge()) { 
                 (*o)->setTargetPlayer(activePlayer);
                 (*o)->applyAbility();   
             }

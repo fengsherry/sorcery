@@ -110,14 +110,6 @@ void GameController::go(int argc, char *argv[]) {
         testCmdArg("graphics");
     }
 
-    cout << "is open: " << file.is_open() << endl;
-    string s;
-    if (getline(file, s)) {
-        cout << "hi!" << endl;
-    } else {
-        cout << "what??" << endl;
-    }
-
     // create input file streams for each deck file location
     ifstream in1 = deck1Flag ? ifstream(deck1File.c_str()) : ifstream("default.deck");
     ifstream in2 = deck2Flag ? ifstream(deck2File.c_str()) : ifstream("default.deck");

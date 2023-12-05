@@ -14,6 +14,10 @@ TriggerType TriggeredAbility::getType() {return type;}
 
 TriggerCardType TriggeredAbility::getCardType() {return cardType;}
 
+void TriggeredAbility::setEnoughCharge(bool b) { enoughCharge = b; } 
+
+bool TriggeredAbility::getEnoughCharge() { return enoughCharge; } 
+
 void TriggeredAbility::setOwnerMinion(MinionPtr m) {ownerMinion = m;}
 
 void TriggeredAbility::setTargetPlayer(Player* targetPlayer) {
