@@ -50,9 +50,9 @@ class GameMaster {
         void useAbility(int i, int j, Player& targetPlayer); // activated ability
 
         // displays some visual
-        void describe();
-        void hand();
-        void board();
+        // void describe();
+        // void hand();
+        // void board();
 
         // getters and setters
         int getTurn();

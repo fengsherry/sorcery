@@ -1,5 +1,4 @@
 // Public interface for Minion
-
 #ifndef __MINION_H__
 #define __MINION_H__
 #include <string>
@@ -15,23 +14,28 @@ class DefaultMinion;
 class EnchantmentDec;
 class Board;
 
-class Minion: public Card {
+class Minion : public Card {
     CardType type = CardType::Minion;
     bool needTarget = false;
     Board* board = nullptr;
+    string desc;
 
  public:
     Minion(CardName cardName, int cost, string desc = "");
     virtual ~Minion() = default;
 
-    // string getName() const override;
+    string getName() const override;
+    string getDesc() const override;
     virtual string getDefaultMinionName() const = 0;
+    virtual string getDefaultMinionDesc() const = 0;
+    // virtual const Minion* getDefaultMinion() const = 0;
     virtual Minion* getDefaultMinion() = 0;
     virtual int getAttack() const = 0;
     virtual int getDefense() const = 0;
     virtual int getAction() const = 0;
     virtual variant<ActivatedAbility*, TriggeredAbility*, monostate> getAbility() = 0;
 
+    virtual int getActivatedAbilityCost() const = 0;
     void setBoard(Board* b);
     virtual void setAbility(variant<ActivatedAbility*, TriggeredAbility*, monostate> a) = 0;
 

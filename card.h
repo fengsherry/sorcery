@@ -16,6 +16,7 @@ enum class CardName {
     /* Spells */ Banish, Unsummon, Recharge, Disenchant, RaiseDead, Blizzard,
     /* Rituals */ DarkRitual, AuraOfPower, Standstill
 };
+
 string cardNameToString(CardName c);
 
 // every card has a name and a cost
@@ -23,21 +24,21 @@ class Card {
     CardName name;
     int cost;
     CardType type;
-    string desc;
     bool needTarget; // true if the Card requires a target to be played
+    string desc;
 
  public:
     // Card();
     Card(CardName cardName, int cost, CardType type, bool needTarget, string desc = "");
     virtual ~Card() = default;
     virtual string getName() const;
-    string getDesc() const;
+    virtual string getDesc() const;
     int getCost() const;
     CardType getType();
-    CardName getCardName();
+    CardName getCardName() const;
     bool getNeedTarget();
-
 };
+
 typedef std::shared_ptr<Card> CardPtr;
 
 ostream &operator<< (ostream &out, const Card *c);

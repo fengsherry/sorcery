@@ -12,6 +12,7 @@ class not_enough_action : public std::exception {
             return p.getName() + " has 0 action. Unable to attack.";
         }
 };
+
 class not_enough_magic : public std::exception {
     Player p;
     public:
@@ -89,6 +90,14 @@ class full_board : public std::exception {
         }
 };
 
+class full_inspect : public std::exception {
+    public:
+        full_inspect() {}
+        string what() {
+            return "The inspect is full.";
+        }
+};
+
 class outside_range : public std::exception {
     public:
         outside_range() {}
@@ -106,13 +115,46 @@ class no_enchantments : public std::exception {
         }
 };
 
+class ability_silenced : public std::exception {
+    public:
+        ability_silenced() {}
+        string what () {
+            return "Cannot apply abilities. Minion has been enchanted with Silence.";
+        }
+};
+
 // class detach_game_observer : public std::exception {
 //     TriggeredAbility* ta;
 //     public:
 //         detach_game_observer(TriggeredAbility* ta ) : ta{ta} {}
 //         string what () {
-//             return "Removing a TriggeredAbility from observers";
+//             return "Removing a TriggeredAbility from gameObservers.";
 //         }
 // };
+
+class invalid_inspect_type : public std::exception {
+    MinionPtr m;
+    public:
+        invalid_inspect_type(MinionPtr _m) : m{_m} {}
+        string what () {
+            return "Unable to inspect: " + m->getName() + " is not a Minion.";
+        }
+};
+
+class invalid_card_inspect : public std::exception {
+    public:
+        invalid_card_inspect() = default;
+        string what () {
+            return "Unable to inspect - card is not on the inspect.";
+        }
+};
+
+class dne_card_inspect : public std::exception {
+    public:
+    dne_card_inspect() = default;
+    string what() {
+        return "Unable to inspect - card does not exist.";
+    }
+};
 
 #endif

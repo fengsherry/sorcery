@@ -6,13 +6,15 @@
 using namespace std;
 
 Minion::Minion(CardName cardName, int cost, string desc): 
-    Card{cardName, cost, CardType::Minion, false, desc} {}
+    Card{cardName, cost, CardType::Minion, false, desc}, desc{desc} {}
 
 // void Minion::decreaseLife(int n) {
 
 // }
 
-// string Minion::getName() const { return getDefaultMinionName(); }
+string Minion::getName() const { return Card::getName(); }
+
+string Minion::getDesc() const { return desc; }
 
 // void Minion::decreaseDefense(int n) {}
 // void Minion::setAction(int n) {

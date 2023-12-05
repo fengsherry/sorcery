@@ -18,6 +18,12 @@ bool EnchantmentDec::isHidden() { return hidden; }
 
 string EnchantmentDec::getDefaultMinionName() const { return next->getDefaultMinionName(); }
 
+string EnchantmentDec::getDefaultMinionDesc() const { return next->getDefaultMinionDesc(); }
+
+// int EnchantmentDec::getActivatedAbilityCost() const {return next->getActivatedAbilityCost(); }
+
+// const Minion* EnchantmentDec::getDefaultMinion() const { return next->getDefaultMinion(); }
+
 Minion* EnchantmentDec::getDefaultMinion() { return next->getDefaultMinion(); }
 
 MinionPtr EnchantmentDec::getNext() { return next; }
