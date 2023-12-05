@@ -222,9 +222,9 @@ void Board::removeCard(int i) {
         theBoard[i]->setDefense(defense);
         theBoard[i]->setAction(action); // implement in Minion
 
-        cout << "attack: " << theBoard[i]->getAttack() << endl;
-        cout << "defense: " << theBoard[i]->getDefense()<< endl;
-        cout << "action: " << theBoard[i]->getAction() << endl;
+        // cout << "attack: " << theBoard[i]->getAttack() << endl;
+        // cout << "defense: " << theBoard[i]->getDefense()<< endl;
+        // cout << "action: " << theBoard[i]->getAction() << endl;
 
         // m->setBoard(nullptr);
         theBoard.erase(theBoard.begin() + i);

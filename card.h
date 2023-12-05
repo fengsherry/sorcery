@@ -42,6 +42,6 @@ class Card {
 
 typedef std::shared_ptr<Card> CardPtr;
 
-// ostream &operator<< (ostream &out, const Card *c);
+ostream &operator<< (ostream &out, const Card *c);
 
 #endif
