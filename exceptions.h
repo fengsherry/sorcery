@@ -6,10 +6,11 @@ using namespace std;
 
 class not_enough_action : public std::exception {
     Player p;
+    MinionPtr m;
     public:
-        not_enough_action(Player& p) : p{p} {}
+        not_enough_action(Player& p, MinionPtr m) : p{p}, m{m} {}
         string what () {
-            return p.getName() + " has 0 action. Unable to attack.";
+            return p.getName() + "'s " + m->getDefaultMinionName() + " has 0 action. Unable to attack.";
         }
 };
 

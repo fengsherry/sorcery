@@ -83,7 +83,11 @@ void GameMaster::startTurn() {
     } catch (deck_empty e) {cout << e.what() << endl;}
     activePlayer->getBoard().restoreAction();
     activePlayer->getHand().restoreAction(); // can we combine these two
-    this->notifyStartTurnObservers();
+    
+    // update activePlayer in observers
+    for (auto o : observers) o->setActivePlayer(activePlayer);
+
+    notifyStartTurnObservers();
 }
 
 // ends a turn, notifies corresponding observers
@@ -96,13 +100,12 @@ void GameMaster::endTurn() {
     swap(activePlayer, nonactivePlayer);
 }
 
-// NOT DONE YET
-void GameMaster::attackMinion(int i, int j) { // i is attacker, j is victim
+void GameMaster::attackMinion(int i, int j, MinionPtr* attacker, MinionPtr*victim) { // i is attacker, j is victim
     MinionPtr attackingMinion = activePlayer->getBoard().getCard(i);
     MinionPtr victimMinion = nonactivePlayer->getBoard().getCard(j);
 
     // check for enough action
-    if (attackingMinion->getAction() == 0) throw not_enough_action{*activePlayer}; 
+    if (attackingMinion->getAction() == 0) throw not_enough_action{*activePlayer, attackingMinion}; 
 
     // minions attack each other
     attackingMinion->setAction(0);
@@ -111,10 +114,16 @@ void GameMaster::attackMinion(int i, int j) { // i is attacker, j is victim
     activePlayer->getBoard().enchantMinion(i, "Modify Defense", -attackValVictim);
     nonactivePlayer->getBoard().enchantMinion(j, "Modify Defense", -attackValAttacker);
 
+    // cout << "ap defense: " << activePlayer->getBoard().getCard(i)->getDefense() << endl;
+    // cout << "nap defense: " << nonactivePlayer->getBoard().getCard(j)->getDefense() << endl;
+    *attacker = activePlayer->getBoard().getCard(i);
+    *victim = nonactivePlayer->getBoard().getCard(j);
+    // cout << attacker->get() << endl;
+
     // check if minions are dead 
     if (activePlayer->getBoard().getCard(i)->isDead()) {
         // send to graveyard
-        activePlayer->getBoard().stripEnchants(i);
+        // activePlayer->getBoard().stripEnchants(i);
         activePlayer->getGrave().push(activePlayer->getBoard().getCard(i));
         activePlayer->getBoard().removeCard(i);
     }
@@ -122,6 +131,8 @@ void GameMaster::attackMinion(int i, int j) { // i is attacker, j is victim
         nonactivePlayer->getGrave().push(nonactivePlayer->getBoard().getCard(j));
         nonactivePlayer->getBoard().removeCard(j);
     }
+    // cout << "in game master: " << activePlayer->getGrave().getTop().get() << endl;
+    // cout << "in grave, defense: " << activePlayer->getGrave().getTop()->getDefense() << endl;
 }
 
 
@@ -129,7 +140,7 @@ void GameMaster::attackPlayer(int i) {
     MinionPtr attackingMinion = activePlayer->getBoard().getCard(i);
 
     // check for enough action
-    if (attackingMinion->getAction() == 0) throw not_enough_action{*activePlayer}; 
+    if (attackingMinion->getAction() == 0) throw not_enough_action{*activePlayer, attackingMinion}; 
 
     attackingMinion->setAction(0);
     int attackVal = attackingMinion->getAttack();
@@ -185,30 +196,73 @@ void GameMaster::useAbility(int i, int j, Player& targetPlayer) {
 
 
 void GameMaster::notifyStartTurnObservers() {
-    for (auto o = observers.begin(); o != observers.end();) {
-        try {
-            if ((*o)->getType() == TriggerType::StartTurn) {
+    // for (auto o = observers.begin(); o != observers.end();) {
+    //     try {
+    //         if ((*o)->getType() == TriggerType::StartTurn) {
+    //             (*o)->setTargetPlayer(activePlayer);
+    //             (*o)->applyAbility();   
+    //         }
+    //         o++;
+    //     } catch (not_enough_charge& e) {
+    //         observers.erase(o);
+    //     }
+    // }
+
+    auto o = observers.begin();
+    try {
+        while (o != observers.end()) {
+            if ((*o)->getType() == TriggerType::StartTurn && (*o)->getOwner() == (*o)->getActivePlayer()) { // TODO
                 (*o)->setTargetPlayer(activePlayer);
                 (*o)->applyAbility();   
             }
-            o++;
-        } catch (not_enough_charge& e) {
-            observers.erase(o);
+            ++o;
         }
+        o = observers.begin();
+        while (o != observers.end()) {
+            if ((*o)->getType() == TriggerType::StartTurn && (*o)->getOwner() != (*o)->getActivePlayer()) { // TODO
+                (*o)->setTargetPlayer(activePlayer);
+                (*o)->applyAbility();   
+            }
+            ++o;
+        }
+    } catch (not_enough_charge& e) {
+        observers.erase(o);
     }
+
 }
 
 void GameMaster::notifyEndTurnObservers() {
-    for (auto o = observers.begin(); o != observers.end();) {
-        try {
-            if ((*o)->getType() == TriggerType::EndTurn) {
+    // for (auto o = observers.begin(); o != observers.end();) {
+    //     try {
+    //         if ((*o)->getType() == TriggerType::EndTurn) {
+    //             (*o)->setTargetPlayer(activePlayer);
+    //             (*o)->applyAbility();   
+    //         }
+    //         o++;
+    //     } catch (not_enough_charge& e) {
+    //         observers.erase(o);
+    //     }
+    // }
+
+    auto o = observers.begin();
+    try {
+        while (o != observers.end()) {
+            if ((*o)->getType() == TriggerType::EndTurn && (*o)->getOwner() == (*o)->getActivePlayer()) { // TODO
                 (*o)->setTargetPlayer(activePlayer);
                 (*o)->applyAbility();   
             }
-            o++;
-        } catch (not_enough_charge& e) {
-            observers.erase(o);
+            ++o;
         }
+        o = observers.begin();
+        while (o != observers.end()) {
+            if ((*o)->getType() == TriggerType::EndTurn && (*o)->getOwner() != (*o)->getActivePlayer()) { // TODO
+                (*o)->setTargetPlayer(activePlayer);
+                (*o)->applyAbility();   
+            }
+            ++o;
+        }
+    } catch (not_enough_charge& e) {
+        observers.erase(o);
     }
 }
 

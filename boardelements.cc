@@ -34,8 +34,11 @@ CardPtr Deck::drawCard() {
         int randomNumber = std::rand() % theDeck.size();
         cout << randomNumber << endl;
         card = theDeck[randomNumber];
-    } else card = theDeck.back();
-    theDeck.pop_back();
+        theDeck.erase(theDeck.begin()+randomNumber);
+    } else {
+        card = theDeck.back();
+        theDeck.pop_back();
+    }
     return card;
 }
 
@@ -103,32 +106,75 @@ void Board::detach(TriggeredAbility* o) {
 }
 
 void Board::notifyMinionEnterObservers(MinionPtr targetMinion) {
-    for (auto o = observers->begin(); o != observers->end();) {
-        try {
-            if ((*o)->getType() == TriggerType::MinionEnter) {
+    // for (auto o = observers->begin(); o != observers->end();) {
+    //     try {
+    //         if ((*o)->getType() == TriggerType::MinionEnter) {
+    //             (*o)->setTargetMinion(targetMinion);
+    //             (*o)->applyAbility();   
+    //         }
+    //         ++o;
+    //     } catch (not_enough_charge& e) {
+    //         observers->erase(o);
+    //     }
+    // }
+
+    // with apnap
+    auto o = observers->begin();
+    try {
+        while (o != observers->end()) {
+            if ((*o)->getType() == TriggerType::MinionEnter && (*o)->getOwner() == (*o)->getActivePlayer()) { // TODO
                 (*o)->setTargetMinion(targetMinion);
                 (*o)->applyAbility();   
             }
             ++o;
-        } catch (not_enough_charge& e) {
-            observers->erase(o);
         }
+        o = observers->begin();
+        while (o != observers->end()) {
+            if ((*o)->getType() == TriggerType::MinionEnter && (*o)->getOwner() != (*o)->getActivePlayer()) { // TODO
+                (*o)->setTargetMinion(targetMinion);
+                (*o)->applyAbility();   
+            }
+            ++o;
+        }
+    } catch (not_enough_charge& e) {
+        observers->erase(o);
     }
 }
 
 void Board::notifyMinionLeaveObservers(MinionPtr targetMinion) {
-    for (auto o = observers->begin(); o != observers->end();) {
-        try {
-            if ((*o)->getType() == TriggerType::MinionLeave) {
+    // for (auto o = observers->begin(); o != observers->end();) {
+    //     try {
+    //         if ((*o)->getType() == TriggerType::MinionLeave) {
+    //             (*o)->setTargetMinion(targetMinion);
+    //             (*o)->applyAbility();   
+    //         }
+    //         ++o;
+    //     } catch (not_enough_charge& e) {
+    //         observers->erase(o);
+    //     }
+    // }
+    auto o = observers->begin();
+    try {
+        while (o != observers->end()) {
+            if ((*o)->getType() == TriggerType::MinionLeave && (*o)->getOwner() == (*o)->getActivePlayer()) { // TODO
                 (*o)->setTargetMinion(targetMinion);
                 (*o)->applyAbility();   
             }
             ++o;
-        } catch (not_enough_charge& e) {
-            observers->erase(o);
         }
+        o = observers->begin();
+        while (o != observers->end()) {
+            if ((*o)->getType() == TriggerType::MinionLeave && (*o)->getOwner() != (*o)->getActivePlayer()) { // TODO
+                (*o)->setTargetMinion(targetMinion);
+                (*o)->applyAbility();   
+            }
+            ++o;
+        }
+    } catch (not_enough_charge& e) {
+        observers->erase(o);
     }
 }
+
 
 MinionPtr Board::getCard(int i) const {
     // if (i > theBoard.size()) {
@@ -176,6 +222,10 @@ void Board::removeCard(int i) {
         theBoard[i]->setDefense(defense);
         theBoard[i]->setAction(action); // implement in Minion
 
+        // cout << "attack: " << theBoard[i]->getAttack() << endl;
+        // cout << "defense: " << theBoard[i]->getDefense()<< endl;
+        // cout << "action: " << theBoard[i]->getAction() << endl;
+
         // m->setBoard(nullptr);
         theBoard.erase(theBoard.begin() + i);
     } else {throw invalid_play{"Cannot access index " + to_string(i) + " in the board."}; } // should never happen
@@ -211,6 +261,7 @@ void Board::stripEnchants(int i) {
     CardPtr noenchantMinionCard = createCard(theBoard[i]->getDefaultMinionName(), nullptr);
     MinionPtr noenchantMinion = dynamic_pointer_cast<Minion>(noenchantMinionCard);
     theBoard[i] = noenchantMinion;
+    // cout << "noenchant defense: " << noenchantMinion->getDefense() << endl;
 }
 
 void Board::stripTopEnchant(int i) {

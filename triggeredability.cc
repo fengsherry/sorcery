@@ -7,11 +7,18 @@
 TriggeredAbility:: TriggeredAbility(TriggerType type, TriggerCardType cardType, Player* owner, MinionPtr ownerMinion):
     type {type}, cardType {cardType}, owner {owner}, ownerMinion {ownerMinion} {}
 
+
+Player* TriggeredAbility::getOwner() {return owner;}
+
 TriggerType TriggeredAbility::getType() {return type;}
+
+Player* TriggeredAbility::getActivePlayer() {return activePlayer;}
 
 TriggerCardType TriggeredAbility::getCardType() {return cardType;}
 
 void TriggeredAbility::setOwnerMinion(MinionPtr m) {ownerMinion = m;}
+
+void TriggeredAbility::setActivePlayer(Player* ap) {activePlayer = ap;}
 
 void TriggeredAbility::setTargetPlayer(Player* targetPlayer) {
     targetPlayers.clear();
@@ -41,8 +48,11 @@ void DarkRitualAbility::applyAbility() {
     cout << "!! triggering DarkRitualAbility for " << targetPlayers[0]->getName() << "!!!!" << endl;
 
     // at this point, the current activePlayer should already be set as targetPlayer
-    TriggeredAbility::applyAbility();
-    if (owner == targetPlayers[0]) targetPlayers[0]->increaseMagic(1);
+    
+    if (owner == targetPlayers[0]) {
+        targetPlayers[0]->increaseMagic(1);
+        TriggeredAbility::applyAbility();
+    }
 }
 
 /* Aura of Power */
@@ -53,10 +63,10 @@ void AuraOfPowerAbility::applyAbility() {
     cout << "!! triggering AuraOfPowerAbility for " << targetMinions[0]->getName() << "!!!!" << endl;
 
     // targetMinion (the minion that just entered) should be added to targetMinions
-    TriggeredAbility::applyAbility();
     if (owner->onBoard(targetMinions[0])) {
         targetMinions[0]->modifyAttack(1);
         targetMinions[0]->modifyDefence(1);
+        TriggeredAbility::applyAbility();
     }
 }
 

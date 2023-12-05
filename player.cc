@@ -181,7 +181,7 @@ void Player::useAbility(int i, Player& nonActivePlayer) {
         // check if ability can be used without target
         if (aaToUse->getNeedTarget()) throw no_target_provided(*minionToUse);
         // check if player has enough action
-        if (minionToUse->getAction() == 0) throw not_enough_action{*this}; 
+        if (minionToUse->getAction() == 0) throw not_enough_action{*this, minionToUse}; 
         // check if player has enough magic to play the card
         int cost = aaToUse->getActivationCost();
         if (!testing && cost > magic) throw not_enough_magic(*this); // why *this not this
@@ -206,7 +206,7 @@ void Player::useAbility(int i, int j, Player &p) {
         // check if ability can be played on a target
         if (!aaToUse->getNeedTarget()) throw no_target_needed(*minionToUse);
         // check if player has enough action
-        if (minionToUse->getAction() == 0) throw not_enough_action{*this}; 
+        if (minionToUse->getAction() == 0) throw not_enough_action{*this, minionToUse}; 
         // check if player has enough magic to play the card
         int cost = aaToUse->getActivationCost();
         if (!testing && cost > magic) throw not_enough_magic(*this); // why *this not this

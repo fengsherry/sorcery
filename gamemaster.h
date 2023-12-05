@@ -6,6 +6,7 @@
 #include <vector>
 #include "player.h"
 #include "boardelements.h"
+#include "triggeredability.h"
 using namespace std;
 
 class GameMaster {
@@ -38,7 +39,7 @@ class GameMaster {
         void startTurn();
         void endTurn();
 
-        void attackMinion(int i, int j); // returns true if successfully attacked, returns false otherwise
+        void attackMinion(int i, int j, MinionPtr* attacker, MinionPtr* victim); // returns true if successfully attacked, returns false otherwise
         void attackPlayer(int i); // returns true if successfully attacked, returns false otherwise
         void activateAbility();
 
