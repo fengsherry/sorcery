@@ -29,7 +29,7 @@ class Player {
         ~Player();
 
         // void init(string name, int id);
-        void init(string name, int id, ifstream& deckIn, vector<TriggeredAbility*>* boardObservers);
+        void init(string name, int id, ifstream& deckIn, vector<TriggeredAbility*>* observers);
 
         string getName() const;
         int getId() const;
@@ -55,7 +55,7 @@ class Player {
         // plays the ith card int he player's hand with no target (i.e. minions, rituals, spells)
         // throws exception if unsucessful 
         TriggeredAbility* play(int i, Player& nonActivePlayer); 
-        void play(int i, int j, Player& p); 
+        TriggeredAbility* play(int i, int j, Player& p); 
 
         void useAbility(int i, Player& nonActivePlayer);
         void useAbility(int i, int j, Player &p);
