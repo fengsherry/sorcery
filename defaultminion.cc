@@ -38,6 +38,10 @@ int DefaultMinion::getAction() const {
     return action;
 }
 
+int DefaultMinion::getCost() const {
+    return cost;
+}
+
 void DefaultMinion::modifyAction(int n){
     action += n;
 }

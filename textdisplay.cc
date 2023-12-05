@@ -202,10 +202,10 @@ void TextDisplay::displayHand(int p) {
           toPrint.emplace_back(display_ritual(name, cost, 1, desc, 5)); 
           break;
         case(CardName::AuraOfPower):
-          display_ritual(name, cost, 1, desc, 4); 
+          toPrint.emplace_back(display_ritual(name, cost, 1, desc, 4)); 
           break;
         case(CardName::Standstill):
-          display_ritual(name, cost, 2, desc, 4); 
+          toPrint.emplace_back(display_ritual(name, cost, 2, desc, 4)); 
           break;
 
         // if enchantment

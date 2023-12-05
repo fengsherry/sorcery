@@ -108,9 +108,16 @@ CardPtr createCard(string cardName, Player* p) {
 
     /* Rituals: */ 
     else if (cardName == "Dark Ritual") card = std::make_shared<Ritual>(CardName::DarkRitual, "At the start of your turn, gain 1 magic", 0, 1, 5, new DarkRitualAbility{p});
-    else if (cardName == "Aura of Power") card = std::make_shared<Ritual>(CardName::AuraOfPower, "Whenever a minion enters play under your control, it gains +1/+1", 1, 1, 4, new AuraOfPowerAbility{p});
-    else if (cardName == "Standstill") card = std::make_shared<Ritual>(CardName::Standstill, "Whenever a minion enters play under your control, destroy it", 3, 2, 4, new StandstillAbility{p});
+    else if (cardName == "Aura of Power") card = std::make_shared<Ritual>(CardName::AuraOfPower, "When a minion enters play under your control, it gains +1/+1", 1, 1, 4, new AuraOfPowerAbility{p});
+    else if (cardName == "Standstill") card = std::make_shared<Ritual>(CardName::Standstill, "When a minion enters play under your control, destroy it", 3, 2, 4, new StandstillAbility{p});
 
     else return nullptr;
     return card;
+}
+
+void checkRange(int i, int max) { // e.g. i = 3, size = 5
+    if (i < 1 || max < i) {
+        string s = (max == 0) ? "Out of range." : "Out of range, please provide a number between " + to_string(1) + " and " + to_string(max);
+        throw std::out_of_range{s};
+    };
 }

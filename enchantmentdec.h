@@ -27,6 +27,7 @@ class EnchantmentDec : public Minion {
         variant<ActivatedAbility*, TriggeredAbility*, monostate> getAbility();
         // string getDefaultMinionName() const ;
         Minion* getDefaultMinion() override;
+        int getCost() const override;
         TriggeredAbility* getEnchantmentAbility();
         MinionPtr getNext();
         void setNext(MinionPtr newnext);

@@ -5,11 +5,14 @@
 #include <string>
 #include "card.h"
 #include "player.h"
+#include "exceptions.h"
 
 string cardNameToString(CardName c);
 
 string cardTypeToString(CardType t);
 
 CardPtr createCard(std::string cardName, Player* p);
+
+void checkRange(int i, int max);
 
 #endif

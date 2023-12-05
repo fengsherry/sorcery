@@ -35,6 +35,7 @@ class Minion : public Card {
     virtual int getAction() const = 0;
     virtual variant<ActivatedAbility*, TriggeredAbility*, monostate> getAbility() = 0;
 
+    virtual int getCost() const override = 0; 
     virtual int getActivatedAbilityCost() const = 0;
     void setBoard(Board* b);
     virtual void setAbility(variant<ActivatedAbility*, TriggeredAbility*, monostate> a) = 0;
