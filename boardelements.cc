@@ -90,17 +90,19 @@ void Hand::removeCard(int i) {
 }
 
 /* BOARD */
-void Board::init(vector<TriggeredAbility*>* o) {
-    observers = o;
+void Board::init(observersList* ol, Graveyard* gy) {
+    this->ol = ol;
+    grave = gy;
 }
 
 void Board::attach(TriggeredAbility* o) {
-    observers->emplace_back(o);
+    ol->observers.emplace_back(o);
+    
 }
 
 void Board::detach(TriggeredAbility* o) {
-    for (auto it = observers->begin(); it != observers->end();) {
-        if (*it == o) observers->erase(it);
+    for (auto it = ol->observers.begin(); it != ol->observers.end();) {
+        if (*it == o) ol->observers.erase(it);
         else ++it;
     }
 }
@@ -119,25 +121,25 @@ void Board::notifyMinionEnterObservers(MinionPtr targetMinion) {
     // }
 
     // with apnap
-    auto o = observers->begin();
+    auto o = ol->observers.begin();
     try {
-        while (o != observers->end()) {
-            if ((*o)->getType() == TriggerType::MinionEnter && (*o)->getOwner() == (*o)->getActivePlayer()) { // TODO
+        while (o != ol->observers.end()) {
+            if ((*o)->getType() == TriggerType::MinionEnter && (*o)->getOwner() == ol->activePlayer) { 
                 (*o)->setTargetMinion(targetMinion);
                 (*o)->applyAbility();   
             }
             ++o;
         }
-        o = observers->begin();
-        while (o != observers->end()) {
-            if ((*o)->getType() == TriggerType::MinionEnter && (*o)->getOwner() != (*o)->getActivePlayer()) { // TODO
+        o = ol->observers.begin();
+        while (o != ol->observers.end()) {
+            if ((*o)->getType() == TriggerType::MinionEnter && (*o)->getOwner() != ol->activePlayer) { 
                 (*o)->setTargetMinion(targetMinion);
                 (*o)->applyAbility();   
             }
             ++o;
         }
     } catch (not_enough_charge& e) {
-        observers->erase(o);
+        ol->observers.erase(o);
     }
 }
 
@@ -153,25 +155,26 @@ void Board::notifyMinionLeaveObservers(MinionPtr targetMinion) {
     //         observers->erase(o);
     //     }
     // }
-    auto o = observers->begin();
+    auto o = ol->observers.begin();
     try {
-        while (o != observers->end()) {
-            if ((*o)->getType() == TriggerType::MinionLeave && (*o)->getOwner() == (*o)->getActivePlayer()) { // TODO
+        while (o != ol->observers.end()) {
+            if ((*o)->getType() == TriggerType::MinionLeave && (*o)->getOwner() == ol->activePlayer) { 
                 (*o)->setTargetMinion(targetMinion);
+                cout << "target minion:" << targetMinion->getName() << "attack: " << targetMinion->getAttack() << "defense: " << targetMinion->getDefense();
                 (*o)->applyAbility();   
             }
             ++o;
         }
-        o = observers->begin();
-        while (o != observers->end()) {
-            if ((*o)->getType() == TriggerType::MinionLeave && (*o)->getOwner() != (*o)->getActivePlayer()) { // TODO
+        o = ol->observers.begin();
+        while (o != ol->observers.end()) {
+            if ((*o)->getType() == TriggerType::MinionLeave && (*o)->getOwner() != ol->activePlayer) { 
                 (*o)->setTargetMinion(targetMinion);
                 (*o)->applyAbility();   
             }
             ++o;
         }
     } catch (not_enough_charge& e) {
-        observers->erase(o);
+        ol->observers.erase(o);
     }
 }
 
@@ -202,7 +205,7 @@ void Board::addCard(MinionPtr m) {
 
 }
 
-void Board::removeCard(int i) {
+MinionPtr Board::removeCard(int i) {
     if (static_cast<int>(theBoard.size()) > i) {
         MinionPtr m = theBoard[i];
         notifyMinionLeaveObservers(m);
@@ -211,10 +214,12 @@ void Board::removeCard(int i) {
         auto a = m->getAbility();
         if (holds_alternative<TriggeredAbility*>(a)) detach(get<TriggeredAbility*>(a));
 
-        // remove enchantments
+        // flatten fields, then remove enchantments
         int attack = theBoard[i]->getAttack();
         int defense = theBoard[i]->getDefense();
         int action = theBoard[i]->getAction();
+
+        cout << "removing!! attack: " << attack << "defence " << defense << "action " << action << endl;
 
         this->stripEnchants(i);
 
@@ -222,12 +227,18 @@ void Board::removeCard(int i) {
         theBoard[i]->setDefense(defense);
         theBoard[i]->setAction(action); // implement in Minion
 
+        cout << "the minion reassigned!! attack: " << theBoard[i]->getAttack() << "defence " << theBoard[i]->getDefense() << "action " << theBoard[i]->getAction()  << endl;
+
         // cout << "attack: " << theBoard[i]->getAttack() << endl;
         // cout << "defense: " << theBoard[i]->getDefense()<< endl;
         // cout << "action: " << theBoard[i]->getAction() << endl;
 
         // m->setBoard(nullptr);
+        MinionPtr res = theBoard[i];
+
         theBoard.erase(theBoard.begin() + i);
+
+        return res;
     } else {throw invalid_play{"Cannot access index " + to_string(i) + " in the board."}; } // should never happen
     
 }
@@ -244,8 +255,14 @@ int Board::find(MinionPtr m) {
 }
 
 
-TriggeredAbility* Board::enchantMinion(int i, string minionName, int modifyval) {
+MinionPtr Board::enchantMinion(int i, string minionName, int modifyval) {
     // EXCEPTION: check for i
+
+    // // this vector will hold the updated MinionPtrs that point at the top layer (after adding enchantdecs)
+    // vector<MinionPtr> res;
+
+    MinionPtr res;
+    
     if (minionName == "Giant Strength") theBoard[i] = make_shared<GiantStrength>(theBoard[i]); 
     else if (minionName == "Enrage") theBoard[i] = make_shared<Enrage>(theBoard[i]);
     else if (minionName == "Haste") theBoard[i] = make_shared <Haste>(theBoard[i]);
@@ -253,8 +270,23 @@ TriggeredAbility* Board::enchantMinion(int i, string minionName, int modifyval) 
     else if (minionName == "Silence") theBoard[i] = make_shared <Silence>(theBoard[i]);
     else if (minionName == "Modify Attack") theBoard[i] = make_shared <ModifyAttack>(theBoard[i], modifyval);
     else if (minionName == "Modify Defense") theBoard[i] = make_shared <ModifyDefense>(theBoard[i], modifyval);
-    TriggeredAbility* a = dynamic_pointer_cast<EnchantmentDec>(theBoard[i])->getEnchantmentAbility();
-    if (a)  return a;
+
+    res = theBoard[i];
+
+    // check if minions are dead (should only go off when modifying defense)
+    if (minionName == "Modify Defense") {
+        if (this->getCard(i)->isDead()) {
+            // send to graveyard
+            grave->push(this->removeCard(i));
+        }
+    } else {
+        // attach trigger if applicable
+        TriggeredAbility* a = dynamic_pointer_cast<EnchantmentDec>(theBoard[i])->getEnchantmentAbility();
+        if (a)  attach(a);
+    }
+
+    return res;
+
 }
 
 void Board::stripEnchants(int i) {

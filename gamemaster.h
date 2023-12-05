@@ -7,6 +7,7 @@
 #include "player.h"
 #include "boardelements.h"
 #include "triggeredability.h"
+#include "sorceryutil.h"
 using namespace std;
 
 class GameMaster {
@@ -17,7 +18,7 @@ class GameMaster {
     bool graphicsFlag;
     Player* activePlayer;
     Player* nonactivePlayer;
-    vector<TriggeredAbility*> observers;
+    observersList ol;
     
     public:
         GameMaster(); 

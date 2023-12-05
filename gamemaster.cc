@@ -16,8 +16,8 @@ void GameMaster::initPlayers(vector<string>names, ifstream& deck1In, ifstream& d
     // getline(cin, p1name); 
     // getline(cin, p2name); 
 
-    p1.init(names[0], 1, deck1In, &observers, testing);
-    p2.init(names[1], 2, deck2In, &observers, testing);
+    p1.init(names[0], 1, deck1In, &ol, testing);
+    p2.init(names[1], 2, deck2In, &ol, testing);
 
     activePlayer = &p1;
     nonactivePlayer = &p2;
@@ -53,12 +53,12 @@ void GameMaster::attach(TriggeredAbility* o) {
     // else if (!isGameObserver && !contains(observers, o)) observers.emplace_back(o);
     
     //if (!contains(observers, o)) observers.emplace_back(o);
-    observers.emplace_back(o);
+    ol.observers.emplace_back(o);
 }
 
 void GameMaster::detach(TriggeredAbility* o) {
-    for (auto it = observers.begin(); it != observers.end();) {
-        if (*it == o) observers.erase(it);
+    for (auto it = ol.observers.begin(); it != ol.observers.end();) {
+        if (*it == o) ol.observers.erase(it);
         else ++it;
     }
 }
@@ -85,7 +85,7 @@ void GameMaster::startTurn() {
     activePlayer->getHand().restoreAction(); // can we combine these two
     
     // update activePlayer in observers
-    for (auto o : observers) o->setActivePlayer(activePlayer);
+    ol.activePlayer = activePlayer;
 
     notifyStartTurnObservers();
 }
@@ -111,26 +111,29 @@ void GameMaster::attackMinion(int i, int j, MinionPtr* attacker, MinionPtr*victi
     attackingMinion->setAction(0);
     int attackValAttacker = attackingMinion->getAttack();
     int attackValVictim = victimMinion->getAttack();
-    activePlayer->getBoard().enchantMinion(i, "Modify Defense", -attackValVictim);
-    nonactivePlayer->getBoard().enchantMinion(j, "Modify Defense", -attackValAttacker);
+    *attacker = activePlayer->getBoard().enchantMinion(i, "Modify Defense", -attackValVictim);
+    *victim = nonactivePlayer->getBoard().enchantMinion(j, "Modify Defense", -attackValAttacker);
 
     // cout << "ap defense: " << activePlayer->getBoard().getCard(i)->getDefense() << endl;
     // cout << "nap defense: " << nonactivePlayer->getBoard().getCard(j)->getDefense() << endl;
-    *attacker = activePlayer->getBoard().getCard(i);
-    *victim = nonactivePlayer->getBoard().getCard(j);
+
+    // update the original pointers to point at the top layer (after adding modify defense/attack enchantdecs)
+    // *attacker = activePlayer->getBoard().getCard(i);
+    // *victim = nonactivePlayer->getBoard().getCard(j);
+
     // cout << attacker->get() << endl;
 
-    // check if minions are dead 
-    if (activePlayer->getBoard().getCard(i)->isDead()) {
-        // send to graveyard
-        // activePlayer->getBoard().stripEnchants(i);
-        activePlayer->getGrave().push(activePlayer->getBoard().getCard(i));
-        activePlayer->getBoard().removeCard(i);
-    }
-    if (nonactivePlayer->getBoard().getCard(j)->isDead()) {
-        nonactivePlayer->getGrave().push(nonactivePlayer->getBoard().getCard(j));
-        nonactivePlayer->getBoard().removeCard(j);
-    }
+    // // check if minions are dead 
+    // if (activePlayer->getBoard().getCard(i)->isDead()) {
+    //     // send to graveyard
+    //     // activePlayer->getBoard().stripEnchants(i);
+    //     activePlayer->getGrave().push(activePlayer->getBoard().getCard(i));
+    //     activePlayer->getBoard().removeCard(i);
+    // }
+    // if (nonactivePlayer->getBoard().getCard(j)->isDead()) {
+    //     nonactivePlayer->getGrave().push(nonactivePlayer->getBoard().getCard(j));
+    //     nonactivePlayer->getBoard().removeCard(j);
+    // }
     // cout << "in game master: " << activePlayer->getGrave().getTop().get() << endl;
     // cout << "in grave, defense: " << activePlayer->getGrave().getTop()->getDefense() << endl;
 }
@@ -208,25 +211,25 @@ void GameMaster::notifyStartTurnObservers() {
     //     }
     // }
 
-    auto o = observers.begin();
+    auto o = ol.observers.begin();
     try {
-        while (o != observers.end()) {
-            if ((*o)->getType() == TriggerType::StartTurn && (*o)->getOwner() == (*o)->getActivePlayer()) { // TODO
+        while (o != ol.observers.end()) {
+            if ((*o)->getType() == TriggerType::StartTurn && (*o)->getOwner() == ol.activePlayer) { // TODO
                 (*o)->setTargetPlayer(activePlayer);
                 (*o)->applyAbility();   
             }
             ++o;
         }
-        o = observers.begin();
-        while (o != observers.end()) {
-            if ((*o)->getType() == TriggerType::StartTurn && (*o)->getOwner() != (*o)->getActivePlayer()) { // TODO
+        o = ol.observers.begin();
+        while (o != ol.observers.end()) {
+            if ((*o)->getType() == TriggerType::StartTurn && (*o)->getOwner() != ol.activePlayer) { // TODO
                 (*o)->setTargetPlayer(activePlayer);
                 (*o)->applyAbility();   
             }
             ++o;
         }
     } catch (not_enough_charge& e) {
-        observers.erase(o);
+        ol.observers.erase(o);
     }
 
 }
@@ -244,25 +247,25 @@ void GameMaster::notifyEndTurnObservers() {
     //     }
     // }
 
-    auto o = observers.begin();
+    auto o = ol.observers.begin();
     try {
-        while (o != observers.end()) {
-            if ((*o)->getType() == TriggerType::EndTurn && (*o)->getOwner() == (*o)->getActivePlayer()) { // TODO
+        while (o != ol.observers.end()) {
+            if ((*o)->getType() == TriggerType::EndTurn && (*o)->getOwner() == ol.activePlayer) { // TODO
                 (*o)->setTargetPlayer(activePlayer);
                 (*o)->applyAbility();   
             }
             ++o;
         }
-        o = observers.begin();
-        while (o != observers.end()) {
-            if ((*o)->getType() == TriggerType::EndTurn && (*o)->getOwner() != (*o)->getActivePlayer()) { // TODO
+        o = ol.observers.begin();
+        while (o != ol.observers.end()) {
+            if ((*o)->getType() == TriggerType::EndTurn && (*o)->getOwner() != ol.activePlayer) { 
                 (*o)->setTargetPlayer(activePlayer);
                 (*o)->applyAbility();   
             }
             ++o;
         }
     } catch (not_enough_charge& e) {
-        observers.erase(o);
+        ol.observers.erase(o);
     }
 }
 

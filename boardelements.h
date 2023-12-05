@@ -14,7 +14,10 @@
 #include "enchantment.h"
 #include "enchantmentdec.h"
 #include "enchantmentdecsconcrete.h"
+#include "sorceryutil.h"
 using namespace std;
+
+class Graveyard;
 
 // collection of cards from which players draw cards into their Hand
 class Deck {
@@ -52,14 +55,15 @@ class Hand {
 // Minions the player has played, not yet dead
 class Board {
     vector<MinionPtr> theBoard;
-    vector<TriggeredAbility*>* observers; // reference to the observers vector in gamemaster
+    observersList* ol; // pointer to the observerList object in gamemaster
+    Graveyard* grave;
 
     public:
         MinionPtr getCard(int i) const;
-        void init(vector<TriggeredAbility*>* o);
+        void init(observersList* ol, Graveyard* gy);
         void addCard(MinionPtr m);
-        void removeCard(int i);
-        TriggeredAbility* enchantMinion(int i, string minionName, int modifyval = 0); // enchant ith Minion with specified enchantment name.
+        MinionPtr removeCard(int i);
+        MinionPtr enchantMinion(int i, string minionName, int modifyval = 0); // enchant ith Minion with specified enchantment name.
         void stripEnchants(int i);
         void stripTopEnchant(int i); 
         void restoreAction(); // sets action of Minions to 1
