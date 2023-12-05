@@ -90,6 +90,14 @@ class full_board : public std::exception {
         }
 };
 
+class full_inspect : public std::exception {
+    public:
+        full_inspect() {}
+        string what() {
+            return "The inspect is full.";
+        }
+};
+
 class outside_range : public std::exception {
     public:
         outside_range() {}
@@ -133,13 +141,20 @@ class invalid_inspect_type : public std::exception {
         }
 };
 
-class invalid_card_board : public std::exception {
+class invalid_card_inspect : public std::exception {
     public:
-        invalid_card_board() = default;
+        invalid_card_inspect() = default;
         string what () {
-            return "Unable to inspect: card is not on the board.";
+            return "Unable to inspect - card is not on the inspect.";
         }
 };
 
+class dne_card_inspect : public std::exception {
+    public:
+    dne_card_inspect() = default;
+    string what() {
+        return "Unable to inspect - card does not exist.";
+    }
+};
 
 #endif

@@ -16,6 +16,7 @@ enum class CardName {
     /* Spells */ Banish, Unsummon, Recharge, Disenchant, RaiseDead, Blizzard,
     /* Rituals */ DarkRitual, AuraOfPower, Standstill
 };
+
 string cardNameToString(CardName c);
 
 // every card has a name and a cost
@@ -36,8 +37,8 @@ class Card {
     CardType getType();
     CardName getCardName() const;
     bool getNeedTarget();
-
 };
+
 typedef std::shared_ptr<Card> CardPtr;
 
 ostream &operator<< (ostream &out, const Card *c);

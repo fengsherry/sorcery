@@ -390,12 +390,14 @@ void GameController::go(int argc, char *argv[]) {
 
                 try {
                     if (i > gm.getPlayer(gm.getActivePlayer().getId()).getBoard().size()) {
-                        throw invalid_card_board();
+                        throw invalid_card_inspect();
                     }
                     notifyDisplays(gm.getActivePlayer().getBoard().getCard(i-1));
                 } catch ( invalid_inspect_type &e ) {
                     notifyDisplaysErr(e.what(), gm.getActivePlayer().getId());
-                } catch ( invalid_card_board &e ) {
+                } catch ( invalid_card_inspect &e ) {
+                    notifyDisplaysErr(e.what(), gm.getActivePlayer().getId());
+                } catch ( dne_card_inspect &e ) {
                     notifyDisplaysErr(e.what(), gm.getActivePlayer().getId());
                 }
                 // if (!(gm.getActivePlayer().getBoard().getCard(i-1)->getType() == CardType::Minion)){

@@ -203,11 +203,9 @@ void TextDisplay::displayHand(int p) {
           break;
         case(CardName::AuraOfPower):
           display_ritual(name, cost, 1, desc, 4); 
-          cout << "ritual" << endl;
           break;
         case(CardName::Standstill):
           display_ritual(name, cost, 2, desc, 4); 
-          cout << "ritual" << endl;
           break;
 
         // if enchantment
