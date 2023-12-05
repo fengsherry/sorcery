@@ -13,7 +13,7 @@
 #include "triggeredability.h"
 #include "enchantment.h"
 #include "enchantmentdec.h"
-#include "enchantmentdecsconcrete.h"
+
 #include "sorceryutil.h"
 using namespace std;
 
