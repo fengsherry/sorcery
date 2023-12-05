@@ -7,3 +7,5 @@ end
 play 1
 end
 play 1
+board
+attack 1 2
