@@ -34,6 +34,15 @@ void GameController::notifyDisplays() {
     }
 }
 
+void GameController::notifyGraphicDisplays() {
+    for (auto display : displays) {
+        if(GraphicsDisplay* gd = dynamic_cast<GraphicsDisplay*>(display)) {
+            display->displaySorceryBoard();
+        }
+            
+    }
+}
+
 // describe minion
 void GameController::notifyDisplays(MinionPtr m) {
     for (auto display : displays) {
@@ -141,6 +150,7 @@ void GameController::go(int argc, char *argv[]) {
     string nonactivePlayerName = gm.getNonactivePlayer().getName();
     notifyDisplays("Player " + to_string(gm.getTurn()) + ": " + activePlayerName + "  It's your turn!", gm.getActivePlayer().getId());
     while (true) {
+        bool updateBoard = true;
         try { // catches exception
             if (cin.eof()) return;
             if (initFlag && getline(file, cmds)) {
@@ -164,6 +174,7 @@ void GameController::go(int argc, char *argv[]) {
                 "\tboard -- Describe all cards on the board.";
 
                 displays[0]->displayMsg(vector<string>{helpmsg});
+                updateBoard = false;
 
             } else if (cmd == "end") {
                 gm.endTurn();
@@ -185,7 +196,7 @@ void GameController::go(int argc, char *argv[]) {
                 catch (invalid_play &e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); }
                 catch (full_hand &e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); }
                 catch (deck_empty &e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); }
-                
+                updateBoard = false;
             } else if (testingFlag && cmd == "discard") { // only available in -testing mode; how to handle this?
                 int i;
                 iss >> i;
@@ -195,6 +206,7 @@ void GameController::go(int argc, char *argv[]) {
                 //     gm.getActivePlayer().getHand().removeCard(i-1);
                 // } else notifyDisplaysErr("Not a valid command", gm.getActivePlayer().getId());
                 // gm.getActivePlayer().TEST_printPlayerHand();
+                updateBoard = false;
             } else if (cmd == "attack") {
                 // attacks player or minion
 
@@ -277,7 +289,6 @@ void GameController::go(int argc, char *argv[]) {
                 }
 
             } else if (cmd == "play") {
-                
                 vector<int> args;
                 string line;
                 int arg;
@@ -435,6 +446,7 @@ void GameController::go(int argc, char *argv[]) {
                 } catch ( dne_card_inspect &e ) {
                     notifyDisplaysErr(e.what(), gm.getActivePlayer().getId());
                 }
+                updateBoard = false;
                 // if (!(gm.getActivePlayer().getBoard().getCard(i-1)->getType() == CardType::Minion)){
                 //     notifyDisplaysErr("Try again, this card is not a Minion.", gm.getActivePlayer().getId());
                 // } else if (i > gm.getPlayer(gm.getActivePlayer().getId()).getBoard().size()) {
@@ -449,18 +461,19 @@ void GameController::go(int argc, char *argv[]) {
             } else if (cmd == "hand") {
                 // gm.getActivePlayer().TEST_printPlayerHand();
                 notifyDisplays(gm.getActivePlayer().getId());
+                updateBoard = false;
 
             } else if (cmd == "board") {
                 gm.getActivePlayer().TEST_printPlayerBoard();
                 notifyDisplays();
-
-            } else if (cmd == "grave") {
-                // gm.getActivePlayer().TEST_printPlayerGrave();
+                updateBoard = false;
 
             } else if (cmd != "") {
                 notifyDisplays("Not a valid command", gm.getActivePlayer().getId());
+                updateBoard = false;
             } 
-            notifyDisplays();
+            // notifyDisplays();
+            if (updateBoard) notifyGraphicDisplays();
             // if (graphicsFlag) displays[1]->displaySorceryBoard();
         } catch(out_of_range &e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); }
         
