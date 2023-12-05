@@ -19,7 +19,8 @@ Minion::Minion(CardName cardName, int cost, string desc):
 //     action = n;
 // }
 
-
+void Minion::setAttack(int n) {}
+void Minion::setDefense(int n) {}
 
 // Custom deleter that does nothing (no deletion)
 struct NoDeleter {

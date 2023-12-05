@@ -20,9 +20,9 @@ Haste::Haste(MinionPtr next) : EnchantmentDec{
     1, 
     "Enchanted minion gains +1 action each turn", 
     next,
-    false} {
-        next->setAbility(new HasteAbility{next}); // idk if this is suppoed to attack to base minion instead
-    }
+    false,
+    new HasteAbility{next}} // idk if this is suppoed to attack to base minion instead
+    {}
 int Haste::getAttack() const { return next->getAttack(); }
 int Haste::getDefense() const { return next->getDefense(); }
 int Haste::getAction() const { return next->getAction(); }

@@ -159,12 +159,10 @@ TriggeredAbility* Player::play(int i, int j, Player& p) {
     if (EnchantmentPtr enchantToPlay = dynamic_pointer_cast<Enchantment>(cardToPlay)) { // enchantment
         if (MinionPtr targetMinion = dynamic_pointer_cast<Minion>(targetCard)) {         
             // enchant the minion. Note the conversion from Enchantment (Card) to EnchantmentDec (Decorator)
-            p.getBoard().enchantMinion(j, enchantToPlay->getName());
-
-            // check if the enchantment creates a trigger
-            auto a = p.getBoard().getCard(i)->getAbility();
-            if (holds_alternative<TriggeredAbility*>(a)) return(get<TriggeredAbility*>(a));
-
+            // check if the enchantment contains a trigger
+            TriggeredAbility* a = p.getBoard().enchantMinion(j, enchantToPlay->getName());
+            if (a) return a;
+  
         } else { throw invalid_play{"You cannot play " + cardToPlay->getName() + " on " + targetCard->getName()}; }
     } else if (SpellPtr spellToPlay = dynamic_pointer_cast<Spell>(cardToPlay)) { // spell with target
         spellToPlay->applyAbility(p, *this, j); // might be sus - *this is a dummy value - should be nullptr but that means the argument needs to be a pointer, will do later if have time

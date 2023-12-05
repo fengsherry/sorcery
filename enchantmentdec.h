@@ -7,11 +7,12 @@
 
 class EnchantmentDec : public Minion {
     bool hidden;
+    TriggeredAbility* ta;
 
     protected:
         MinionPtr next;
     public:
-        EnchantmentDec(CardName cardName, int cost, string desc, MinionPtr next, bool hidden);
+        EnchantmentDec(CardName cardName, int cost, string desc, MinionPtr next, bool hidden, TriggeredAbility* ta=nullptr);
         virtual ~EnchantmentDec();
 
         void setAction(int n) override;
@@ -21,6 +22,7 @@ class EnchantmentDec : public Minion {
         variant<ActivatedAbility*, TriggeredAbility*, monostate> getAbility();
         string getDefaultMinionName() const ;
         Minion* getDefaultMinion() override;
+        TriggeredAbility* getEnchantmentAbility();
         MinionPtr getNext();
         void setNext(MinionPtr newnext);
         void setAbility(variant<ActivatedAbility*, TriggeredAbility*, monostate> a);

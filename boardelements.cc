@@ -152,6 +152,17 @@ void Board::removeCard(int i) {
         auto a = m->getAbility();
         if (holds_alternative<TriggeredAbility*>(a)) detach(get<TriggeredAbility*>(a));
 
+        // remove enchantments
+        int attack = theBoard[i]->getAttack();
+        int defense = theBoard[i]->getDefense();
+        int action = theBoard[i]->getAction();
+
+        this->stripEnchants(i);
+
+        theBoard[i]->setAttack(attack);
+        theBoard[i]->setDefense(defense);
+        theBoard[i]->setAction(action); // implement in Minion
+
         // m->setBoard(nullptr);
         theBoard.erase(theBoard.begin() + i);
     } else {throw invalid_play{"Cannot access index " + to_string(i) + " in the board."}; } // should never happen
@@ -170,7 +181,7 @@ int Board::find(MinionPtr m) {
 }
 
 
-void Board::enchantMinion(int i, string minionName, int modifyval) {
+TriggeredAbility* Board::enchantMinion(int i, string minionName, int modifyval) {
     // EXCEPTION: check for i
     if (minionName == "Giant Strength") theBoard[i] = make_shared<GiantStrength>(theBoard[i]); 
     else if (minionName == "Enrage") theBoard[i] = make_shared<Enrage>(theBoard[i]);
@@ -179,10 +190,11 @@ void Board::enchantMinion(int i, string minionName, int modifyval) {
     else if (minionName == "Silence") theBoard[i] = make_shared <Silence>(theBoard[i]);
     else if (minionName == "Modify Attack") theBoard[i] = make_shared <ModifyAttack>(theBoard[i], modifyval);
     else if (minionName == "Modify Defense") theBoard[i] = make_shared <ModifyDefense>(theBoard[i], modifyval);
-    // need option another for Modify Ability 
+    TriggeredAbility* a = dynamic_pointer_cast<EnchantmentDec>(theBoard[i])->getEnchantmentAbility();
+    if (a)  return a;
 }
 
-void Board::stripEnchants(int i, Player& p) {
+void Board::stripEnchants(int i) {
     CardPtr noenchantMinionCard = createCard(theBoard[i]->getDefaultMinionName(), nullptr);
     MinionPtr noenchantMinion = dynamic_pointer_cast<Minion>(noenchantMinionCard);
     theBoard[i] = noenchantMinion;
@@ -193,7 +205,7 @@ void Board::stripTopEnchant(int i) {
     if (DefaultMinionPtr dm = dynamic_pointer_cast<DefaultMinion>(m)) {
         throw no_enchantments(m);
     } else { // m points at hidden or non-hidden enchantment decorator
-        // careful that EnchantmentDecs also contain "hidden" Enchantments, which are not legit Enchantments
+        // careful that EnchantmentDecs also contain "hidden" Enchantments, which are not legit Enchantments - they will be flattened into the fields
         EnchantmentDecPtr curr = dynamic_pointer_cast<EnchantmentDec>(m);
         EnchantmentDecPtr prev = curr;
         EnchantmentDecPtr ednext; // will be set if applicable
@@ -211,6 +223,12 @@ void Board::stripTopEnchant(int i) {
         cout << "curr: " << curr->getName() << endl;
         curr->setNext(nullptr);
         
+        // if curr has a trigged ability, remove the observer
+        TriggeredAbility* ta = curr->getEnchantmentAbility();
+        if (ta) {
+            detach(ta);
+        }
+
         cout << "next: " << next->getName() << endl;
         prev->setNext(next);
         // cout << theBoard[i] << endl;

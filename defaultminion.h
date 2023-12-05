@@ -33,8 +33,9 @@ class DefaultMinion : public Minion {
     void modifyAction(int n) override;
     void setTrigOwnerMinion(MinionPtr m);
     void setAbility(variant<ActivatedAbility*, TriggeredAbility*, monostate> a);
-    void setAction(int n);
-    void setDefense(int n);
+    void setAction(int n) override;
+    void setDefense(int n) override;
+    void setAttack(int n) override;
 };
 typedef shared_ptr<DefaultMinion> DefaultMinionPtr;
 

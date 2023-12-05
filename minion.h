@@ -41,6 +41,8 @@ class Minion: public Card {
     virtual void modifyAction(int n) = 0; // lol can't tell if this is supposed to be pure virtual
     // virtual Ability getAbility() = 0;
     virtual void setAction(int n) = 0;
+    virtual void setAttack(int n);
+    virtual void setDefense(int n);
     // void enchant(string minionName);
     // void decreaseLife(int n);
     

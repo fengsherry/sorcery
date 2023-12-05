@@ -32,7 +32,6 @@ int DefaultMinion::getAction() const {
     return action;
 }
 
-
 void DefaultMinion::modifyAction(int n){
     action += n;
 };
@@ -59,4 +58,7 @@ void DefaultMinion::setDefense(int n) {
     defense = n;
 }
 
+void DefaultMinion::setAttack(int n) {
+    attack = n;
+}
 //Ability getAbility();

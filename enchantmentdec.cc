@@ -1,8 +1,8 @@
 #include <string>
 #include "enchantmentdec.h"
 
-EnchantmentDec::EnchantmentDec(CardName cardName, int cost, string desc, MinionPtr next, bool hidden) : 
-    Minion{cardName, cost, desc}, next{next}, hidden{hidden} {}
+EnchantmentDec::EnchantmentDec(CardName cardName, int cost, string desc, MinionPtr next, bool hidden, TriggeredAbility* ta) : 
+    Minion{cardName, cost, desc}, next{next}, hidden{hidden}, ta{ta} {}
 
 EnchantmentDec::~EnchantmentDec() { next.reset(); }
 
@@ -28,4 +28,5 @@ variant<ActivatedAbility*, TriggeredAbility*, monostate> EnchantmentDec::getAbil
 
 void EnchantmentDec::setNext(MinionPtr newnext) { next = newnext; }
 
+TriggeredAbility* EnchantmentDec::getEnchantmentAbility() { return ta;}
 // CardName EnchantmentDec::getDefaultMinionName() { return next->getDefaultMinionName(); }
