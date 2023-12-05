@@ -33,16 +33,21 @@ class Minion : public Card {
     virtual int getAttack() const = 0;
     virtual int getDefense() const = 0;
     virtual int getAction() const = 0;
+    virtual variant<ActivatedAbility*, TriggeredAbility*, monostate> getAbility() = 0;
+
     virtual int getCost() const override = 0; 
     virtual int getActivatedAbilityCost() const = 0;
     void setBoard(Board* b);
+    virtual void setAbility(variant<ActivatedAbility*, TriggeredAbility*, monostate> a) = 0;
+
     void destroy();
     void modifyAttack(int n);
     void modifyDefence(int n);
+    virtual void modifyAction(int n) = 0; // lol can't tell if this is supposed to be pure virtual
     // virtual Ability getAbility() = 0;
-    virtual variant<ActivatedAbility*, TriggeredAbility*, monostate> getAbility() = 0;
-
     virtual void setAction(int n) = 0;
+    virtual void setAttack(int n);
+    virtual void setDefense(int n);
     // void enchant(string minionName);
     // void decreaseLife(int n);
     
@@ -56,10 +61,5 @@ typedef std::shared_ptr<Minion> MinionPtr;
 
 std::ostream& operator<<(std::ostream& out, const MinionPtr m);
 
-
-// Custom deleter that does nothing (no deletion)
-struct NoDeleter {
-    void operator()(Minion*) const;
-};
 
 #endif

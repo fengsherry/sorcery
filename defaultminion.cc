@@ -42,6 +42,14 @@ int DefaultMinion::getCost() const {
     return cost;
 }
 
+void DefaultMinion::modifyAction(int n){
+    action += n;
+}
+
+void DefaultMinion::setAbility(variant<ActivatedAbility*, TriggeredAbility*, monostate> a) {
+    ability = a;
+}
+
 int DefaultMinion::getActivatedAbilityCost() const { 
     ActivatedAbility* aa = get<ActivatedAbility*>(ability);
     return aa->getActivationCost();
@@ -66,4 +74,7 @@ void DefaultMinion::setDefense(int n) {
     defense = n;
 }
 
+void DefaultMinion::setAttack(int n) {
+    attack = n;
+}
 //Ability getAbility();

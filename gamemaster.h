@@ -16,15 +16,14 @@ class GameMaster {
     bool graphicsFlag;
     Player* activePlayer;
     Player* nonactivePlayer;
-    vector<TriggeredAbility*> gameObservers;
-    vector<TriggeredAbility*> boardObservers;
+    vector<TriggeredAbility*> observers;
     
     public:
         GameMaster(); 
         ~GameMaster();
 
         // methods to initialize the players
-        void initPlayers(ifstream& deck1In, ifstream& deck2In);
+        void initPlayers(ifstream& deck1In, ifstream& deck2In, bool testing);
         // void initDecks(ifstream& deck1In, ifstream& deck2In);
 
         // observer pattern methods
@@ -61,6 +60,7 @@ class GameMaster {
         Player& getActivePlayer();
         Player& getNonactivePlayer();
 };
+
 
 
 #endif

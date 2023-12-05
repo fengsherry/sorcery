@@ -19,13 +19,14 @@ using namespace std;
 // collection of cards from which players draw cards into their Hand
 class Deck {
     vector<CardPtr> theDeck;
+    bool random;
     //vector<string*> theDeck;
 
  public:
     Deck();
     ~Deck();
 
-    void init(ifstream& file, Player* p);
+    void init(ifstream& file, Player* p, bool random);
     void shuffle();
     CardPtr drawCard();
     size_t getSize();
@@ -51,14 +52,14 @@ class Hand {
 // Minions the player has played, not yet dead
 class Board {
     vector<MinionPtr> theBoard;
-    vector<TriggeredAbility*>* boardObservers; // reference to the boardObservers vector in gamemaster
+    vector<TriggeredAbility*>* observers; // reference to the observers vector in gamemaster
 
     public:
         MinionPtr getCard(int i) const;
-        void init(vector<TriggeredAbility*>* bo);
+        void init(vector<TriggeredAbility*>* o);
         void addCard(MinionPtr m);
         void removeCard(int i);
-        void enchantMinion(int i, string minionName, int modifyval = 0); // enchant ith Minion with specified enchantment name.
+        TriggeredAbility* enchantMinion(int i, string minionName, int modifyval = 0); // enchant ith Minion with specified enchantment name.
         void stripEnchants(int i);
         void stripTopEnchant(int i); 
         void restoreAction(); // sets action of Minions to 1

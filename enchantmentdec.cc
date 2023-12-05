@@ -1,12 +1,18 @@
 #include <string>
 #include "enchantmentdec.h"
 
-EnchantmentDec::EnchantmentDec(CardName cardName, int cost, string desc, MinionPtr next, bool hidden) : 
-    Minion{cardName, cost, desc}, next{next}, hidden{hidden} {}
+EnchantmentDec::EnchantmentDec(CardName cardName, int cost, string desc, MinionPtr next, bool hidden, TriggeredAbility* ta) : 
+    Minion{cardName, cost, desc}, next{next}, hidden{hidden}, ta{ta} {}
 
 EnchantmentDec::~EnchantmentDec() { next.reset(); }
 
 void EnchantmentDec::setAction(int n) { next->setAction(n); }
+
+void EnchantmentDec::setAbility(variant<ActivatedAbility*, TriggeredAbility*, monostate> a) {
+    next->setAbility(a);
+}
+
+void EnchantmentDec::modifyAction(int n) { next->modifyAction(n); }
 
 bool EnchantmentDec::isHidden() { return hidden; }
 
@@ -30,4 +36,5 @@ variant<ActivatedAbility*, TriggeredAbility*, monostate> EnchantmentDec::getAbil
 
 void EnchantmentDec::setNext(MinionPtr newnext) { next = newnext; }
 
+TriggeredAbility* EnchantmentDec::getEnchantmentAbility() { return ta;}
 // CardName EnchantmentDec::getDefaultMinionName() { return next->getDefaultMinionName(); }
