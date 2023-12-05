@@ -105,7 +105,7 @@ void GameMaster::attackMinion(int i, int j, MinionPtr* attacker, MinionPtr*victi
     MinionPtr victimMinion = nonactivePlayer->getBoard().getCard(j);
 
     // check for enough action
-    if (attackingMinion->getAction() == 0) throw not_enough_action{*activePlayer}; 
+    if (attackingMinion->getAction() == 0) throw not_enough_action{*activePlayer, attackingMinion}; 
 
     // minions attack each other
     attackingMinion->setAction(0);
@@ -140,7 +140,7 @@ void GameMaster::attackPlayer(int i) {
     MinionPtr attackingMinion = activePlayer->getBoard().getCard(i);
 
     // check for enough action
-    if (attackingMinion->getAction() == 0) throw not_enough_action{*activePlayer}; 
+    if (attackingMinion->getAction() == 0) throw not_enough_action{*activePlayer, attackingMinion}; 
 
     attackingMinion->setAction(0);
     int attackVal = attackingMinion->getAttack();
