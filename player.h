@@ -31,7 +31,7 @@ class Player {
         ~Player();
 
         // void init(string name, int id);
-        void init(string name, int id, ifstream& deckIn, vector<TriggeredAbility*>* observers, bool random);
+        void init(string name, int id, ifstream& deckIn, observersList* ol, bool random);
 
         string getName() const;
         int getId() const;

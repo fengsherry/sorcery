@@ -12,13 +12,9 @@ Player* TriggeredAbility::getOwner() {return owner;}
 
 TriggerType TriggeredAbility::getType() {return type;}
 
-Player* TriggeredAbility::getActivePlayer() {return activePlayer;}
-
 TriggerCardType TriggeredAbility::getCardType() {return cardType;}
 
 void TriggeredAbility::setOwnerMinion(MinionPtr m) {ownerMinion = m;}
-
-void TriggeredAbility::setActivePlayer(Player* ap) {activePlayer = ap;}
 
 void TriggeredAbility::setTargetPlayer(Player* targetPlayer) {
     targetPlayers.clear();

@@ -11,12 +11,13 @@ Player::Player() {}
 
 Player::~Player() {}
 
-void Player::init(string name, int id, ifstream& deckIn, vector<TriggeredAbility*>* observers, bool testing) {
+void Player::init(string name, int id, ifstream& deckIn, observersList* ol, bool testing) {
     this->name = name;
     this->id = id;
     this->testing = testing;
     deck.init(deckIn, this, !testing); // if testing is on, set random field to false
-    board.init(observers, &grave);
+    hand.init(deck);
+    board.init(ol, &grave);
 }
 
 void Player::TEST_printPlayerDeck() {
@@ -161,8 +162,8 @@ TriggeredAbility* Player::play(int i, int j, Player& p) {
         if (MinionPtr targetMinion = dynamic_pointer_cast<Minion>(targetCard)) {         
             // enchant the minion. Note the conversion from Enchantment (Card) to EnchantmentDec (Decorator)
             // check if the enchantment contains a trigger
-            TriggeredAbility* a = p.getBoard().enchantMinion(j, enchantToPlay->getName());
-            if (a) return a;
+            // TriggeredAbility* a = p.getBoard().enchantMinion(j, enchantToPlay->getName());
+            // if (a) return a;
   
         } else { throw invalid_play{"You cannot play " + cardToPlay->getName() + " on " + targetCard->getName()}; }
     } else if (SpellPtr spellToPlay = dynamic_pointer_cast<Spell>(cardToPlay)) { // spell with target

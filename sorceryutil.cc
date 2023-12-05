@@ -1,4 +1,6 @@
 #include "sorceryutil.h"
+#include "card.h"
+#include "player.h"
 
 string cardNameToString(CardName c) {
     switch (c) {
@@ -123,3 +125,4 @@ void checkRange(int i, int max) { // e.g. i = 3, size = 5
         throw std::out_of_range{s};
     };
 }
+
