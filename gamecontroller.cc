@@ -185,10 +185,12 @@ void GameController::go(int argc, char *argv[]) {
                 
             } else if (testingFlag && cmd == "discard") { // only available in -testing mode; how to handle this?
                 int i;
-                checkRange(i,gm.getActivePlayer().getHand().getSize()); // may throw control to next iteration of while loop, skipping below code
-                if (testingFlag && (iss >> i)) {
-                    gm.getActivePlayer().getHand().removeCard(i-1);
-                } else notifyDisplaysErr("Not a valid command", gm.getActivePlayer().getId());
+                iss >> i;
+                checkRange(i, gm.getActivePlayer().getHand().getSize()); // may throw control to next iteration of while loop, skipping below code
+                gm.getActivePlayer().getHand().removeCard(i-1);
+                // if (testingFlag && (iss >> i)) {
+                //     gm.getActivePlayer().getHand().removeCard(i-1);
+                // } else notifyDisplaysErr("Not a valid command", gm.getActivePlayer().getId());
                 // gm.getActivePlayer().TEST_printPlayerHand();
             } else if (cmd == "attack") {
                 // attacks player or minion
