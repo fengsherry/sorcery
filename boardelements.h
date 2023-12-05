@@ -16,6 +16,8 @@
 #include "enchantmentdecsconcrete.h"
 using namespace std;
 
+class Graveyard;
+
 // collection of cards from which players draw cards into their Hand
 class Deck {
     vector<CardPtr> theDeck;
@@ -53,10 +55,11 @@ class Hand {
 class Board {
     vector<MinionPtr> theBoard;
     vector<TriggeredAbility*>* observers; // reference to the observers vector in gamemaster
+    Graveyard* grave;
 
     public:
         MinionPtr getCard(int i) const;
-        void init(vector<TriggeredAbility*>* o);
+        void init(vector<TriggeredAbility*>* o, Graveyard* gy);
         void addCard(MinionPtr m);
         void removeCard(int i);
         TriggeredAbility* enchantMinion(int i, string minionName, int modifyval = 0); // enchant ith Minion with specified enchantment name.

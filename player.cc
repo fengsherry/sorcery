@@ -16,8 +16,7 @@ void Player::init(string name, int id, ifstream& deckIn, vector<TriggeredAbility
     this->id = id;
     this->testing = testing;
     deck.init(deckIn, this, !testing); // if testing is on, set random field to false
-    hand.init(deck);
-    board.init(observers);
+    board.init(observers, &grave);
 }
 
 void Player::TEST_printPlayerDeck() {

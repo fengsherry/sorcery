@@ -90,8 +90,9 @@ void Hand::removeCard(int i) {
 }
 
 /* BOARD */
-void Board::init(vector<TriggeredAbility*>* o) {
+void Board::init(vector<TriggeredAbility*>* o, Graveyard* gy) {
     observers = o;
+    grave = gy;
 }
 
 void Board::attach(TriggeredAbility* o) {
@@ -248,7 +249,10 @@ TriggeredAbility* Board::enchantMinion(int i, string minionName, int modifyval) 
     else if (minionName == "Magic Fatigue") theBoard[i] = make_shared <MagicFatigue>(theBoard[i]);
     else if (minionName == "Silence") theBoard[i] = make_shared <Silence>(theBoard[i]);
     else if (minionName == "Modify Attack") theBoard[i] = make_shared <ModifyAttack>(theBoard[i], modifyval);
-    else if (minionName == "Modify Defense") theBoard[i] = make_shared <ModifyDefense>(theBoard[i], modifyval);
+    else if (minionName == "Modify Defense") {
+        theBoard[i] = make_shared <ModifyDefense>(theBoard[i], modifyval);
+        // TODO
+    }
     TriggeredAbility* a = dynamic_pointer_cast<EnchantmentDec>(theBoard[i])->getEnchantmentAbility();
     if (a)  return a;
 }

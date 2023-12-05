@@ -220,7 +220,6 @@ void GameController::go(int argc, char *argv[]) {
                         // perform attack
                         gm.attackMinion(arg-1, arg2-1); 
 
-                        cout << victimMinion->getDefaultMinionName() << endl;
                         string s = activePlayerName + "'s minion, " + attackingMinion->getDefaultMinionName() + " has attacked " +  nonactivePlayerName 
                                     + "'s minion, " + victimMinion->getDefaultMinionName();
                         
