@@ -318,6 +318,7 @@ void GameController::go(int argc, char *argv[]) {
                     }
                     catch (not_enough_magic &e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId());}
                     catch (no_target_provided &e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId());}
+                    catch (empty_grave &e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId());}
 
                 } else if ((args.size() == 3) || (args.size() == 2 && (third == "r"))) { // "play i p j" - enchantments, spells with targets
                     // check if i and j within range
