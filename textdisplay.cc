@@ -17,7 +17,7 @@ void print(const card_template_t &t) {
 // print cards from a vector of templates
 void printCardRow(const vector<card_template_t> &ct) {
   for (int j = 0; j < 11; j++) {
-    for (int i = 0; i < ct.size(); i ++){
+    for (size_t i = 0; i < ct.size(); i ++){
       cout << ct[i][j];
     }
     cout << endl;
@@ -55,7 +55,7 @@ void printCardFiveRow(const vector<card_template_t> &ct) {
 // print cards with the boarder from a vector of templates
 void printCardRowWithBorder(const vector<card_template_t> &ct) {
   for (int j = 0; j < 11; j++) {
-    for (int i = 0; i < ct.size(); i ++) {
+    for (size_t i = 0; i < ct.size(); i ++) {
       if (i == 0) {
         cout << EXTERNAL_BORDER_CHAR_UP_DOWN  << ct[i][j];
       } else if (i == ct.size() - 1) {
@@ -224,6 +224,7 @@ void TextDisplay::displayHand(int p) {
         case(CardName::Silence):
           toPrint.emplace_back(display_enchantment(name, cost, desc));
           break;
+        default: break;
       }
     }
     // go to the left of the current card, change the cursor position
@@ -266,6 +267,7 @@ vector<card_template_t> &addEnchantmentPrint(const MinionPtr m, vector<card_temp
       case(CardName::Silence):
         toPrint.emplace_back(display_enchantment(m->getName(), m->getCost(), m->getDesc()));
         break;
+      default: break;
     }
     addEnchantmentPrint(ed->getNext(), toPrint, count++);
   }

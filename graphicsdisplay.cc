@@ -153,6 +153,8 @@ void GraphicsDisplay::displayCard(int x, int y, int width, int height, Enchantme
         case(CardName::Silence):
             displayCard(x, y, hand_cardwidth, hand_cardheight, make_shared<Enchantment>(e->getCardName(), e->getCost(), e->getDesc()));
             break;
+        default:
+            break;
     }
 }
 

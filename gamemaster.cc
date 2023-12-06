@@ -34,8 +34,8 @@ void GameMaster::initPlayers(vector<string>names, ifstream& deck1In, ifstream& d
 
 }
 
-bool find(vector<TriggeredAbility*> v, TriggeredAbility* target) {
-    for (int i = 0; i < v.size(); i++) {
+int find(vector<TriggeredAbility*> v, TriggeredAbility* target) {
+    for (size_t i = 0; i < v.size(); i++) {
         if (v[i] == target) return i;
     }
     return -1;
@@ -80,7 +80,7 @@ void GameMaster::startTurn() {
     activePlayer->increaseMagic(1);
     try {
         if (activePlayer->getHandSize() < 5) activePlayer->drawCard();
-    } catch (deck_empty e) {cout << e.what() << endl;}
+    } catch (deck_empty& e) {cout << e.what() << endl;}
     activePlayer->getBoard().restoreAction();
     activePlayer->getHand().restoreAction(); // can we combine these two
     
