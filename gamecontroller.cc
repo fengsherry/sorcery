@@ -127,7 +127,7 @@ void GameController::go(int argc, char *argv[]) {
     if (graphicsFlag) displays.emplace_back(new GraphicsDisplay{&gm});
 
     notifyDisplays("Please enter player names.", 0);
-
+    
     // initialize Players, their Decks, and their Hands
     vector<string> names;
     for (int i = 0; i < 2; ++i) {

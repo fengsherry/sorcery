@@ -41,7 +41,7 @@ void GraphicsDisplay::displayCard(int x, int y,  int width, int height, Player* 
     displayCardBlank(x, y, width, height);
     if (p->getName() != "") {
         // cout << "p->getId: " << p->getId() << endl;
-        w->drawString(playerpsn[p->getId()-1][0] + 75, playerpsn[p->getId()-1][1] + 42, p->getName());
+        w->drawString(playerpsn[p->getId()-1][0] + 65, playerpsn[p->getId()-1][1] + 42, p->getName());
         w->drawString(playerpsn[p->getId()-1][0] + 8, playerpsn[p->getId()-1][1] + 110, to_string(p->getLife()));
         w->drawString(playerpsn[p->getId()-1][0] + 143, playerpsn[p->getId()-1][1] + 110, to_string(p->getMagic()));
     } 

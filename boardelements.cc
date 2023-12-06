@@ -298,8 +298,7 @@ void Board::stripTopEnchant(int i) {
     MinionPtr m = theBoard[i];
     if (DefaultMinionPtr dm = dynamic_pointer_cast<DefaultMinion>(m)) {
         throw no_enchantments(m);
-    } else { // m points at hidden or non-hidden enchantment decorator
-        // careful that EnchantmentDecs also contain "hidden" Enchantments, which are not legit Enchantments - they will be flattened into the fields
+    } else { // careful that EnchantmentDecs could be "hidden" 
         EnchantmentDecPtr curr = dynamic_pointer_cast<EnchantmentDec>(m);
         EnchantmentDecPtr prev = curr;
         EnchantmentDecPtr ednext; // will be set if applicable
@@ -309,23 +308,15 @@ void Board::stripTopEnchant(int i) {
                 prev = curr;
                 curr = ednext;
                 next = ednext->getNext();
-            } else { // hit the base case
-                throw no_enchantments(m);
-            }
+            } else throw no_enchantments(m); // hit the base case
         }
-        cout << "prev: " << prev->getName() << endl;
-        cout << "curr: " << curr->getName() << endl;
         curr->setNext(nullptr);
         
         // if curr has a trigged ability, remove the observer
         TriggeredAbility* ta = curr->getEnchantmentAbility();
-        if (ta) {
-            detach(ta);
-        }
+        if (ta) detach(ta);
 
-        cout << "next: " << next->getName() << endl;
         prev->setNext(next);
-        // cout << theBoard[i] << endl;
     }
 }
 
