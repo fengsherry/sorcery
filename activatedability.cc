@@ -46,7 +46,9 @@ void UnsummonAbility::doEffect(Player& player, int i) {
 DisenchantAbility::DisenchantAbility() {}
 DisenchantAbility::~DisenchantAbility() {}
 void DisenchantAbility::doEffect(Player& player, int i){
-    player.getBoard().stripTopEnchant(i);
+    try {
+        player.getBoard().stripTopEnchant(i);
+    } catch (no_enchantments& e) {}
 }
 
 /* Abilities for Spells without targets: */
