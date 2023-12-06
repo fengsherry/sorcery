@@ -32,7 +32,7 @@ struct NoDeleter {
 
 void Minion::destroy() {
     int i = board->find(MinionPtr(this, NoDeleter{})); 
-    board->destroyMinion(i);
+    board->removeCard(i);
 }
 
 void Minion::modifyDefence(int n) {

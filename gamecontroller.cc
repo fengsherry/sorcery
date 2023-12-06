@@ -290,11 +290,14 @@ void GameController::go(int argc, char *argv[]) {
 
             } else if (cmd == "play" && !gameover) {
                 vector<int> args;
-                string line;
                 int arg;
-                // getline(cin, line);
-                // istringstream iss(line);
                 while (iss >> arg) { args.emplace_back(arg); }
+                string stringargs = iss.str();
+                istringstream iss2(stringargs);
+                string play, first, second, third;
+                iss2 >> play >> first >> second >> third;
+                // cout << "play: " << play << "first: " << first << "second: " << second << "third: " << third << endl;
+                // cout << iss2.fail();
 
                 if (args.size() == 1) { // "play i" - minions, rituals, spells with no targets
                     // check if i within range
@@ -316,10 +319,10 @@ void GameController::go(int argc, char *argv[]) {
                     catch (not_enough_magic &e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId());}
                     catch (no_target_provided &e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId());}
 
-                } else if (args.size() == 3) { // "play i p j" - enchantments, spells with targets
+                } else if ((args.size() == 3) || (args.size() == 2 && (third == "r"))) { // "play i p j" - enchantments, spells with targets
                     // check if i and j within range
                     checkRange(args[0], gm.getActivePlayer().getHand().getSize());
-                    if (args[1] != 'r' && args[1] != 1 && args[2] != 2) throw out_of_range{"Out of range."};
+                    if (args[1] != 'r' && args[1] != 1 && args[2] != 2) throw out_of_range{"Out of range."}; //?
 
                     // identify target player
                     Player* targetPlayer;
@@ -327,14 +330,15 @@ void GameController::go(int argc, char *argv[]) {
                     else if (args[1] == gm.getActivePlayer().getId()) { targetPlayer = &gm.getActivePlayer(); } 
                     else { targetPlayer = &gm.getNonactivePlayer(); }
 
-                    checkRange(args[2], targetPlayer->getBoard().getBoardSize());
-
-                    // identify target card
+                    // identify target card (could be minion or ritual)
                     Card* targetCard;
-                    if (args[2] == 'r') {
+                    if (args.size() == 3) { // minion
+                        checkRange(args[2], targetPlayer->getBoard().getBoardSize());
+                        targetCard = targetPlayer->getBoard().getCard(args[2] - 1).get();
+                    } else { // ritual
                         targetCard = targetPlayer->getRitual().get();
-                    }  
-                    else targetCard = targetPlayer->getBoard().getCard(args[2] - 1).get();
+                    }
+ 
                     string s = activePlayerName + " has played " + gm.getActivePlayer().getHand().getCard(args[0]-1)->getName() + 
                                     " on " + targetPlayer->getName() + "'s " + targetCard->getName();
                     // notifyDisplays(activePlayerName + " is playing " + gm.getActivePlayer().getHand().getCard(args[0]-1)->getName() + 
@@ -344,7 +348,8 @@ void GameController::go(int argc, char *argv[]) {
 
                     // play the card
                     try { 
-                        gm.play(args[0]-1, args[2]-1, *targetPlayer);
+                        if (args.size() == 3) gm.play(args[0]-1, args[2]-1, *targetPlayer, false);
+                        else gm.play(args[0]-1, -1, *targetPlayer, true);
                         vector<string> msg;
                         msg.emplace_back(s);
                         msg.emplace_back(activePlayerName + "'s magic remaining: " + to_string(gm.getActivePlayer().getMagic()));

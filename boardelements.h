@@ -67,7 +67,7 @@ class Board {
         void stripEnchants(int i);
         void stripTopEnchant(int i); 
         void restoreAction(); // sets action of Minions to 1
-        void destroyMinion(int i);
+        // void destroyMinion(int i);
         int size();
         int getBoardSize();
         int find(MinionPtr m); // returns index of m in theBoard, -1 if not found

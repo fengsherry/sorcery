@@ -46,7 +46,7 @@ class GameMaster {
 
         void discard();
         void play(int i); // minions, rituals, spells with no targets
-        void play(int i, int j, Player& targetPlayer); // enchantments, spells with targets
+        void play(int i, int j, Player& targetPlayer, bool targetRitual); // enchantments, spells with targets
 
         void useAbility(int i); // activated ability
         void useAbility(int i, int j, Player& targetPlayer); // activated ability

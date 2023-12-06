@@ -28,9 +28,9 @@ void ActivatedAbility::incActivationCost(int n) {activationCost += n; }
 BanishAbility::BanishAbility() {}
 BanishAbility::~BanishAbility() {}
 void BanishAbility::doEffect(Player& player, int i) {
-    if (i == 'r') player.destroyRitual();
+    if (i == -1) player.destroyRitual();
     else if (i < 0 || i > player.getBoard().size()) throw outside_range();
-    else  player.getBoard().destroyMinion(i - 1);
+    else  player.getBoard().removeCard(i);
 }
 
 UnsummonAbility::UnsummonAbility() {}
@@ -38,7 +38,7 @@ UnsummonAbility::~UnsummonAbility() {}
 void UnsummonAbility::doEffect(Player& player, int i) {
     player.getBoard().stripEnchants(i); // remove any enchantments from minion
     MinionPtr temp = player.getBoard().getCard(i);
-    player.getBoard().destroyMinion(i); // remove it from the Board
+    player.getBoard().removeCard(i); // remove it from the Board
     player.getHand().addCard(temp); // add it into the Hand
 }
 

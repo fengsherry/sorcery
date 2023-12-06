@@ -316,7 +316,10 @@ void Board::stripTopEnchant(int i) {
         TriggeredAbility* ta = curr->getEnchantmentAbility();
         if (ta) detach(ta);
 
-        prev->setNext(next);
+        cout << "next: " << next->getName() << endl;
+        if (theBoard[i] == prev) theBoard[i] = next;
+        else prev->setNext(next);
+        // cout << theBoard[i] << endl;
     }
 }
 
@@ -326,9 +329,9 @@ void Board::restoreAction() {
     }
 }
 
-void Board::destroyMinion(int i) {
-    theBoard.erase(theBoard.begin() + i);
-}
+// void Board::destroyMinion(int i) {
+//     theBoard.erase(theBoard.begin() + i);
+// }
 
 int Board::size() { return static_cast<int>(theBoard.size()); }
 

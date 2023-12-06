@@ -19,7 +19,9 @@ void Ritual::decreaseCharge(int n) {
         cout << "SETTING ENOUGH CHARGE TO FALSE" << endl;
         throw not_enough_charge(this);
     } else if (n == charge) {
-        trigAbility->setEnoughCharge(false); charge -= n;
+        trigAbility->setEnoughCharge(false); 
+        cout << "SETTING ENOUGH CHARGE TO FALSE" << endl;
+        charge -= n;
     } else charge -= n;
 
     // if (n == charge) charge -= n;

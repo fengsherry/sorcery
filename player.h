@@ -56,7 +56,7 @@ class Player {
         // plays the ith card int he player's hand with no target (i.e. minions, rituals, spells)
         // throws exception if unsucessful 
         TriggeredAbility* play(int i, Player& nonActivePlayer); 
-        TriggeredAbility* play(int i, int j, Player& p); 
+        void play(int i, int j, Player& p, bool targetRitual); 
 
         void useAbility(int i, Player& nonActivePlayer);
         void useAbility(int i, int j, Player &p);
