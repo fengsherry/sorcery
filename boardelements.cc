@@ -324,7 +324,8 @@ void Board::stripTopEnchant(int i) {
         }
 
         cout << "next: " << next->getName() << endl;
-        prev->setNext(next);
+        if (theBoard[i] == prev) theBoard[i] = next;
+        else prev->setNext(next);
         // cout << theBoard[i] << endl;
     }
 }
