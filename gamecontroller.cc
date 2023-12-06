@@ -107,7 +107,7 @@ void GameController::go(int argc, char *argv[]) {
     if (findIndex(argc, argv, "-init", i)) { 
         initFlag = true; initFile = argv[i + 1];
         testCmdArg("init", initFile);
-        cout << initFile << endl;
+        // cout << initFile << endl;
         file = ifstream(initFile);
     }
     if (findIndex(argc, argv, "-testing", i)) { 

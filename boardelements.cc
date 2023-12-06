@@ -160,7 +160,7 @@ void Board::notifyMinionLeaveObservers(MinionPtr targetMinion) {
         while (o != ol->observers.end()) {
             if ((*o)->getType() == TriggerType::MinionLeave && (*o)->getOwner() == ol->activePlayer) { // TODO
                 (*o)->setTargetMinion(targetMinion);
-                cout << "target minion:" << targetMinion->getName() << "attack: " << targetMinion->getAttack() << "defense: " << targetMinion->getDefense();
+                // cout << "target minion:" << targetMinion->getName() << "attack: " << targetMinion->getAttack() << "defense: " << targetMinion->getDefense();
                 (*o)->applyAbility();   
             }
             ++o;
@@ -217,7 +217,7 @@ MinionPtr Board::removeCard(int i) {
         int defense = theBoard[i]->getDefense();
         int action = theBoard[i]->getAction();
 
-        cout << "removing!! attack: " << attack << "defence " << defense << "action " << action << endl;
+        // cout << "removing!! attack: " << attack << "defence " << defense << "action " << action << endl;
 
         this->stripEnchants(i);
 
@@ -225,7 +225,7 @@ MinionPtr Board::removeCard(int i) {
         theBoard[i]->setDefense(defense);
         theBoard[i]->setAction(action); // implement in Minion
 
-        cout << "the minion reassigned!! attack: " << theBoard[i]->getAttack() << "defence " << theBoard[i]->getDefense() << "action " << theBoard[i]->getAction()  << endl;
+        // cout << "the minion reassigned!! attack: " << theBoard[i]->getAttack() << "defence " << theBoard[i]->getDefense() << "action " << theBoard[i]->getAction()  << endl;
 
         // cout << "attack: " << theBoard[i]->getAttack() << endl;
         // cout << "defense: " << theBoard[i]->getDefense()<< endl;
@@ -318,7 +318,7 @@ void Board::stripTopEnchant(int i) {
         TriggeredAbility* ta = curr->getEnchantmentAbility();
         if (ta) detach(ta);
 
-        cout << "next: " << next->getName() << endl;
+        // cout << "next: " << next->getName() << endl;
         
         // if the top layer enchantment is non-hidden, then 
         if ((theBoard[i] == prev) && !((dynamic_pointer_cast<EnchantmentDec>(theBoard[i]))->isHidden())) {

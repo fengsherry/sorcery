@@ -121,8 +121,8 @@ CardPtr createCard(string cardName, Player* p) {
 
 void checkRange(int i, int max) { // e.g. i = 3, size = 5
     if (i < 1 || max < i) {
-        std::cout << i << std::endl;
-        std::cout << max << std::endl;
+        // std::cout << i << std::endl;
+        // std::cout << max << std::endl;
         string s = (max == 0) ? "Out of range." : "Out of range, please provide a number between " + to_string(1) + " and " + to_string(max);
         throw std::out_of_range{s};
     };
