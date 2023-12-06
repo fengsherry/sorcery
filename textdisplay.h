@@ -16,7 +16,7 @@ class TextDisplay : public SorceryDisplay {
     ~TextDisplay();
     void displayMsg(string msg, int p = 0);
     void displayMsg(vector<string> msg, int p = 0) override;
-    void displaySorceryBoard() override;
+    void displaySorceryBoard(int p) override;
     void displayHand(int p) override;
     void displayMinion(const MinionPtr m) override;
 

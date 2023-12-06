@@ -17,7 +17,7 @@ GraphicsDisplay::GraphicsDisplay(GameMaster *_gm) : gm{_gm} {
 
     w->fillRectangle(913, 27, 351, 632, 1);
     w->fillRectangle(913+2, 27+2, 351-4, 632-4, 0);
-    displaySorceryBoard();
+    displaySorceryBoard(0);
 }
 GraphicsDisplay::~GraphicsDisplay() {
 
@@ -195,10 +195,10 @@ void GraphicsDisplay::displayCard(int x, int y, int width, int height, Enchantme
 void GraphicsDisplay::displayCard(int x, int y, int width, int height, SpellPtr s) {
     displayCardBlank(x, y, width, height);
     displayCardBase(x, y, width, height, s); // name, type, cost
-    wrapString(x+8, y+55, 17, s->getDesc());
+    wrapString(x+8, y+55, 25, s->getDesc());
 }
 
-void GraphicsDisplay::displaySorceryBoard(){
+void GraphicsDisplay::displaySorceryBoard(int p){
     // cout << "hi" << endl;
     for (int p = 0; p <= 1; ++p) { // looping through player 1 and 2
         // cout << "p: " << p << endl;
@@ -221,6 +221,7 @@ void GraphicsDisplay::displaySorceryBoard(){
         // player
         displayCard(playerpsn[p][0], playerpsn[p][1], cardwidth, cardheight, &gm->getPlayer(p+1));
     }
+    displayHand(p);
 }
 
 void GraphicsDisplay::displayHand(int p) {
