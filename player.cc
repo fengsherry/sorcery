@@ -75,7 +75,7 @@ void Player::decreaseLife(int n) {
     life -= n;
 
     // checks if player is still alive
-    if (life <= 0) cout << this->getName() << " is dead D:" << endl; 
+    if (life <= 0) throw game_over(this);
     // we should throw an exception here
 }
 
@@ -227,3 +227,6 @@ void Player::useAbility(int i, int j, Player &p) {
 bool Player::onBoard(MinionPtr m) {
     return board.contains(m);
 }
+
+
+

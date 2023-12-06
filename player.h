@@ -9,7 +9,6 @@
 #include "ritual.h"
 #include "enchantment.h"
 #include "enchantmentdec.h"
-#include "enchantmentdecsconcrete.h"
 using namespace std;
 
 class Player {
@@ -113,3 +112,5 @@ class Player {
 
 
 #endif
+
+

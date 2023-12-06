@@ -30,3 +30,4 @@ class Ritual: public Card {
 typedef shared_ptr<Ritual>  RitualPtr;
 
 #endif
+

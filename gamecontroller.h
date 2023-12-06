@@ -21,6 +21,7 @@ class GameController {
     void testCmdArg(string arg, string filename = "n/a");
 
     void notifyDisplays(); // board
+    void notifyGraphicDisplays();
     void notifyDisplays(MinionPtr m); // describe minion
     void notifyDisplays(int p); // hand
     void notifyDisplays(string msg, int p); // message

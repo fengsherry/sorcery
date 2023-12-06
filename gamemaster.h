@@ -25,7 +25,7 @@ class GameMaster {
         ~GameMaster();
 
         // methods to initialize the players
-        void initPlayers(ifstream& deck1In, ifstream& deck2In, bool testing);
+        void initPlayers(vector<string> names, ifstream& deck1In, ifstream& deck2In, bool testing);
         // void initDecks(ifstream& deck1In, ifstream& deck2In);
 
         // observer pattern methods

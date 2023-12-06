@@ -9,15 +9,15 @@ GameMaster::~GameMaster() {}
 
 
 // SET PLAYERS, ask Players for their names
-void GameMaster::initPlayers(ifstream& deck1In, ifstream& deck2In, bool testing) {
+void GameMaster::initPlayers(vector<string>names, ifstream& deck1In, ifstream& deck2In, bool testing) {
     // players:
-    string p1name, p2name;
-    // cout << "Please enter player names: " << endl;
-    getline(cin, p1name); 
-    getline(cin, p2name); 
+    // string p1name, p2name;
+    // // cout << "Please enter player names: " << endl;
+    // getline(cin, p1name); 
+    // getline(cin, p2name); 
 
-    p1.init(p1name, 1, deck1In, &ol, testing);
-    p2.init(p2name, 2, deck2In, &ol, testing);
+    p1.init(names[0], 1, deck1In, &ol, testing);
+    p2.init(names[1], 2, deck2In, &ol, testing);
 
     activePlayer = &p1;
     nonactivePlayer = &p2;
@@ -34,8 +34,8 @@ void GameMaster::initPlayers(ifstream& deck1In, ifstream& deck2In, bool testing)
 
 }
 
-bool find(vector<TriggeredAbility*> v, TriggeredAbility* target) {
-    for (int i = 0; i < v.size(); i++) {
+int find(vector<TriggeredAbility*> v, TriggeredAbility* target) {
+    for (size_t i = 0; i < v.size(); i++) {
         if (v[i] == target) return i;
     }
     return -1;
@@ -80,7 +80,7 @@ void GameMaster::startTurn() {
     activePlayer->increaseMagic(1);
     try {
         if (activePlayer->getHandSize() < 5) activePlayer->drawCard();
-    } catch (deck_empty e) {cout << e.what() << endl;}
+    } catch (deck_empty& e) {cout << e.what() << endl;}
     activePlayer->getBoard().restoreAction();
     activePlayer->getHand().restoreAction(); // can we combine these two
     
@@ -214,7 +214,7 @@ void GameMaster::notifyStartTurnObservers() {
     auto o = ol.observers.begin();
     try {
         while (o != ol.observers.end()) {
-            if ((*o)->getType() == TriggerType::StartTurn && (*o)->getOwner() == ol.activePlayer) { // TODO
+            if ((*o)->getType() == TriggerType::StartTurn && (*o)->getOwner() == ol.activePlayer && (*o)->getEnoughCharge()) { // TODO
                 (*o)->setTargetPlayer(activePlayer);
                 (*o)->applyAbility();   
             }
@@ -222,14 +222,14 @@ void GameMaster::notifyStartTurnObservers() {
         }
         o = ol.observers.begin();
         while (o != ol.observers.end()) {
-            if ((*o)->getType() == TriggerType::StartTurn && (*o)->getOwner() != ol.activePlayer) { // TODO
+            if ((*o)->getType() == TriggerType::StartTurn && (*o)->getOwner() != ol.activePlayer && (*o)->getEnoughCharge()) { // TODO
                 (*o)->setTargetPlayer(activePlayer);
                 (*o)->applyAbility();   
             }
             ++o;
         }
     } catch (not_enough_charge& e) {
-        ol.observers.erase(o);
+        // observers.erase(o);
     }
 
 }
@@ -250,7 +250,7 @@ void GameMaster::notifyEndTurnObservers() {
     auto o = ol.observers.begin();
     try {
         while (o != ol.observers.end()) {
-            if ((*o)->getType() == TriggerType::EndTurn && (*o)->getOwner() == ol.activePlayer) { // TODO
+            if ((*o)->getType() == TriggerType::EndTurn && (*o)->getOwner() == ol.activePlayer && (*o)->getEnoughCharge()) { // TODO
                 (*o)->setTargetPlayer(activePlayer);
                 (*o)->applyAbility();   
             }
@@ -258,7 +258,7 @@ void GameMaster::notifyEndTurnObservers() {
         }
         o = ol.observers.begin();
         while (o != ol.observers.end()) {
-            if ((*o)->getType() == TriggerType::EndTurn && (*o)->getOwner() != ol.activePlayer) { 
+            if ((*o)->getType() == TriggerType::EndTurn && (*o)->getOwner() != ol.activePlayer && (*o)->getEnoughCharge()) { 
                 (*o)->setTargetPlayer(activePlayer);
                 (*o)->applyAbility();   
             }

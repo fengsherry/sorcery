@@ -34,6 +34,15 @@ void GameController::notifyDisplays() {
     }
 }
 
+void GameController::notifyGraphicDisplays() {
+    for (auto display : displays) {
+        if(GraphicsDisplay* gd = dynamic_cast<GraphicsDisplay*>(display)) {
+            display->displaySorceryBoard();
+        }
+            
+    }
+}
+
 // describe minion
 void GameController::notifyDisplays(MinionPtr m) {
     for (auto display : displays) {
@@ -86,7 +95,7 @@ void GameController::go(int argc, char *argv[]) {
     bool testingFlag = false;
     bool graphicsFlag = false;
     string deck1File, deck2File, initFile;
-    ifstream file(initFile);
+    ifstream file;
     if (findIndex(argc, argv, "-deck1", i)) {
         deck1Flag = true; deck1File = argv[i + 1];
         testCmdArg("deck1", deck1File);
@@ -98,8 +107,10 @@ void GameController::go(int argc, char *argv[]) {
     if (findIndex(argc, argv, "-init", i)) { 
         initFlag = true; initFile = argv[i + 1];
         testCmdArg("init", initFile);
+        cout << initFile << endl;
+        file = ifstream(initFile);
     }
-    if (findIndex(argc, argv, "-testing", i)) { // NOT IMPLEMENTED YET // NOT IMPLEMENTED YET
+    if (findIndex(argc, argv, "-testing", i)) { 
         testingFlag = true; 
         testCmdArg("testing");
     }
@@ -108,36 +119,37 @@ void GameController::go(int argc, char *argv[]) {
         testCmdArg("graphics");
     }
 
-
     // create input file streams for each deck file location
     ifstream in1 = deck1Flag ? ifstream(deck1File.c_str()) : ifstream("default.deck");
     ifstream in2 = deck2Flag ? ifstream(deck2File.c_str()) : ifstream("default.deck");
 
-    // initialize the game
-    // GameMaster gm{};
-
-    // create a new textdisplay
-    // td = new TextDisplay(&gm);
-
-    // create a new graphics display if required
-    // if (graphicsFlag) gd = new GraphicsDisplay{&gm};
+    // create a new graphics display as required
     if (graphicsFlag) displays.emplace_back(new GraphicsDisplay{&gm});
 
-    // initialize Players, their Decks, and their Hands
     notifyDisplays("Please enter player names.", 0);
-    gm.initPlayers(in1, in2, testingFlag); 
+
+    // initialize Players, their Decks, and their Hands
+    vector<string> names;
+    for (int i = 0; i < 2; ++i) {
+        string s;
+        if (initFlag && getline(file, s)) {}// already read into s  
+        else getline(cin, s);
+        names.emplace_back(s);
+    }
+    
+    gm.initPlayers(names, in1, in2, testingFlag); 
 
     if (graphicsFlag) displays[1]->displaySorceryBoard();
     
     string cmds, cmd; // cmds is a line, cmd is the first "word" in that line
-    int arg1, arg2, arg3;
     srand(static_cast<unsigned>(time(0)));
     gm.startTurn();
     string activePlayerName = gm.getActivePlayer().getName();
     string nonactivePlayerName = gm.getNonactivePlayer().getName();
     notifyDisplays("Player " + to_string(gm.getTurn()) + ": " + activePlayerName + "  It's your turn!", gm.getActivePlayer().getId());
-    // cout << "Player " << gm.getTurn() << ": " << activePlayerName << "  It's your turn!" << endl;
+    bool gameover = false;
     while (true) {
+        bool updateBoard = true;
         try { // catches exception
             if (cin.eof()) return;
             if (initFlag && getline(file, cmds)) {
@@ -161,19 +173,21 @@ void GameController::go(int argc, char *argv[]) {
                 "\tboard -- Describe all cards on the board.";
 
                 displays[0]->displayMsg(vector<string>{helpmsg});
+                updateBoard = false;
 
-            } else if (cmd == "end") {
+            } else if (cmd == "end" && !gameover) {
                 gm.endTurn();
                 notifyDisplays();
                 // reset names with new pointer values
                 activePlayerName = gm.getActivePlayer().getName(); 
                 nonactivePlayerName = gm.getNonactivePlayer().getName();
                 gm.startTurn();
+                notifyGraphicDisplays();
                 notifyDisplays("Player " + to_string(gm.getTurn()) + ": " + activePlayerName + "  It's your turn!", gm.getActivePlayer().getId());
                 // cout << "Player " << gm.getTurn() << ": " << activePlayerName << "  It's your turn!" << endl;
             } else if (cmd == "quit") {
                 break;
-            } else if (testingFlag && cmd == "draw") {
+            } else if (testingFlag && cmd == "draw" && !gameover) {
                 try {
                     CardPtr drawnCard = gm.getActivePlayer().drawCard();
                     notifyDisplays("Player " + to_string(gm.getTurn()) + ": " + activePlayerName + "  drew a " + drawnCard->getName(), gm.getActivePlayer().getId());
@@ -182,8 +196,8 @@ void GameController::go(int argc, char *argv[]) {
                 catch (invalid_play &e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); }
                 catch (full_hand &e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); }
                 catch (deck_empty &e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); }
-                
-            } else if (testingFlag && cmd == "discard") { // only available in -testing mode; how to handle this?
+                updateBoard = false;
+            } else if (testingFlag && cmd == "discard" && !gameover) { // only available in -testing mode; how to handle this?
                 int i;
                 iss >> i;
                 checkRange(i, gm.getActivePlayer().getHand().getSize()); // may throw control to next iteration of while loop, skipping below code
@@ -192,7 +206,8 @@ void GameController::go(int argc, char *argv[]) {
                 //     gm.getActivePlayer().getHand().removeCard(i-1);
                 // } else notifyDisplaysErr("Not a valid command", gm.getActivePlayer().getId());
                 // gm.getActivePlayer().TEST_printPlayerHand();
-            } else if (cmd == "attack") {
+                updateBoard = false;
+            } else if (cmd == "attack" && !gameover) {
                 // attacks player or minion
 
                 string args;
@@ -233,7 +248,8 @@ void GameController::go(int argc, char *argv[]) {
                         if (victimMinion->isDead()) {
                             s2 = victimMinion->getDefaultMinionName() + " has died.";
                         } else {
-                            s2 = victimMinion->getDefaultMinionName() + "'s defense remaining: " + to_string(victimMinion->getDefense());
+                            s2 = victimMinion->getDefaultMinionName() + "'s defense remaining: " + 
+                            to_string(victimMinion->getDefense());
                         }
                         vector<string> msg = {s, s1, s2};
                         
@@ -265,14 +281,14 @@ void GameController::go(int argc, char *argv[]) {
                         // cout << nonactivePlayerName << "'s life remaining: " << gm.getNonactivePlayer().getLife() << endl;
                         // cout << endl;
                         notifyDisplays(msg, gm.getActivePlayer().getId());
-                    } catch (not_enough_action e) {
+                    } catch (not_enough_action& e) {
                         notifyDisplaysErr(e.what(), gm.getActivePlayer().getId());
                         // cout << e.what() << endl; // error message
                     }
                     
                 }
 
-            } else if (cmd == "play") {
+            } else if (cmd == "play" && !gameover) {
                 vector<int> args;
                 int arg;
                 while (iss >> arg) { args.emplace_back(arg); }
@@ -351,7 +367,7 @@ void GameController::go(int argc, char *argv[]) {
                 }
 
                 
-            } else if (cmd == "use") {
+            } else if (cmd == "use" && !gameover) {
                 vector<int> args;
                 string line;
                 int arg;
@@ -372,7 +388,7 @@ void GameController::go(int argc, char *argv[]) {
                     } 
                     catch (no_target_provided &e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); }
                     catch (not_enough_magic &e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); } 
-                    catch (not_enough_magic &e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); }
+                    catch (not_enough_action &e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); }
                     catch (invalid_play &e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); }
                     catch (ability_silenced &e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); }
                 }
@@ -406,7 +422,7 @@ void GameController::go(int argc, char *argv[]) {
                     } 
                     catch (no_target_needed &e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); }
                     catch (not_enough_magic &e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); } 
-                    catch (not_enough_magic &e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); }
+                    catch (not_enough_action &e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); }
                     catch (invalid_play &e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); }
                     catch (ability_silenced &e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); }
 
@@ -417,7 +433,7 @@ void GameController::go(int argc, char *argv[]) {
                     // cout << "Incorrect input." << endl;
                 }
 
-            } else if (cmd == "inspect") {
+            } else if (cmd == "inspect" && !gameover) {
                 int i;
                 // cin >> i;
                 iss >> i;
@@ -435,6 +451,7 @@ void GameController::go(int argc, char *argv[]) {
                 } catch ( dne_card_inspect &e ) {
                     notifyDisplaysErr(e.what(), gm.getActivePlayer().getId());
                 }
+                updateBoard = false;
                 // if (!(gm.getActivePlayer().getBoard().getCard(i-1)->getType() == CardType::Minion)){
                 //     notifyDisplaysErr("Try again, this card is not a Minion.", gm.getActivePlayer().getId());
                 // } else if (i > gm.getPlayer(gm.getActivePlayer().getId()).getBoard().size()) {
@@ -446,23 +463,28 @@ void GameController::go(int argc, char *argv[]) {
                 // gm.getActivePlayer().getBoard().getCard(i-1)->TEST_printInspectMinion();
                 // td->displayMinion(gm.getActivePlayer().getBoard().getCard(i-1));
 
-            } else if (cmd == "hand") {
+            } else if (cmd == "hand" && !gameover) {
                 // gm.getActivePlayer().TEST_printPlayerHand();
                 notifyDisplays(gm.getActivePlayer().getId());
+                updateBoard = false;
 
-            } else if (cmd == "board") {
+            } else if (cmd == "board" && !gameover) {
                 gm.getActivePlayer().TEST_printPlayerBoard();
                 notifyDisplays();
-
-            } else if (cmd == "grave") {
-                // gm.getActivePlayer().TEST_printPlayerGrave();
+                updateBoard = false;
 
             } else if (cmd != "") {
                 notifyDisplays("Not a valid command", gm.getActivePlayer().getId());
+                updateBoard = false;
             } 
             // notifyDisplays();
+            if (updateBoard) notifyGraphicDisplays();
             // if (graphicsFlag) displays[1]->displaySorceryBoard();
-        } catch(out_of_range &e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); }
-        
+        } 
+        catch(out_of_range &e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); }
+        catch(game_over &e) { 
+            gameover = true;
+            notifyDisplays(e.what(), gm.getActivePlayer().getId()); 
+        }
     }
 }
