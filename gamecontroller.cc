@@ -30,14 +30,14 @@ void GameController::testCmdArg(string arg, string filename) {
 
 void GameController::notifyDisplays() {
     for (auto display : displays) {
-        display->displaySorceryBoard();
+        display->displaySorceryBoard(gm.getActivePlayer().getId());
     }
 }
 
 void GameController::notifyGraphicDisplays() {
     for (auto display : displays) {
         if(GraphicsDisplay* gd = dynamic_cast<GraphicsDisplay*>(display)) {
-            display->displaySorceryBoard();
+            display->displaySorceryBoard(gm.getActivePlayer().getId());
         }
             
     }
@@ -139,7 +139,7 @@ void GameController::go(int argc, char *argv[]) {
     
     gm.initPlayers(names, in1, in2, testingFlag); 
 
-    if (graphicsFlag) displays[1]->displaySorceryBoard();
+    notifyGraphicDisplays();
     
     string cmds, cmd; // cmds is a line, cmd is the first "word" in that line
     srand(static_cast<unsigned>(time(0)));

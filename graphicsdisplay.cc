@@ -17,7 +17,7 @@ GraphicsDisplay::GraphicsDisplay(GameMaster *_gm) : gm{_gm} {
 
     w->fillRectangle(913, 27, 351, 632, 1);
     w->fillRectangle(913+2, 27+2, 351-4, 632-4, 0);
-    displaySorceryBoard();
+    displaySorceryBoard(0);
 }
 GraphicsDisplay::~GraphicsDisplay() {
 
@@ -41,7 +41,7 @@ void GraphicsDisplay::displayCard(int x, int y,  int width, int height, Player* 
     displayCardBlank(x, y, width, height);
     if (p->getName() != "") {
         // cout << "p->getId: " << p->getId() << endl;
-        w->drawString(playerpsn[p->getId()-1][0] + 75, playerpsn[p->getId()-1][1] + 42, p->getName());
+        w->drawString(playerpsn[p->getId()-1][0] + 65, playerpsn[p->getId()-1][1] + 42, p->getName());
         w->drawString(playerpsn[p->getId()-1][0] + 8, playerpsn[p->getId()-1][1] + 110, to_string(p->getLife()));
         w->drawString(playerpsn[p->getId()-1][0] + 143, playerpsn[p->getId()-1][1] + 110, to_string(p->getMagic()));
     } 
@@ -118,6 +118,7 @@ void GraphicsDisplay::wrapString(int x, int y, size_t chars, vector<string> msg)
 
 // minion
 void GraphicsDisplay::displayCard(int x, int y, int width, int height, MinionPtr m) {
+    // cout << m->getAttack() << endl;
     displayCardBlank(x, y, width, height); 
     displayCardMinionBase(x, y, width, height, m); 
     // cout << m->getAbility().
@@ -195,10 +196,10 @@ void GraphicsDisplay::displayCard(int x, int y, int width, int height, Enchantme
 void GraphicsDisplay::displayCard(int x, int y, int width, int height, SpellPtr s) {
     displayCardBlank(x, y, width, height);
     displayCardBase(x, y, width, height, s); // name, type, cost
-    wrapString(x+8, y+55, 17, s->getDesc());
+    wrapString(x+8, y+55, 25, s->getDesc());
 }
 
-void GraphicsDisplay::displaySorceryBoard(){
+void GraphicsDisplay::displaySorceryBoard(int p){
     // cout << "hi" << endl;
     for (int p = 0; p <= 1; ++p) { // looping through player 1 and 2
         // cout << "p: " << p << endl;
@@ -221,6 +222,7 @@ void GraphicsDisplay::displaySorceryBoard(){
         // player
         displayCard(playerpsn[p][0], playerpsn[p][1], cardwidth, cardheight, &gm->getPlayer(p+1));
     }
+    displayHand(p);
 }
 
 void GraphicsDisplay::displayHand(int p) {
@@ -256,8 +258,9 @@ void GraphicsDisplay::displayMinion(const MinionPtr m) {
     w->fillRectangle(913+2,155, 351-4, 504-2, 0);
     MinionPtr curr = m;
     if (DefaultMinionPtr dmptr = dynamic_pointer_cast<DefaultMinion>(curr)) {
-        displayCard(minionpsn[0][0], minionpsn[0][1], hand_cardwidth, hand_cardheight, curr);
+        displayCard(minionpsn[0][0], minionpsn[0][1], hand_cardwidth, hand_cardheight, m);
     } else {
+        vector<EnchantmentDecPtr> enchants;
         // EnchantmentDecPtr ed_curr = dynamic_pointer_cast<EnchantmentDec>(curr);
         int i = 1;
         // cout << "i: " << i << endl;
@@ -267,13 +270,29 @@ void GraphicsDisplay::displayMinion(const MinionPtr m) {
 
             if (ed_curr->isHidden()) { curr = ed_curr->getNext(); continue; }
             // display ed_curr
-            displayCard(minionpsn[i][0], minionpsn[i][1], hand_cardwidth, hand_cardheight, ed_curr);
+            enchants.emplace_back(ed_curr);
+            // displayCard(minionpsn[i][0], minionpsn[i][1], hand_cardwidth, hand_cardheight, ed_curr);
 
             // reset curr to next
             curr = ed_curr->getNext();
             ++i;
         }
-        displayCard(minionpsn[0][0], minionpsn[0][1], hand_cardwidth, hand_cardheight, curr);
+        size_t num_to_print = (enchants.size() > 8) ? 8 : enchants.size();
+        for (size_t i = 1; i <= num_to_print; ++i) {
+            displayCard(minionpsn[i][0], minionpsn[i][1], hand_cardwidth, hand_cardheight, enchants[enchants.size() - i]);
+        }
+
+        // int number_printed = 0;
+        // for (auto ed_curr : enchants) {
+        //     cout << number_printed << endl;
+        //     if (number_printed == 8) break;
+        //     if (i > 8) i = 9;
+        //     --i;
+        //     displayCard(minionpsn[i][0], minionpsn[i][1], hand_cardwidth, hand_cardheight, ed_curr);
+        //     ++number_printed;
+            
+        // }
+        displayCard(minionpsn[0][0], minionpsn[0][1], hand_cardwidth, hand_cardheight, m);
      }
     
 }

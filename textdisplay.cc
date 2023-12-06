@@ -296,7 +296,7 @@ void TextDisplay::displayMinion(const MinionPtr m) {
 
 // displays the entore sorcery board: 
 // player1 row, play1 board, center graphic, player 2 board, player 2 row, (+border)
-void TextDisplay::displaySorceryBoard() {
+void TextDisplay::displaySorceryBoard(int p) {
   printTopBorder();
   printPlayerBoardRow(1);
 

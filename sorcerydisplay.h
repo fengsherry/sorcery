@@ -16,7 +16,7 @@ class SorceryDisplay {
         
         virtual void displayMsg(vector<string> msg, int p = 0) = 0;
         // virtual void displayMsg(string msg, int p = 0) = 0;
-        virtual void displaySorceryBoard() = 0;
+        virtual void displaySorceryBoard(int p) = 0;
         virtual void displayHand(int p) = 0;
         virtual void displayMinion(const MinionPtr m) = 0;
         void displayErrMsg(string msg, int p = 0);
