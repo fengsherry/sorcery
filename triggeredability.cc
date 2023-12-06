@@ -136,3 +136,4 @@ void HasteAbility::applyAbility() {
     cout << "!! triggering HasteAbility for " << ownerMinion->getName() << "!!!!" << endl;
     ownerMinion->modifyAction(1);
 }
+

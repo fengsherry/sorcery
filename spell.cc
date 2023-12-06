@@ -12,3 +12,4 @@ void Spell::applyAbility(Player& player1, Player& player2) {
 void Spell::applyAbility(Player& player1, Player& player2, int i) {
     aa->applyAbility(player1, player2, i);
 }
+
