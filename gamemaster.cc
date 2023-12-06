@@ -174,8 +174,8 @@ void GameMaster::play(int i) {
 }
 
 // play with target
-void GameMaster::play(int i, int j, Player& targetPlayer) {
-    TriggeredAbility* ta = activePlayer->play(i, j, targetPlayer); // may throw exception
+void GameMaster::play(int i, int j, Player& targetPlayer, bool targetRitual) {
+    TriggeredAbility* ta = activePlayer->play(i, j, targetPlayer, targetRitual); // may throw exception
     if (ta) this->attach(ta);
         
     activePlayer->getHand().removeCard(i);

@@ -145,9 +145,12 @@ TriggeredAbility* Player::play(int i, Player& nonActivePlayer) {
 }
 
 // with target
-TriggeredAbility* Player::play(int i, int j, Player& p) {
+TriggeredAbility* Player::play(int i, int j, Player& p, bool targetRitual) {
+    if (targetRitual) j =-1;
     CardPtr cardToPlay = hand.getCard(i);
-    CardPtr targetCard = p.getBoard().getCard(j);
+    CardPtr targetCard;
+    if (targetRitual) targetCard = p.getRitual();
+    else targetCard = p.getBoard().getCard(j);
 
     // check if the card needs a target to be played
     if (cardToPlay->getNeedTarget() == false) throw no_target_needed(*cardToPlay);
@@ -167,7 +170,7 @@ TriggeredAbility* Player::play(int i, int j, Player& p) {
   
         } else { throw invalid_play{"You cannot play " + cardToPlay->getName() + " on " + targetCard->getName()}; }
     } else if (SpellPtr spellToPlay = dynamic_pointer_cast<Spell>(cardToPlay)) { // spell with target
-        spellToPlay->applyAbility(p, *this, j); // might be sus - *this is a dummy value - should be nullptr but that means the argument needs to be a pointer, will do later if have time
+        spellToPlay->applyAbility(p, *this, j); 
     }
     return nullptr;
 }

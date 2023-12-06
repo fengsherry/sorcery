@@ -337,9 +337,9 @@ void Board::restoreAction() {
     }
 }
 
-void Board::destroyMinion(int i) {
-    theBoard.erase(theBoard.begin() + i);
-}
+// void Board::destroyMinion(int i) {
+//     theBoard.erase(theBoard.begin() + i);
+// }
 
 int Board::size() { return static_cast<int>(theBoard.size()); }
 
