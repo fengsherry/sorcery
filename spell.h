@@ -19,3 +19,4 @@ class Spell: public Card {
 typedef shared_ptr<Spell> SpellPtr;
 
 #endif
+
