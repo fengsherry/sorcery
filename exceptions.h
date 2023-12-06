@@ -158,4 +158,13 @@ class dne_card_inspect : public std::exception {
     }
 };
 
+class game_over : public std::exception {
+    Player* p;
+    public:
+    game_over(Player* p) : p{p} {}
+    string what() {
+        return p->getName() + " has died. Game over. Input 'quit' to end the program.";
+    }
+};
+
 #endif

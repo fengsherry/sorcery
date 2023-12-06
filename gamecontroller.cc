@@ -137,8 +137,6 @@ void GameController::go(int argc, char *argv[]) {
         names.emplace_back(s);
     }
     
-    cout << "hi" << endl;
-    
     gm.initPlayers(names, in1, in2, testingFlag); 
 
     if (graphicsFlag) displays[1]->displaySorceryBoard();
@@ -149,6 +147,7 @@ void GameController::go(int argc, char *argv[]) {
     string activePlayerName = gm.getActivePlayer().getName();
     string nonactivePlayerName = gm.getNonactivePlayer().getName();
     notifyDisplays("Player " + to_string(gm.getTurn()) + ": " + activePlayerName + "  It's your turn!", gm.getActivePlayer().getId());
+    bool gameover = false;
     while (true) {
         bool updateBoard = true;
         try { // catches exception
@@ -176,18 +175,19 @@ void GameController::go(int argc, char *argv[]) {
                 displays[0]->displayMsg(vector<string>{helpmsg});
                 updateBoard = false;
 
-            } else if (cmd == "end") {
+            } else if (cmd == "end" && !gameover) {
                 gm.endTurn();
                 notifyDisplays();
                 // reset names with new pointer values
                 activePlayerName = gm.getActivePlayer().getName(); 
                 nonactivePlayerName = gm.getNonactivePlayer().getName();
                 gm.startTurn();
+                notifyGraphicDisplays();
                 notifyDisplays("Player " + to_string(gm.getTurn()) + ": " + activePlayerName + "  It's your turn!", gm.getActivePlayer().getId());
                 // cout << "Player " << gm.getTurn() << ": " << activePlayerName << "  It's your turn!" << endl;
             } else if (cmd == "quit") {
                 break;
-            } else if (testingFlag && cmd == "draw") {
+            } else if (testingFlag && cmd == "draw" && !gameover) {
                 try {
                     CardPtr drawnCard = gm.getActivePlayer().drawCard();
                     notifyDisplays("Player " + to_string(gm.getTurn()) + ": " + activePlayerName + "  drew a " + drawnCard->getName(), gm.getActivePlayer().getId());
@@ -197,7 +197,7 @@ void GameController::go(int argc, char *argv[]) {
                 catch (full_hand &e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); }
                 catch (deck_empty &e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); }
                 updateBoard = false;
-            } else if (testingFlag && cmd == "discard") { // only available in -testing mode; how to handle this?
+            } else if (testingFlag && cmd == "discard" && !gameover) { // only available in -testing mode; how to handle this?
                 int i;
                 iss >> i;
                 checkRange(i, gm.getActivePlayer().getHand().getSize()); // may throw control to next iteration of while loop, skipping below code
@@ -207,7 +207,7 @@ void GameController::go(int argc, char *argv[]) {
                 // } else notifyDisplaysErr("Not a valid command", gm.getActivePlayer().getId());
                 // gm.getActivePlayer().TEST_printPlayerHand();
                 updateBoard = false;
-            } else if (cmd == "attack") {
+            } else if (cmd == "attack" && !gameover) {
                 // attacks player or minion
 
                 string args;
@@ -288,7 +288,7 @@ void GameController::go(int argc, char *argv[]) {
                     
                 }
 
-            } else if (cmd == "play") {
+            } else if (cmd == "play" && !gameover) {
                 vector<int> args;
                 string line;
                 int arg;
@@ -362,7 +362,7 @@ void GameController::go(int argc, char *argv[]) {
                 }
 
                 
-            } else if (cmd == "use") {
+            } else if (cmd == "use" && !gameover) {
                 vector<int> args;
                 string line;
                 int arg;
@@ -428,7 +428,7 @@ void GameController::go(int argc, char *argv[]) {
                     // cout << "Incorrect input." << endl;
                 }
 
-            } else if (cmd == "inspect") {
+            } else if (cmd == "inspect" && !gameover) {
                 int i;
                 // cin >> i;
                 iss >> i;
@@ -458,12 +458,12 @@ void GameController::go(int argc, char *argv[]) {
                 // gm.getActivePlayer().getBoard().getCard(i-1)->TEST_printInspectMinion();
                 // td->displayMinion(gm.getActivePlayer().getBoard().getCard(i-1));
 
-            } else if (cmd == "hand") {
+            } else if (cmd == "hand" && !gameover) {
                 // gm.getActivePlayer().TEST_printPlayerHand();
                 notifyDisplays(gm.getActivePlayer().getId());
                 updateBoard = false;
 
-            } else if (cmd == "board") {
+            } else if (cmd == "board" && !gameover) {
                 gm.getActivePlayer().TEST_printPlayerBoard();
                 notifyDisplays();
                 updateBoard = false;
@@ -475,7 +475,11 @@ void GameController::go(int argc, char *argv[]) {
             // notifyDisplays();
             if (updateBoard) notifyGraphicDisplays();
             // if (graphicsFlag) displays[1]->displaySorceryBoard();
-        } catch(out_of_range &e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); }
-        
+        } 
+        catch(out_of_range &e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId()); }
+        catch(game_over &e) { 
+            gameover = true;
+            notifyDisplays(e.what(), gm.getActivePlayer().getId()); 
+        }
     }
 }
