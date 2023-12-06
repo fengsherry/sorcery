@@ -298,13 +298,9 @@ void Board::stripTopEnchant(int i) {
     MinionPtr m = theBoard[i];
     if (DefaultMinionPtr dm = dynamic_pointer_cast<DefaultMinion>(m)) {
         throw no_enchantments(m);
-<<<<<<< HEAD
     } else { // m points at hidden or non-hidden enchantment decorator
         // careful that EnchantmentDecs also contain "hidden" Enchantments, which are not legit Enchantments - they will be flattened into the fields
 
-=======
-    } else { // careful that EnchantmentDecs could be "hidden" 
->>>>>>> 4063e7b7069fb45451b77fdf3e1ed7dd6f930a1f
         EnchantmentDecPtr curr = dynamic_pointer_cast<EnchantmentDec>(m);
         EnchantmentDecPtr prev = curr;
         EnchantmentDecPtr ednext; // will be set if applicable
