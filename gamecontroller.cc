@@ -469,7 +469,7 @@ void GameController::go(int argc, char *argv[]) {
                 updateBoard = false;
 
             } else if (cmd == "board" && !gameover) {
-                gm.getActivePlayer().TEST_printPlayerBoard();
+                // gm.getActivePlayer().TEST_printPlayerBoard();
                 notifyDisplays();
                 updateBoard = false;
 

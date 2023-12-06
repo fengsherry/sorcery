@@ -22,15 +22,15 @@ void GameMaster::initPlayers(vector<string>names, ifstream& deck1In, ifstream& d
     activePlayer = &p1;
     nonactivePlayer = &p2;
 
-    // testing:
+    
     cout << "Player " << p1.getId() << ": " << p1.getName() << "\n" << endl;
     cout << "Player " << p2.getId() << ": " << p2.getName() << "\n" << endl;
 
-    p1.TEST_printPlayerDeck();
-    p2.TEST_printPlayerDeck();
+    // p1.TEST_printPlayerDeck();
+    // p2.TEST_printPlayerDeck();
 
-    p1.TEST_printPlayerHand();
-    p2.TEST_printPlayerHand();
+    // p1.TEST_printPlayerHand();
+    // p2.TEST_printPlayerHand();
 
 }
 
@@ -169,7 +169,7 @@ void GameMaster::play(int i) {
 
     activePlayer->getHand().removeCard(i);
 
-    activePlayer->TEST_printPlayerBoard();
+    // activePlayer->TEST_printPlayerBoard();
 
 }
 
@@ -181,21 +181,21 @@ void GameMaster::play(int i, int j, Player& targetPlayer, bool targetRitual) {
 
     activePlayer->getHand().removeCard(i);
 
-    activePlayer->TEST_printPlayerBoard();
+    // activePlayer->TEST_printPlayerBoard();
 }
 
 void GameMaster::useAbility(int i) {
     activePlayer->useAbility(i, *nonactivePlayer);
 
-    activePlayer->TEST_printPlayerHand();
-    activePlayer->TEST_printPlayerBoard();
+    // activePlayer->TEST_printPlayerHand();
+    // activePlayer->TEST_printPlayerBoard();
 }
 
 void GameMaster::useAbility(int i, int j, Player& targetPlayer) {
     activePlayer->useAbility(i, j, targetPlayer);
 
-    activePlayer->TEST_printPlayerHand();
-    activePlayer->TEST_printPlayerBoard();
+    // activePlayer->TEST_printPlayerHand();
+    // activePlayer->TEST_printPlayerBoard();
 }
 
 
