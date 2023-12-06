@@ -118,6 +118,7 @@ void GraphicsDisplay::wrapString(int x, int y, size_t chars, vector<string> msg)
 
 // minion
 void GraphicsDisplay::displayCard(int x, int y, int width, int height, MinionPtr m) {
+    // cout << m->getAttack() << endl;
     displayCardBlank(x, y, width, height); 
     displayCardMinionBase(x, y, width, height, m); 
     // cout << m->getAbility().
@@ -254,10 +255,13 @@ void GraphicsDisplay::displayHand(int p) {
 }
 
 void GraphicsDisplay::displayMinion(const MinionPtr m) {
+    // cout << m << endl;
+    // cout << m->getAttack() << endl;
     w->fillRectangle(913+2,155, 351-4, 504-2, 0);
     MinionPtr curr = m;
     if (DefaultMinionPtr dmptr = dynamic_pointer_cast<DefaultMinion>(curr)) {
-        displayCard(minionpsn[0][0], minionpsn[0][1], hand_cardwidth, hand_cardheight, curr);
+        // cout << m->getAttack() << endl;
+        displayCard(minionpsn[0][0], minionpsn[0][1], hand_cardwidth, hand_cardheight, m);
     } else {
         // EnchantmentDecPtr ed_curr = dynamic_pointer_cast<EnchantmentDec>(curr);
         int i = 1;
@@ -274,7 +278,7 @@ void GraphicsDisplay::displayMinion(const MinionPtr m) {
             curr = ed_curr->getNext();
             ++i;
         }
-        displayCard(minionpsn[0][0], minionpsn[0][1], hand_cardwidth, hand_cardheight, curr);
+        displayCard(minionpsn[0][0], minionpsn[0][1], hand_cardwidth, hand_cardheight, m);
      }
     
 }
