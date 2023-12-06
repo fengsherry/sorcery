@@ -300,6 +300,7 @@ void Board::stripTopEnchant(int i) {
         throw no_enchantments(m);
     } else { // m points at hidden or non-hidden enchantment decorator
         // careful that EnchantmentDecs also contain "hidden" Enchantments, which are not legit Enchantments - they will be flattened into the fields
+
         EnchantmentDecPtr curr = dynamic_pointer_cast<EnchantmentDec>(m);
         EnchantmentDecPtr prev = curr;
         EnchantmentDecPtr ednext; // will be set if applicable
@@ -315,7 +316,7 @@ void Board::stripTopEnchant(int i) {
         }
         cout << "prev: " << prev->getName() << endl;
         cout << "curr: " << curr->getName() << endl;
-        curr->setNext(nullptr);
+        curr->setNext(nullptr); // we are removing curr
         
         // if curr has a trigged ability, remove the observer
         TriggeredAbility* ta = curr->getEnchantmentAbility();
@@ -324,9 +325,17 @@ void Board::stripTopEnchant(int i) {
         }
 
         cout << "next: " << next->getName() << endl;
-        if (theBoard[i] == prev) theBoard[i] = next;
-        else prev->setNext(next);
-        // cout << theBoard[i] << endl;
+        
+        // if the top layer enchantment is non-hidden, then 
+        if ((theBoard[i] == prev) && !((dynamic_pointer_cast<EnchantmentDec>(theBoard[i]))->isHidden())) {
+            theBoard[i] = next;
+            return;
+        }
+
+        prev->setNext(next);
+        
+        // checks if minion is dead
+        enchantMinion(i, "Modify Defense", 0);
     }
 }
 
