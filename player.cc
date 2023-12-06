@@ -145,7 +145,7 @@ TriggeredAbility* Player::play(int i, Player& nonActivePlayer) {
 }
 
 // with target
-TriggeredAbility* Player::play(int i, int j, Player& p, bool targetRitual) {
+void Player::play(int i, int j, Player& p, bool targetRitual) {
     if (targetRitual) j =-1;
     CardPtr cardToPlay = hand.getCard(i);
     CardPtr targetCard;
@@ -165,14 +165,13 @@ TriggeredAbility* Player::play(int i, int j, Player& p, bool targetRitual) {
         if (MinionPtr targetMinion = dynamic_pointer_cast<Minion>(targetCard)) {         
             // enchant the minion. Note the conversion from Enchantment (Card) to EnchantmentDec (Decorator)
             // check if the enchantment contains a trigger
-            // TriggeredAbility* a = p.getBoard().enchantMinion(j, enchantToPlay->getName());
-            // if (a) return a;
+            p.getBoard().enchantMinion(j, enchantToPlay->getName());
   
         } else { throw invalid_play{"You cannot play " + cardToPlay->getName() + " on " + targetCard->getName()}; }
     } else if (SpellPtr spellToPlay = dynamic_pointer_cast<Spell>(cardToPlay)) { // spell with target
         spellToPlay->applyAbility(p, *this, j); 
     }
-    return nullptr;
+    // return nullptr;
 }
 
 void Player::useAbility(int i, Player& nonActivePlayer) {

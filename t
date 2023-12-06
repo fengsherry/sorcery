@@ -1,10 +1,18 @@
 a
 b
-play 2
+play 3
 end
-play 2
+end
+end
+end
+end
+end
+end
+end
+end
+end
+end
+end
+end
+end
 board
-attack 1 1
-board
-play 1
-

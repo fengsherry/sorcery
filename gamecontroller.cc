@@ -322,7 +322,7 @@ void GameController::go(int argc, char *argv[]) {
                 } else if ((args.size() == 3) || (args.size() == 2 && (third == "r"))) { // "play i p j" - enchantments, spells with targets
                     // check if i and j within range
                     checkRange(args[0], gm.getActivePlayer().getHand().getSize());
-                    if (args[1] != 'r' && args[1] != 1 && args[2] != 2) throw out_of_range{"Out of range."};
+                    if (args[1] != 'r' && args[1] != 1 && args[2] != 2) throw out_of_range{"Out of range."}; //?
 
                     // identify target player
                     Player* targetPlayer;

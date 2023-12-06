@@ -145,7 +145,7 @@ void GameMaster::attackPlayer(int i) {
     // check for enough action
     if (attackingMinion->getAction() == 0) throw not_enough_action{*activePlayer, attackingMinion}; 
 
-    attackingMinion->setAction(0);
+    attackingMinion->modifyAction(-1);
     int attackVal = attackingMinion->getAttack();
     nonactivePlayer->decreaseLife(attackVal);
 }
@@ -175,9 +175,10 @@ void GameMaster::play(int i) {
 
 // play with target
 void GameMaster::play(int i, int j, Player& targetPlayer, bool targetRitual) {
-    TriggeredAbility* ta = activePlayer->play(i, j, targetPlayer, targetRitual); // may throw exception
-    if (ta) this->attach(ta);
-        
+    //TriggeredAbility* ta = activePlayer->play(i, j, targetPlayer, targetRitual); // may throw exception
+    //if (ta) this->attach(ta);
+    activePlayer->play(i, j, targetPlayer, targetRitual); 
+
     activePlayer->getHand().removeCard(i);
 
     activePlayer->TEST_printPlayerBoard();
