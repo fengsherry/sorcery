@@ -13,14 +13,14 @@ TriggeredAbility* Ritual::getAbility() {return trigAbility;}
 
 
 void Ritual::decreaseCharge(int n) {
-    cout << "n: " << n << "charge: " << charge << endl;
+    //cout << "n: " << n << "charge: " << charge << endl;
     if (n > charge) {
         trigAbility->setEnoughCharge(false);
-        cout << "SETTING ENOUGH CHARGE TO FALSE" << endl;
+        //cout << "SETTING ENOUGH CHARGE TO FALSE" << endl;
         throw not_enough_charge(this);
     } else if (n == charge) {
         trigAbility->setEnoughCharge(false); 
-        cout << "SETTING ENOUGH CHARGE TO FALSE" << endl;
+        //cout << "SETTING ENOUGH CHARGE TO FALSE" << endl;
         charge -= n;
     } else charge -= n;
 

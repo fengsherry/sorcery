@@ -217,7 +217,7 @@ MinionPtr Board::removeCard(int i) {
         int defense = theBoard[i]->getDefense();
         int action = theBoard[i]->getAction();
 
-        cout << "removing!! attack: " << attack << "defence " << defense << "action " << action << endl;
+        //cout << "removing!! attack: " << attack << "defence " << defense << "action " << action << endl;
 
         this->stripEnchants(i);
 
@@ -225,7 +225,7 @@ MinionPtr Board::removeCard(int i) {
         theBoard[i]->setDefense(defense);
         theBoard[i]->setAction(action); // implement in Minion
 
-        cout << "the minion reassigned!! attack: " << theBoard[i]->getAttack() << "defence " << theBoard[i]->getDefense() << "action " << theBoard[i]->getAction()  << endl;
+        //cout << "the minion reassigned!! attack: " << theBoard[i]->getAttack() << "defence " << theBoard[i]->getDefense() << "action " << theBoard[i]->getAction()  << endl;
 
         // cout << "attack: " << theBoard[i]->getAttack() << endl;
         // cout << "defense: " << theBoard[i]->getDefense()<< endl;

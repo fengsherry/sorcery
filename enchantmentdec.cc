@@ -99,7 +99,7 @@ int Silence::getDefense() const { return next->getDefense(); }
 int Silence::getAction() const { return next->getAction(); }
 int Silence::getActivatedAbilityCost() const {return next->getActivatedAbilityCost();}
 variant<ActivatedAbility*, TriggeredAbility*, monostate> Silence::getAbility(){
-    cout << "hi" << endl;
+    //cout << "hi" << endl;
     return new SilenceAbility{};
 }
 // Ability GiantStrength::getAbility() const; // ADD THIS BACK ONCE IMPLEMENTED ABILITIES

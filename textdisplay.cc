@@ -239,7 +239,6 @@ vector<card_template_t> &addEnchantmentPrint(const MinionPtr m, vector<card_temp
   //card_template_t NULL_TEMPLATE;
 
   if (DefaultMinionPtr dm = dynamic_pointer_cast<DefaultMinion>(m)) {
-    toPrint.insert(toPrint.begin(), display_minion_no_ability(m->getDefaultMinionName(), m->getCost(), m->getAttack(), m->getDefense()));
     return toPrint;
 
   // if there are enchantments on the minion
@@ -283,12 +282,13 @@ void TextDisplay::displayMinion(const MinionPtr m) {
   addEnchantmentPrint(m, toPrint, 0);
 
   // print the minion first
-  print(toPrint.at(0));
+  print(display_minion_no_ability(m->getDefaultMinionName(), m->getCost(), m->getAttack(), m->getDefense()));
 
-  // delete the minion card from the toPrint vector
-  if (!toPrint.empty()) {
-    toPrint.erase(toPrint.begin());
+  //reverse the vector
+  for (size_t i = 0; i < toPrint.size() / 2; ++i) {
+    std::swap(toPrint[i], toPrint[toPrint.size() - 1 - i]);
   }
+  
   // print the rest of the enchantment cards in rows of 5's
   printCardFiveRow(toPrint);
   toPrint.clear();
