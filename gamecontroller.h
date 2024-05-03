@@ -5,7 +5,7 @@
 #include "gamemaster.h"
 #include "sorcerydisplay.h"
 #include "textdisplay.h"
-#include "graphicsdisplay.h"
+//#include "graphicsdisplay.h"
 
 class GameController {
     GameMaster gm; 
