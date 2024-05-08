@@ -45,7 +45,7 @@ TriggeredAbility{TriggerType::StartTurn, TriggerCardType::Ritual, owner} {}
 
 
 void DarkRitualAbility::applyAbility() {
-    cout << "!! triggering DarkRitualAbility for " << targetPlayers[0]->getName() << "!!!!" << endl;
+    // cout << "!! triggering DarkRitualAbility for " << targetPlayers[0]->getName() << "!!!!" << endl;
 
     // at this point, the current activePlayer should already be set as targetPlayer
     
@@ -60,7 +60,7 @@ AuraOfPowerAbility::AuraOfPowerAbility(Player* owner):
 TriggeredAbility{TriggerType::MinionEnter, TriggerCardType::Ritual, owner} {}
 
 void AuraOfPowerAbility::applyAbility() {
-    cout << "!! triggering AuraOfPowerAbility for " << targetMinions[0]->getName() << "!!!!" << endl;
+    // cout << "!! triggering AuraOfPowerAbility for " << targetMinions[0]->getName() << "!!!!" << endl;
 
     // targetMinion (the minion that just entered) should be added to targetMinions
     if (owner->onBoard(targetMinions[0])) {
@@ -76,7 +76,7 @@ StandstillAbility::StandstillAbility(Player* owner):
 TriggeredAbility{TriggerType::MinionEnter, TriggerCardType::Ritual, owner} {}
 
 void StandstillAbility::applyAbility() {
-    cout << "!! triggering StandstillAbility for " << targetMinions[0]->getName() << "!!!!" << endl;
+    // cout << "!! triggering StandstillAbility for " << targetMinions[0]->getName() << "!!!!" << endl;
 
     TriggeredAbility::applyAbility();
     targetMinions[0]->destroy();
@@ -88,7 +88,7 @@ BoneGolemAbility::BoneGolemAbility(Player* owner):
 TriggeredAbility{TriggerType::MinionLeave, TriggerCardType::Minion, owner} {}
 
 void BoneGolemAbility::applyAbility() {
-    cout << "!! triggering BoneGolemAbility for " << targetMinions[0]->getName() << "!!!!" << endl;
+    // cout << "!! triggering BoneGolemAbility for " << targetMinions[0]->getName() << "!!!!" << endl;
 
     ownerMinion->modifyAttack(1);
     ownerMinion->modifyDefence(1);
@@ -104,7 +104,7 @@ void FireElementalAbility::applyAbility() {
     // targetMinons[0] was set to minion that just entered
 
     // deal damage if minion isn't owned by owner
-    cout << "!! triggering FireElementalAbility for " << targetMinions[0]->getName() << "!!!!" << endl;
+    // cout << "!! triggering FireElementalAbility for " << targetMinions[0]->getName() << "!!!!" << endl;
     bool opponentsMinion = !owner->onBoard(targetMinions[0]);
     if (opponentsMinion) targetMinions[0]->modifyDefence(-1); // error here
 }
@@ -115,7 +115,7 @@ TriggeredAbility{TriggerType::EndTurn, TriggerCardType::Minion, owner} {}
 
 void PotionSellerAbility::applyAbility() {
     // targetPlayers[0] has been set to the activePlayer
-    cout << "!! triggering PotionSellerAbility for " << targetPlayers[0]->getName() << "!!!!" << endl;
+    // cout << "!! triggering PotionSellerAbility for " << targetPlayers[0]->getName() << "!!!!" << endl;
 
     if (owner == targetPlayers[0]) {
         Board* b = &(owner->getBoard());
@@ -133,7 +133,7 @@ HasteAbility::HasteAbility(MinionPtr ownerMinion):
 TriggeredAbility{TriggerType::StartTurn, TriggerCardType::Minion, nullptr, ownerMinion} {}
 
 void HasteAbility::applyAbility() {
-    cout << "!! triggering HasteAbility for " << ownerMinion->getName() << "!!!!" << endl;
+    // cout << "!! triggering HasteAbility for " << ownerMinion->getName() << "!!!!" << endl;
     ownerMinion->modifyAction(1);
 }
 

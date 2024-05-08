@@ -107,7 +107,7 @@ void GameController::go(int argc, char *argv[]) {
     if (findIndex(argc, argv, "-init", i)) { 
         initFlag = true; initFile = argv[i + 1];
         testCmdArg("init", initFile);
-        cout << initFile << endl;
+        // cout << initFile << endl;
         file = ifstream(initFile);
     }
     if (findIndex(argc, argv, "-testing", i)) { 
@@ -318,6 +318,7 @@ void GameController::go(int argc, char *argv[]) {
                     }
                     catch (not_enough_magic &e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId());}
                     catch (no_target_provided &e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId());}
+                    catch (empty_grave &e) { notifyDisplaysErr(e.what(), gm.getActivePlayer().getId());}
 
                 } else if ((args.size() == 3) || (args.size() == 2 && (third == "r"))) { // "play i p j" - enchantments, spells with targets
                     // check if i and j within range
@@ -469,7 +470,7 @@ void GameController::go(int argc, char *argv[]) {
                 updateBoard = false;
 
             } else if (cmd == "board" && !gameover) {
-                gm.getActivePlayer().TEST_printPlayerBoard();
+                // gm.getActivePlayer().TEST_printPlayerBoard();
                 notifyDisplays();
                 updateBoard = false;
 
