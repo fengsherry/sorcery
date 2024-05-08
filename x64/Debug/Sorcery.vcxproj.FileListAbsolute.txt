@@ -1,0 +1,2 @@
+C:\Users\suade\Projects\Sorcery\sorcery\x64\Debug\Sorcery.vcxproj.AssemblyReference.cache
+C:\Users\suade\Projects\Sorcery\sorcery\x64\Debug\Sorcery.exe

@@ -10,7 +10,7 @@
 #include "ascii_graphics.h"
 #include "sorcerydisplay.h"
 #include "textdisplay.h"
-#include "graphicsdisplay.h"
+//#include "graphicsdisplay.h"
 #include "sorceryutil.h"
 using namespace std;
 
@@ -36,9 +36,9 @@ void GameController::notifyDisplays() {
 
 void GameController::notifyGraphicDisplays() {
     for (auto display : displays) {
-        if(GraphicsDisplay* gd = dynamic_cast<GraphicsDisplay*>(display)) {
+        /*if(GraphicsDisplay* gd = dynamic_cast<GraphicsDisplay*>(display)) {
             display->displaySorceryBoard(gm.getActivePlayer().getId());
-        }
+        }*/
             
     }
 }
@@ -124,7 +124,7 @@ void GameController::go(int argc, char *argv[]) {
     ifstream in2 = deck2Flag ? ifstream(deck2File.c_str()) : ifstream("default.deck");
 
     // create a new graphics display as required
-    if (graphicsFlag) displays.emplace_back(new GraphicsDisplay{&gm});
+    //if (graphicsFlag) displays.emplace_back(new GraphicsDisplay{&gm});
 
     notifyDisplays("Please enter player names.", 0);
 

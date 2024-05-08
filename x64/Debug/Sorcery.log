@@ -1,0 +1,11 @@
+﻿  ascii_graphics.cc
+  gamecontroller.cc
+C:\Users\suade\Projects\Sorcery\sorcery\gamecontroller.cc(203,69): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\suade\Projects\Sorcery\sorcery\gamecontroller.cc(304,79): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\suade\Projects\Sorcery\sorcery\gamecontroller.cc(324,79): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+  textdisplay.cc
+C:\Users\suade\Projects\Sorcery\sorcery\textdisplay.cc(148,11): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+  Generating Code...
+C:\Users\suade\Projects\Sorcery\sorcery\textdisplay.cc(274): warning C4715: 'addEnchantmentPrint': not all control paths return a value
+  ability.obj : MSIL module encountered; incremental linking is disabled for MSIL; performing full link
+  Sorcery.vcxproj -> C:\Users\suade\Projects\Sorcery\sorcery\x64\Debug\Sorcery.exe
